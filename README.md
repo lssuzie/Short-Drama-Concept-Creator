@@ -1,3 +1,12 @@
+## 预览
+
+<p align="center">
+  <img src="assets/01-overview.png" width="45%" />
+  <img src="assets/02-params.png" width="45%" />
+  <img src="assets/03-prompt.png" width="45%" />
+  <img src="assets/04-result.png" width="45%" />
+</p>
+
 # 短剧创意生成器 — Short Drama Concept Creator
 
 > 将影视策划经验与短剧市场洞察编码为 AI 可执行的结构化创意方法论引擎。
