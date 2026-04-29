@@ -1,0 +1,22 @@
+{
+  "name": "short-drama-concept-creator",
+  "version": "1.0.0",
+  "description": "短剧创意生成器 — 基于结构化方法论生成高质量短剧创意概念，垂直聚焦女频、精品导向",
+  "description_en": "Short Drama Concept Creator — Generate high-quality short drama concepts based on structured methodology, focused on female-oriented premium content",
+  "author": "lssuzie",
+  "license": "MIT",
+  "keywords": [
+    "短剧",
+    "创意",
+    "写作",
+    "剧本",
+    "女频",
+    "短剧策划",
+    "drama",
+    "creative writing",
+    "concept",
+    "storytelling"
+  ],
+  "homepage": "https://github.com/lssuzie/Short-Drama-Concept-Creator",
+  "repository": "https://github.com/lssuzie/Short-Drama-Concept-Creator"
+}
