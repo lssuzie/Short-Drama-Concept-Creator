@@ -1,4 +1,4 @@
-# 短剧创意炼金坊 — Short Drama Alchemy Workshop
+# 短剧创意炼金坊 — Short Drama Concept Creator
 
 基于 2025H2-2026Q1 短剧市场爆款观察的结构化创意方法论引擎。
 
