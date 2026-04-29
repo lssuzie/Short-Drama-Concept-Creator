@@ -69,7 +69,7 @@ select option{background:var(--s);color:var(--tp)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-/* === v10 additions === */
+/* === additions === */
 .settings-btn{position:fixed;top:20px;right:20px;z-index:50;width:40px;height:40px;border-radius:10px;background:var(--s);border:1px solid var(--b);color:var(--ts);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .settings-btn:hover{border-color:var(--bf);color:var(--tp)}
 .settings-panel{display:none;position:fixed;top:68px;right:20px;z-index:50;width:360px;background:var(--sr);border:1px solid var(--b);border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
@@ -141,10 +141,10 @@ select option{background:var(--s);color:var(--tp)}
 </head>
 <body>
 <div class="app">
-<!-- v10: Settings Button -->
+<!-- Settings Button -->
 <button class="settings-btn" onclick="toggleSettings()" title="API 设置">⚙</button>
 
-<!-- v10: Settings Panel (Multi-Model) -->
+<!-- Settings Panel (Multi-Model) -->
 <div class="settings-panel" id="settingsPanel">
   <h3>⚙ 模型配置</h3>
   <p style="font-size:11px;color:var(--tm);margin-bottom:16px;line-height:1.8">同一个创意简报发给不同模型，对比输出差异。<br>创作不像代码——大纲、台词、人物无法拆分给不同模型拼装，需要整体交付、整体评估。</p>
@@ -189,7 +189,7 @@ select option{background:var(--s);color:var(--tp)}
 
   <div class="hd">
     <div class="hd-l">Short Drama Creative Engine</div>
-    <h1>短剧创意生成器 <span class="v6">v10</span></h1>
+    <h1>短剧创意生成器 <span class="v6">v1.0</span></h1>
     <p>基于2025H2-2026Q1短剧市场观察的<em>结构化创意方法论引擎</em>，帮助创作者/制片人从受众需求出发，系统化激发高质量短剧创意。</p>
   </div>
 
@@ -368,7 +368,7 @@ select option{background:var(--s);color:var(--tp)}
     <div id="qcResults" style="margin-top:20px"></div>
   </div>
 
-  <!-- 反馈沉淀区（v10增强版） -->
+  <!-- 反馈沉淀区 -->
   <div id="fbSection" style="display:none;margin-top:32px;opacity:0;animation:fu .6s ease forwards">
     <div class="sec-t" style="font-size:16px"><span class="n" style="background:rgba(34,211,238,.12);color:#22d3ee">✎</span> 反馈沉淀 <span style="font-size:12px;color:var(--tm);font-weight:300;margin-left:8px">点选标签或自由书写 → 更新创作者画像 → 下次激发更精准</span></div>
 
@@ -424,21 +424,21 @@ select option{background:var(--s);color:var(--tp)}
     <div id="histList"></div>
   </div>
 
-  <!-- v10: Nav Tabs -->
+  <!-- Nav Tabs -->
 <div class="nav-tabs" style="opacity:0;animation:fu .7s ease .12s forwards">
   <button class="nav-tab active" onclick="switchTab('create')">创作</button>
   <button class="nav-tab" onclick="switchTab('dashboard')">数据</button>
   <button class="nav-tab" onclick="switchTab('lab')">实验室</button>
 </div>
 
-<!-- v10: One-click generate button (replaces old button group) -->
+<!-- One-click generate button -->
 
-<!-- v10: Quality Check Section -->
+<!-- Quality Check Section -->
 
 
-<!-- v10: Enhanced Feedback (replaces old feedback) -->
+<!-- Enhanced Feedback -->
 
-<!-- v10: Dashboard -->
+<!-- Dashboard -->
 <div class="dashboard" id="dashboard">
   <div class="sec-t"><span class="n" style="background:var(--cms);color:var(--cm)">📊</span> 数据看板</div>
   <div class="dash-grid">
@@ -464,7 +464,7 @@ select option{background:var(--s);color:var(--tp)}
   </div>
 </div>
 
-<!-- v10: Methodology Lab -->
+<!-- Methodology Lab -->
 <div class="lab-panel" id="labPanel">
   <div class="sec-t"><span class="n" style="background:var(--r0s);color:var(--r0)">🧪</span> 方法论实验室 <span style="font-size:12px;color:var(--tm);font-weight:300;margin-left:8px">开关规则，观察 Prompt 变化</span></div>
   <div id="labRules"></div>
@@ -477,25 +477,8 @@ select option{background:var(--s);color:var(--tp)}
   <div style="opacity:0;animation:fu .7s ease .4s forwards">
     <button class="rt" id="chtog" onclick="document.getElementById('chlog').classList.toggle('visible');this.classList.toggle('open')"><span class="ar">›</span> 版本更新</button>
     <div class="rp" id="chlog">
-      <strong>v10 · 2026-04-29</strong><br>
-      · 多模型配置：支持添加/切换/对比不同模型输出<br>
-      · 自动质检：粘贴大模型输出后一键质检（10项规则自动检查）<br>
-      · 数据看板：生成次数、反馈轮次、题材偏好、标签权重可视化<br>
-      · 方法论实验室：开关单条规则，观察 Prompt 差异<br>
-      · 结构化反馈：点选模式 + 文本模式双通道<br>
-      · 粘贴区：支持直接粘贴大模型输出并质检/写反馈<br>
-      · 产品更名为「短剧创意生成器」<br>
-      <strong>v9 · 2026-04-29</strong><br>
-      · 新增「创作者画像」：基于反馈自动提炼并持久化的偏好档案，每次生成自动附加<br>
-      · 画像永久显示在页面顶部，可随时查看和手动编辑<br>
-      · 保存反馈时自动更新画像，画像始终简洁（覆盖更新，不累积）<br>
-      · 反馈的价值从"单次附加"升级为"长期资产积累"<br>
-      <strong>v8 · 2026-04-29</strong><br>
-      · 反馈提示词预览 + 用户可控开关<br>
-      <strong>v7 · 2026-04-29</strong><br>
-      · 产品定位升级为"创意方法论引擎"，新增反馈沉淀功能<br>
-      <strong>v6 · 初始版本</strong><br>
-      · 10步质检 + 喜剧公式 + 女主三关 + 标题5铁律
+      <strong>v1.0 · 2026-04-29</strong><br>
+      · 首版发布：7大规则体系 + 自动质检 + 创作者画像 + 多模型对比 + 数据看板<br>
     </div>
   </div>
 
@@ -1003,7 +986,7 @@ function dl(){
 
 
 /* ============================================
-   v10 新增功能模块
+   新增功能模块
    ============================================ */
 
 /* --- API 设置（多模型预设） --- */
