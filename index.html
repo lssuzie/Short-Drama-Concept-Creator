@@ -178,8 +178,8 @@ select option{background:var(--s);color:var(--tp)}
       <input type="password" id="spKey" placeholder="sk-...">
     </div>
     <div style="font-size:10px;color:var(--tm);line-height:1.8;margin-bottom:10px">
-      🔒 Key 仅存储在浏览器本地 localStorage 中，不会上传到任何服务器。<br>
-      本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。清除浏览器数据即删除。
+      ⚠️ Key 仅临时存储（sessionStorage），关闭标签页后自动清空，需重新输入。<br>
+      本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。Key 不会上传到任何第三方服务器。<br>
     </div>
     <div class="sp-row">
       <button class="sp-save" onclick="saveApiKey()" style="flex:1">保存 Key</button>
@@ -991,7 +991,7 @@ function dl(){
 
 /* --- API 设置（多模型预设） --- */
 var PRESETS_KEY='sdcc_model_presets';
-var API_KEY_KEY='sdcc_api_key';
+var API_KEY_KEY='sdcc_api_key';  // Key 存储在 sessionStorage（关闭页面自动清空）
 var ACTIVE_KEY='sdcc_active_model';
 
 var defaultPresets=[
@@ -1090,7 +1090,7 @@ function deletePreset(id){
 function saveApiKey(){
   var key=document.getElementById('spKey').value.trim();
   if(!key){ts('请填写 API Key');return}
-  localStorage.setItem(API_KEY_KEY,key);
+  sessionStorage.setItem(API_KEY_KEY,key);
   document.getElementById('spKey').value='';
   ts('API Key 已保存');
 }
@@ -1113,7 +1113,7 @@ function updateModelSelector(){
 
 function updateActiveModelInfo(){
   var p=getActivePreset();
-  var key=localStorage.getItem(API_KEY_KEY)||'';
+  var key=sessionStorage.getItem(API_KEY_KEY)||'';
   var el=document.getElementById('activeModelInfo');
   if(!el)return;
   el.innerHTML='当前模型：<strong style="color:var(--tp)">'+p.name+'</strong> ('+p.model+') · Key: '+(key?'已配置':'未配置')+' · <a href="javascript:void(0)" onclick="toggleSettings()" style="color:var(--d)">切换</a>';
@@ -1124,14 +1124,14 @@ function toggleSettings(){
   p.classList.toggle('visible');
   if(p.classList.contains('visible')){
     renderPresetList();
-    var key=localStorage.getItem(API_KEY_KEY)||'';
+    var key=sessionStorage.getItem(API_KEY_KEY)||'';
     document.getElementById('spKey').value=key;
   }
 }
 
 async function testConnection(){
   var p=getActivePreset();
-  var key=localStorage.getItem(API_KEY_KEY)||'';
+  var key=sessionStorage.getItem(API_KEY_KEY)||'';
   if(!key){document.getElementById('spStatus').textContent='✗ 请先保存 API Key';document.getElementById('spStatus').style.color='#ef4444';return}
   document.getElementById('spStatus').textContent='连接 '+p.name+' 中...';document.getElementById('spStatus').style.color='var(--d)';
   try{
@@ -1154,7 +1154,7 @@ var generating=false;
 async function genAI(){
   if(generating)return;
   var preset=getActivePreset();
-  var key=localStorage.getItem(API_KEY_KEY)||'';
+  var key=sessionStorage.getItem(API_KEY_KEY)||'';
   if(!key){ts('请先在设置中配置 API Key');toggleSettings();return}
   var p=build();if(!p)return;
   generating=true;

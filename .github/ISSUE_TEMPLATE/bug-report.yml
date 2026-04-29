@@ -1,0 +1,47 @@
+name: Bug Report
+description: 报告工具使用中的问题
+title: "[BUG] "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 清晰描述遇到的问题
+      placeholder: |
+        例如：点击生成按钮后页面卡死
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 环境
+      description: 操作系统和浏览器版本
+      placeholder: "macOS 14 / Chrome 125"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 一步步说明如何复现这个问题
+      placeholder: |
+        1. 打开 index.html
+        2. 选择..."
+        3. 点击...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果
+      description: 你原本期望看到什么
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+      description: 实际看到了什么（可附截图）
+    validations:
+      required: true

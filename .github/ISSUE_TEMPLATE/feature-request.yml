@@ -1,0 +1,32 @@
+name: Feature Request
+description: 提出新功能建议
+title: "[FEATURE] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题背景
+      description: 这个功能想要解决什么问题
+      placeholder: |
+        我在做...时发现无法...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: 期望方案
+      description: 你希望工具如何工作
+      placeholder: |
+        希望增加一个...功能，可以...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案
+      description: 是否有其他替代方法
+      placeholder: |
+        目前我只能通过...手动处理
+    validations:
+      required: false
