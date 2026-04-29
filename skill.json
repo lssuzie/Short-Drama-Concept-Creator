@@ -18,5 +18,175 @@
     "storytelling"
   ],
   "homepage": "https://github.com/lssuzie/Short-Drama-Concept-Creator",
-  "repository": "https://github.com/lssuzie/Short-Drama-Concept-Creator"
+  "repository": "https://github.com/lssuzie/Short-Drama-Concept-Creator",
+
+  "triggers": {
+    "patterns": [
+      "短剧创意",
+      "短剧概念",
+      "短剧策划",
+      "短剧方向",
+      "生成短剧",
+      "写短剧",
+      "短剧大纲",
+      "女频创意",
+      "甜宠创意",
+      "穿书创意",
+      "短剧idea",
+      "drama concept"
+    ],
+    "exclude": [
+      "帮我写短剧剧本",
+      "把这个大纲写成剧本",
+      "帮我写第.*集",
+      "续写短剧"
+    ]
+  },
+
+  "parameters": {
+    "targetAudience": {
+      "type": "string",
+      "default": "女频 25-35岁",
+      "description": "目标受众年龄段"
+    },
+    "genre": {
+      "type": "string",
+      "default": "豪门甜宠",
+      "description": "题材方向",
+      "options": [
+        "豪门甜宠（地域反差型）",
+        "穿书反套路（打破第四面墙型）",
+        "家庭喜剧（身份错位型）",
+        "大女主逆袭（古装/现代权谋型）",
+        "女性成长（自我觉醒型）"
+      ]
+    },
+    "emotions": {
+      "type": "array",
+      "default": ["甜宠心动"],
+      "description": "核心情绪，可多选",
+      "options": [
+        "搞笑解压",
+        "甜宠心动",
+        "大女主逆袭",
+        "复仇爽感",
+        "治愈亲情",
+        "身份反转"
+      ]
+    },
+    "hotReference": {
+      "type": "string",
+      "required": false,
+      "description": "参考爆款（选填）"
+    },
+    "customRules": {
+      "type": "string",
+      "required": false,
+      "description": "自定义规则（选填）"
+    }
+  },
+
+  "outputs": {
+    "concepts": {
+      "type": "array",
+      "description": "生成的差异化创意概念列表",
+      "items": {
+        "$ref": "#/definitions/Concept"
+      }
+    },
+    "qaChecklist": {
+      "type": "object",
+      "description": "10项质检结果"
+    }
+  },
+
+  "definitions": {
+    "Concept": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "片名，通过标题5铁律检验"
+        },
+        "fantasyTrigger": {
+          "type": "string",
+          "description": "奇幻触发器：荒诞扳机，故事开始的起点"
+        },
+        "herIdentity": {
+          "type": "string",
+          "description": "她是谁：用'她能做什么'定义，不用'别人对她做了什么'定义"
+        },
+        "herAction": {
+          "type": "string",
+          "description": "核心行动线，观众追的是'看她怎么做'"
+        },
+        "identityGap": {
+          "type": "string",
+          "description": "极端身份错位：触发器制造出的身份落差，越大越好"
+        },
+        "highConcept": {
+          "type": "string",
+          "description": "高概念：一句话描述故事核心卖点"
+        },
+        "oneLiner": {
+          "type": "string",
+          "description": "一句话梗概：情绪过山车，至少两个情绪转折"
+        },
+        "comedyEngine": {
+          "type": "string",
+          "description": "喜剧引擎：每集的笑点来源"
+        },
+        "relationshipLine": {
+          "type": "string",
+          "description": "家庭/情感线：荒诞外壳下的真实关系痛点"
+        },
+        "herTest": {
+          "type": "object",
+          "description": "女主三关检验",
+          "properties": {
+            "配得感": {
+              "type": "boolean",
+              "description": "她本来就值得，不是逆袭后才值得"
+            },
+            "快意恩仇": {
+              "type": "boolean",
+              "description": "当场怼回去，不隔夜，不内耗"
+            },
+            "主体性": {
+              "type": "boolean",
+              "description": "她做选择，不是被选择"
+            }
+          }
+        },
+        "cpChemistry": {
+          "type": "string",
+          "description": "CP磕点：他被她吸引因为她太强，磕点来自'差一点就说出口'"
+        },
+        "episodeStructure": {
+          "type": "string",
+          "description": "每集结构：开场钩子 → 中段冲突 → 结尾悬念"
+        },
+        "riskNote": {
+          "type": "string",
+          "description": "风险提示：这个概念可能踩的坑，以及如何规避"
+        }
+      },
+      "required": ["title", "fantasyTrigger", "herIdentity", "herAction", "oneLiner", "herTest"]
+    },
+    "QAChecklist": {
+      "type": "object",
+      "properties": {
+        "1_wantToBeHer": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "2_emotionExcited": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "3_herAction": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "4_titleRule": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "5_oneLiner": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "6_herTest": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "7_differentiated": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "8_emotionCoverage": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "9_comedyFormula": {"type": "string", "enum": ["✅", "⚠️", "❌"]},
+        "10_episodeStructure": {"type": "string", "enum": ["✅", "⚠️", "❌"]}
+      }
+    }
+  }
 }
