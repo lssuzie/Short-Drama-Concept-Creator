@@ -2,12 +2,12 @@
 name: short-drama-concept-creator
 version: 1.0.0
 author: lssuzie
-description: 基于结构化方法论生成高质量短剧创意概念。垂直聚焦女频、精品导向。
+description: 基于结构化方法论的短剧创意炼金工坊，垂直聚焦女频、精品导向。
 ---
 
-# 短剧创意生成器 Skill
+# 短剧创意炼金坊 Skill
 
-> 基于结构化方法论生成高质量短剧创意概念。垂直聚焦女频、精品导向。
+> 基于结构化方法论的短剧创意炼金工坊，垂直聚焦女频、精品导向。
 
 ## 触发条件
 

@@ -1,8 +1,8 @@
 {
   "name": "short-drama-concept-creator",
   "version": "1.0.0",
-  "description": "短剧创意生成器 — 基于结构化方法论生成高质量短剧创意概念，垂直聚焦女频、精品导向",
-  "description_en": "Short Drama Concept Creator — Generate high-quality short drama concepts based on structured methodology, focused on female-oriented premium content",
+  "description": "短剧创意炼金坊 — 基于结构化方法论的短剧创意工坊，垂直聚焦女频、精品导向",
+  "description_en": "Short Drama Alchemy Workshop — A structured creative methodology workshop for crafting high-quality short drama concepts, focused on female-oriented premium content",
   "author": "lssuzie",
   "license": "MIT",
   "keywords": [
