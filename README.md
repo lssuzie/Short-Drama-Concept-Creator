@@ -165,7 +165,7 @@ AI auto-generates 3 differentiated concepts per methodology, each containing: fa
 
 方法论基于 2025H2-2026Q1 短剧市场爆款观察。短剧创作意识迭代很快，更早的经验不仅不适用，反而会污染提示词。
 
-完整方法论详见 → [methodology.md](methodology.md)
+完整方法论详见 → [methodology.md](methodology.md) | [Full Methodology (English)](methodology.en.md)
 
 7-rule system:
 
