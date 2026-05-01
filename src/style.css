@@ -128,3 +128,8 @@ select option{background:var(--s);color:var(--tp)}
 .nav-tab{font-size:12px;padding:8px 20px;border-radius:10px;border:none;background:transparent;color:var(--ts);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif}
 .nav-tab.active{background:var(--as);color:var(--a);font-weight:500}
 
+/* === language toggle === */
+.lang-btn{position:fixed;top:20px;right:72px;z-index:99999;background:var(--sr);border:1px solid var(--b);color:var(--tp);padding:4px 10px;border-radius:6px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .1s ease;box-shadow:0 1px 4px rgba(0,0,0,.15);text-transform:uppercase;letter-spacing:.5px;min-width:60px;justify-content:center;line-height:1}
+.lang-btn:hover{background:var(--b);border-color:var(--bf)}
+.lang-btn:active{transform:scale(.96)}
+
