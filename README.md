@@ -14,6 +14,15 @@ Single-file HTML, zero dependencies, OpenAI-compatible API presets (MiMo / GPT-4
 
 ---
 
+## Key Terms
+
+- **精品 (boutique/premium)** — Quality-focused creators vs. mass-production MCNs; emphasis on authorial voice and emotional density over volume
+- **女频 (female-oriented)** — Content targeting women audiences, centered on romance, relationships, and emotional catharsis
+- **短剧 (short-drama)** — Vertical short-form drama series (60–120 seconds per episode), popularized by platforms like Red Fruit (红果)
+- **三要素融合 (triple-element fusion)** — The simultaneous weaving of CP (romantic tension), comedy, and period-specific (年代) signifiers within the same scene
+
+---
+
 ## 这是什么
 
 <p align="center">
