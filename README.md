@@ -277,13 +277,10 @@ Enable CORS manually in LM Studio's server settings.
 
 ---
 
-## 贡献者 / 团队 | Contributors / Team
+## 贡献者 / Contributors
 
 - [@lssuzie](https://github.com/lssuzie) — 项目创建者、方法论设计、初始实现
 - [@haixuanTao](https://github.com/haixuanTao) — 代码重构贡献
-
-- [@lssuzie](https://github.com/lssuzie) — Project creator, methodology design, initial implementation
-- [@haixuanTao](https://github.com/haixuanTao) — Code refactoring contribution
 
 ---
 
