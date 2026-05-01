@@ -142,4 +142,5 @@ OLLAMA_ORIGINS="*" ollama serve
 
 - GitHub 仓库：https://github.com/lssuzie/Short-Drama-Concept-Creator
 - 完整方法论：https://github.com/lssuzie/Short-Drama-Concept-Creator/blob/main/methodology.md
-- 在线工具：下载 index.html 浏览器直接打开
+- 在线工具：https://lssuzie.github.io/short-drama-concept-creator/
+- 本地使用：下载 `index.html` 浏览器直接打开
