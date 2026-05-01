@@ -2,7 +2,19 @@
 
 基于 2025H2-2026Q1 短剧市场爆款观察的结构化创意方法论引擎。
 
-## 预览
+## English Summary
+
+A structured short-drama ideation engine built on observed blockbuster patterns from H2 2025–Q1 2026. It helps精品 short-drama creators generate differentiated concepts through a 7-rule methodology, without writing scripts for you.
+
+- **Live demo:** https://lssuzie.github.io/Short-Drama-Concept-Creator/
+- **Full methodology (Chinese):** [methodology.md](methodology.md)
+- **Target audience:** Female-oriented精品 short-drama creators (not mass-production MCNs)
+
+Single-file HTML, zero dependencies, OpenAI-compatible API presets (MiMo / GPT-4o / DeepSeek). Anthropic Claude requires a proxy due to browser CORS restrictions.
+
+---
+
+## 这是什么
 
 <p align="center">
   <img src="assets/01-overview.png" width="45%" />
