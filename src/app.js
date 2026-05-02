@@ -2,6 +2,12 @@ function gt(){var t=[];document.querySelectorAll('#tags input:checked').forEach(
 function tr(){document.getElementById('rtog').classList.toggle('open');document.getElementById('rpv').classList.toggle('visible')}
 function ts(m){var t=document.getElementById('tst');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)}
 
+/* --- 翻译函数 --- */
+function t(zh){
+  if(!zh||currentLang==='zh')return zh;
+  return ZH_TO_EN[zh]||zh;
+}
+
 /* ============================================
    创作者画像系统（核心升级）
    ============================================ */
@@ -29,24 +35,24 @@ function renderProfile(){
   var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
 
   if(!p||(!p.like&&!p.avoid&&!p.style&&!p.extra)){
-    display.innerHTML='<div style="color:var(--tm)">还没有画像数据。使用工具生成创意后，在下方写反馈，你的偏好会自动沉淀到这里。</div>';
+    display.innerHTML='<div style="color:var(--tm)">'+t('还没有画像数据。使用工具生成创意后，在下方写反馈，你的偏好会自动沉淀到这里。')+'</div>';
     rounds.textContent='';
-    hint.innerHTML='<strong style="color:var(--cm)">为什么值得在这里反馈？</strong> 大模型里反馈关窗口就没了，这里的反馈会积累成你的「创作者画像」——一个跨模型、跨会话持久化的偏好档案，每次生成自动带上。';
+    hint.innerHTML='<strong style="color:var(--cm)">'+t('为什么值得在这里反馈？')+'</strong> '+t('大模型里反馈关窗口就没了，这里的反馈会积累成你的「创作者画像」——一个跨模型、跨会话持久化的偏好档案，每次生成自动带上。');
     hint.style.marginTop='12px';
     btns.style.display='none';
     return;
   }
 
   btns.style.display='flex';
-  rounds.textContent=cnt+' 轮反馈';
+  rounds.textContent=cnt+' '+t('轮反馈');
 
   var h='';
-  if(p.like)h+='<div><strong style="color:#22d3ee">✅ 偏好：</strong>'+p.like+'</div>';
-  if(p.avoid)h+='<div><strong style="color:#f472b6">❌ 避免：</strong>'+p.avoid+'</div>';
-  if(p.style)h+='<div><strong style="color:#8b5cf6">🎨 风格：</strong>'+p.style+'</div>';
-  if(p.extra)h+='<div><strong style="color:var(--tm)">📝 备注：</strong>'+p.extra+'</div>';
+  if(p.like)h+='<div><strong style="color:#22d3ee">✅ '+t('偏好：')+'</strong>'+p.like+'</div>';
+  if(p.avoid)h+='<div><strong style="color:#f472b6">❌ '+t('避免：')+'</strong>'+p.avoid+'</div>';
+  if(p.style)h+='<div><strong style="color:#8b5cf6">🎨 '+t('风格：')+'</strong>'+p.style+'</div>';
+  if(p.extra)h+='<div><strong style="color:var(--tm)">📝 '+t('备注：')+'</strong>'+p.extra+'</div>';
   display.innerHTML=h;
-  hint.textContent='↑ 此画像自动附加到每次生成的 Prompt 末尾，随反馈轮次更新';
+  hint.textContent=t('↑ 此画像自动附加到每次生成的 Prompt 末尾，随反馈轮次更新');
 }
 
 // 生成画像的提示词片段
@@ -92,16 +98,16 @@ function saveProfile(){
   };
   saveProfileData(data);
   document.getElementById('profileEditor').style.display='none';
-  ts('画像已保存');
+  ts(t('画像已保存'));
 }
 
 // 清空画像
 function clearProfile(){
-  if(!confirm('确定清空创作者画像？'))return;
+  if(!confirm(t('确定清空创作者画像？')))return;
   localStorage.removeItem(PROF_KEY);
   localStorage.removeItem(PROF_CNT_KEY);
   renderProfile();
-  ts('画像已清空');
+  ts(t('画像已清空'));
 }
 
 /* ============================================
@@ -155,7 +161,7 @@ function buildFbSnippet(){
 function previewFb(){
   var fbSnippet=buildFbSnippet();
   var profileSnippet=buildProfileSnippet();
-  if(!fbSnippet&&!profileSnippet){ts('请先填写反馈');return}
+  if(!fbSnippet&&!profileSnippet){ts(t('请先填写反馈'));return}
 
   var preview='';
   if(profileSnippet)preview+=profileSnippet;
@@ -182,7 +188,7 @@ function preset(key){
   document.querySelectorAll('#tags input').forEach(function(c){c.checked=p.tags.indexOf(c.value)>=0});
   document.getElementById('ref').value=p.ref||'';
   document.getElementById('cust').value='';
-  ts('已加载「'+key+'」预设');
+  ts(t('已加载预设')+'「'+key+'」');
 }
 
 /* ============================================
@@ -231,13 +237,13 @@ function loadHist(i){
   o.classList.add('v');o.style.animation='none';o.offsetHeight;
   o.style.animation='fu .6s ease forwards';
   o.scrollIntoView({behavior:'smooth',block:'start'});
-  ts('已加载历史记录');
+  ts(t('已加载历史记录'));
 }
 
 function clearHist(){
   localStorage.removeItem(HIST_KEY);
   renderHist();
-  ts('已清空历史记录');
+  ts(t('已清空历史记录'));
 }
 
 /* ============================================
@@ -249,8 +255,8 @@ function build(){
   var e=gt();
   var r=document.getElementById('ref').value.trim();
   var c=document.getElementById('cust').value.trim();
-  if(!a){ts('请填写目标受众');return null}
-  if(!e.length){ts('请至少选择一个核心情绪');return null}
+  if(!a){ts(t('请填写目标受众'));return null}
+  if(!e.length){ts(t('请至少选择一个核心情绪'));return null}
 
   var p='';
   p+='# 任务：生成短剧创意概念\n\n';
@@ -471,9 +477,9 @@ function pv(){
 
 function cp(){
   var t=document.getElementById('obox').textContent;
-  navigator.clipboard.writeText(t).then(function(){ts('已复制')}).catch(function(){
+  navigator.clipboard.writeText(t).then(function(){ts(t('已复制'))}).catch(function(){
     var r=document.createRange();r.selectNodeContents(document.getElementById('obox'));
-    var s=window.getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();ts('已复制');
+    var s=window.getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();ts(t('已复制'));
   });
 }
 
@@ -482,7 +488,7 @@ function dl(){
   var b=new Blob([t],{type:'text/plain;charset=utf-8'});
   var u=URL.createObjectURL(b);var a=document.createElement('a');
   a.href=u;a.download='短剧策划_v9_'+new Date().toISOString().slice(0,10)+'.txt';
-  a.click();URL.revokeObjectURL(u);ts('已下载');
+  a.click();URL.revokeObjectURL(u);ts(t('已下载'));
 }
 
 
@@ -548,14 +554,14 @@ function renderPresetList(){
 function selectPreset(id){
   setActivePresetId(id);
   renderPresetList();
-  ts('已切换到 '+getPresets().find(function(p){return p.id===id}).name);
+  ts(t('已切换到')+' '+getPresets().find(function(p){return p.id===id}).name);
 }
 
 function savePreset(){
   var name=document.getElementById('spName').value.trim();
   var endpoint=document.getElementById('spEndpoint').value.trim();
   var model=document.getElementById('spModel').value.trim();
-  if(!name||!endpoint||!model){ts('请填写完整信息');return}
+  if(!name||!endpoint||!model){ts(t('请填写完整信息'));return}
   var presets=getPresets();
   var existingIdx=presets.findIndex(function(p){return p.name===name||p.model===model});
   var id=existingIdx>=0?presets[existingIdx].id:'custom_'+Date.now();
@@ -566,7 +572,7 @@ function savePreset(){
   document.getElementById('spEndpoint').value='';
   document.getElementById('spModel').value='';
   renderPresetList();
-  ts('模型 '+name+' 已保存');
+  ts(t('模型已保存')+' '+name);
 }
 
 function editPreset(id){
@@ -585,15 +591,15 @@ function deletePreset(id){
   savePresets(presets);
   if(getActivePresetId()===id)setActivePresetId('mimo');
   renderPresetList();
-  ts('已删除');
+  ts(t('已删除'));
 }
 
 function saveApiKey(){
   var key=document.getElementById('spKey').value.trim();
-  if(!key){ts('请填写 API Key');return}
+  if(!key){ts(t('请填写 API Key'));return}
   sessionStorage.setItem(API_KEY_KEY,key);
   document.getElementById('spKey').value='';
-  ts('API Key 已保存');
+  ts(t('API Key 已保存'));
 }
 
 function updateModelSelector(){
@@ -617,7 +623,7 @@ function updateActiveModelInfo(){
   var key=sessionStorage.getItem(API_KEY_KEY)||'';
   var el=document.getElementById('activeModelInfo');
   if(!el)return;
-  el.innerHTML='当前模型：<strong style="color:var(--tp)">'+p.name+'</strong> ('+p.model+') · Key: '+(key?'已配置':'未配置')+' · <a href="javascript:void(0)" onclick="toggleSettings()" style="color:var(--d)">切换</a>';
+  el.innerHTML=t('当前模型：')+'<strong style="color:var(--tp)">'+p.name+'</strong> ('+p.model+') · Key: '+(key?t('已配置'):t('未配置'))+' · <a href="javascript:void(0)" onclick="toggleSettings()" style="color:var(--d)">'+t('切换')+'</a>';
 }
 
 function toggleSettings(){
@@ -633,8 +639,8 @@ function toggleSettings(){
 async function testConnection(){
   var p=getActivePreset();
   var key=sessionStorage.getItem(API_KEY_KEY)||'';
-  if(!key){document.getElementById('spStatus').textContent='✗ 请先保存 API Key';document.getElementById('spStatus').style.color='#ef4444';return}
-  document.getElementById('spStatus').textContent='连接 '+p.name+' 中...';document.getElementById('spStatus').style.color='var(--d)';
+  if(!key){document.getElementById('spStatus').textContent='✗ '+t('请先保存 API Key');document.getElementById('spStatus').style.color='#ef4444';return}
+  document.getElementById('spStatus').textContent=t('连接')+' '+p.name+' '+t('中...');document.getElementById('spStatus').style.color='var(--d)';
   try{
     var isAnthropic=p.endpoint.indexOf('anthropic')>=0;
     var headers=isAnthropic?
@@ -644,9 +650,9 @@ async function testConnection(){
       JSON.stringify({model:p.model,max_tokens:10,messages:[{role:'user',content:'说"连接成功"'}]}):
       JSON.stringify({model:p.model,messages:[{role:'user',content:'说"连接成功"'}],max_tokens:10});
     var r=await fetch(p.endpoint,{method:'POST',headers:headers,body:body});
-    if(r.ok){document.getElementById('spStatus').textContent='✓ '+p.name+' 连接成功';document.getElementById('spStatus').style.color='#22c55e'}
-    else{var t=await r.text();document.getElementById('spStatus').textContent='✗ '+r.status+' '+t.slice(0,80);document.getElementById('spStatus').style.color='#ef4444'}
-  }catch(e){document.getElementById('spStatus').textContent='✗ 网络错误: '+e.message;document.getElementById('spStatus').style.color='#ef4444'}
+    if(r.ok){document.getElementById('spStatus').textContent='✓ '+p.name+' '+t('连接成功');document.getElementById('spStatus').style.color='#22c55e'}
+    else{var errText=await r.text();document.getElementById('spStatus').textContent='✗ '+r.status+' '+errText.slice(0,80);document.getElementById('spStatus').style.color='#ef4444'}
+  }catch(e){document.getElementById('spStatus').textContent='✗ '+t('网络错误:')+' '+e.message;document.getElementById('spStatus').style.color='#ef4444'}
 }
 
 /* --- 发送到模型（多模型支持） --- */
@@ -656,13 +662,13 @@ async function genAI(){
   if(generating)return;
   var preset=getActivePreset();
   var key=sessionStorage.getItem(API_KEY_KEY)||'';
-  if(!key){ts('请先在设置中配置 API Key');toggleSettings();return}
+  if(!key){ts(t('请先在设置中配置 API Key'));toggleSettings();return}
   var p=build();if(!p)return;
   generating=true;
   var btn=document.getElementById('genAIBtn');
-  btn.textContent='生成中...';btn.style.opacity='.6';
+  btn.textContent=t('生成中...');btn.style.opacity='.6';
   var obox=document.getElementById('obox');
-  obox.textContent='⏳ 正在调用 '+preset.name+' ('+preset.model+') 生成创意...\n\n';
+  obox.textContent='⏳ '+t('正在调用')+' '+preset.name+' ('+preset.model+') '+t('生成创意...')+'\n\n';
   obox.classList.add('gen-streaming');
   var opanel=document.getElementById('opanel');
   opanel.classList.add('v');opanel.style.animation='none';opanel.offsetHeight;
@@ -745,13 +751,13 @@ async function genAI(){
     document.getElementById('fbSaved').style.display='none';
     document.getElementById('fbPreview').style.display='none';
     initFeedbackCards(fullText);
-    ts(preset.name+' 生成完成');
+    ts(preset.name+' '+t('生成完成'));
   }catch(e){
-    obox.textContent='❌ 生成失败: '+e.message+'\n\n请检查 API 设置是否正确。';
-    ts('生成失败');
+    obox.textContent='❌ '+t('生成失败:')+' '+e.message+'\n\n'+t('请检查 API 设置是否正确。');
+    ts(t('生成失败'));
   }finally{
     generating=false;
-    btn.textContent='发送到模型';btn.style.opacity='1';
+    btn.textContent=t('发送到模型');btn.style.opacity='1';
     obox.classList.remove('gen-streaming');
   }
 }
@@ -761,7 +767,7 @@ function scrollToPaste(){
   var pa=document.getElementById('pasteArea');
   if(pa.style.display==='none'){
     // 还没生成过 Prompt，先提示
-    ts('请先点击「生成创意 Prompt」');
+    ts(t('请先点击「生成创意 Prompt」'));
     return;
   }
   pa.scrollIntoView({behavior:'smooth',block:'center'});
@@ -770,7 +776,7 @@ function scrollToPaste(){
 
 function runQC(){
   var text=document.getElementById('pasteInput').value.trim();
-  if(!text){ts('请先将大模型的输出结果粘贴到上方文本框');return}
+  if(!text){ts(t('请先将大模型的输出结果粘贴到上方文本框'));return}
   var results=parseAndCheck(text);
   renderQCResults(results);
 }
@@ -927,13 +933,13 @@ function initFeedbackCards(text){
 
 function initFeedbackFromPaste(){
   var text=document.getElementById('pasteInput').value.trim();
-  if(!text){ts('请先将大模型的输出粘贴到上方文本框');return}
+  if(!text){ts(t('请先将大模型的输出粘贴到上方文本框'));return}
   initFeedbackCards(text);
   document.getElementById('fbSection').style.display='block';
   document.getElementById('fbSaved').style.display='none';
   document.getElementById('fbPreview').style.display='none';
   document.getElementById('fbSection').scrollIntoView({behavior:'smooth',block:'start'});
-  ts('已从粘贴内容识别出 '+fbConcepts.length+' 个概念');
+  ts(t('已从粘贴内容识别出')+' '+fbConcepts.length+' '+t('个概念'));
 }
 
 var GOOD_TAGS=['身份错位','喜剧引擎','CP线','题材新鲜','标题好','情绪过山车','地域特色','女性力量','反套路','治愈感','每集有爽点'];
@@ -989,7 +995,7 @@ function toggleFbTag(idx,type,tag){
 
 function saveStructuredFeedback(){
   var hasDecision=fbConcepts.some(function(c){return c.decision});
-  if(!hasDecision){ts('请至少对一个概念做出判断');return}
+  if(!hasDecision){ts(t('请至少对一个概念做出判断'));return}
 
   var list=JSON.parse(localStorage.getItem(FB_CONCEPTS_KEY)||'[]');
   list.unshift({
@@ -1022,9 +1028,9 @@ function saveStructuredFeedback(){
   var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
   localStorage.setItem(PROF_CNT_KEY,String(cnt+1));
 
-  document.getElementById('fbSaved').innerHTML='✓ 结构化反馈已保存，画像已更新（第 '+(cnt+1)+' 轮）';
+  document.getElementById('fbSaved').innerHTML='✓ '+t('结构化反馈已保存，画像已更新')+'（第 '+(cnt+1)+' '+t('轮）')+'）';
   document.getElementById('fbSaved').style.display='block';
-  ts('反馈已保存');
+  ts(t('反馈已保存'));
   renderProfile();
 }
 
@@ -1050,7 +1056,7 @@ function saveFb(){
     var good=document.getElementById('fbGood').value.trim();
     var bad=document.getElementById('fbBad').value.trim();
     var pref=document.getElementById('fbPref').value.trim();
-    if(!good&&!bad&&!pref){ts('请填写反馈');return}
+    if(!good&&!bad&&!pref){ts(t('请填写反馈'));return}
     var list=JSON.parse(localStorage.getItem(FB_KEY)||'[]');
     list.unshift({ts:Date.now(),good:good,bad:bad,pref:pref,genre:document.getElementById('genre').value,tags:gt()});
     if(list.length>20)list=list.slice(0,20);
@@ -1060,9 +1066,9 @@ function saveFb(){
     document.getElementById('fbBad').value='';
     document.getElementById('fbPref').value='';
     var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
-    document.getElementById('fbSaved').innerHTML='✓ 反馈已保存，创作者画像已更新（第 '+cnt+' 轮）';
+    document.getElementById('fbSaved').innerHTML='✓ '+t('反馈已保存，创作者画像已更新')+'（第 '+cnt+' '+t('轮）')+'）';
     document.getElementById('fbSaved').style.display='block';
-    ts('反馈已保存，画像已更新');
+    ts(t('反馈已保存，画像已更新'));
   }
 }
 
@@ -1095,7 +1101,7 @@ function renderDashboard(){
     var pct=Math.round(genreCount[g]/genreMax*100);
     genreHtml+='<div class="dash-bar-row"><span class="dash-bar-label">'+g+'</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:'+pct+'%;background:var(--a)">'+genreCount[g]+'</div></div></div>';
   });
-  document.getElementById('dashGenreBars').innerHTML=genreHtml||'<div style="font-size:12px;color:var(--tm)">暂无数据</div>';
+  document.getElementById('dashGenreBars').innerHTML=genreHtml||'<div style="font-size:12px;color:var(--tm)">'+t('暂无数据')+'</div>';
 
   // 标签权重
   var posTags=Object.keys(weights).filter(function(k){return weights[k]>0}).sort(function(a,b){return weights[b]-weights[a]});
@@ -1105,13 +1111,13 @@ function renderDashboard(){
     var pct=Math.min(100,Math.round(weights[t]/(posTags.length>0?weights[posTags[0]]:1)*100));
     posHtml+='<div class="dash-bar-row"><span class="dash-bar-label">'+t+'</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:'+pct+'%;background:#22c55e">+'+weights[t]+'</div></div></div>';
   });
-  document.getElementById('dashPosTags').innerHTML=posHtml||'<div style="font-size:12px;color:var(--tm)">暂无正面标签数据</div>';
+  document.getElementById('dashPosTags').innerHTML=posHtml||'<div style="font-size:12px;color:var(--tm)">'+t('暂无正面标签数据')+'</div>';
   var negHtml='';
   negTags.slice(0,5).forEach(function(t){
     var pct=Math.min(100,Math.round(Math.abs(weights[t])/Math.abs(negTags.length>0?weights[negTags[0]]:1)*100));
     negHtml+='<div class="dash-bar-row"><span class="dash-bar-label">'+t+'</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:'+pct+'%;background:#ef4444">'+weights[t]+'</div></div></div>';
   });
-  document.getElementById('dashNegTags').innerHTML=negHtml||'<div style="font-size:12px;color:var(--tm)">暂无负面标签数据</div>';
+  document.getElementById('dashNegTags').innerHTML=negHtml||'<div style="font-size:12px;color:var(--tm)">'+t('暂无负面标签数据')+'</div>';
 
   // 情绪标签统计
   var tagCount={};
@@ -1123,7 +1129,7 @@ function renderDashboard(){
     var pct=Math.round(tagCount[t]/tagMax*100);
     tagHtml+='<div class="dash-bar-row"><span class="dash-bar-label">'+t+'</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:'+pct+'%;background:var(--cm)">'+tagCount[t]+'</div></div></div>';
   });
-  document.getElementById('dashEmotionTags').innerHTML=tagHtml||'<div style="font-size:12px;color:var(--tm)">暂无数据</div>';
+  document.getElementById('dashEmotionTags').innerHTML=tagHtml||'<div style="font-size:12px;color:var(--tm)">'+t('暂无数据')+'</div>';
 }
 
 /* --- 方法论实验室 --- */
@@ -1165,24 +1171,24 @@ function updateLabDiff(){
   var offRules=Object.keys(labRules).filter(function(k){return !labRules[k].on});
   var box=document.getElementById('labDiff');
   if(offRules.length===0){
-    box.innerHTML='<div style="color:var(--d)">所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。</div>';
+    box.innerHTML='<div style="color:var(--d)">'+t('所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。')+'</div>';
     return;
   }
-  var h='<div style="color:var(--a);font-weight:500;margin-bottom:8px">已关闭 '+offRules.length+' 条规则：</div>';
+  var h='<div style="color:var(--a);font-weight:500;margin-bottom:8px">'+t('已关闭')+' '+offRules.length+' '+t('条规则：')+'</div>';
   var impacts={
-    rule0:'将从痛点出发而非幻想出发，创意可能偏"苦情"',
-    rule1:'可能生成以 CP 为主线而非女主为主线的概念',
-    rule2:'不再检验女主的配得感、快意恩仇、主体性',
-    rule3:'标题不再受5铁律约束，可能出现6-8字中间地带',
-    rule4:'概念不再要求"一句话=情绪过山车"',
-    rule5:'CP 可能回到"命运安排"的老套路',
-    rule6:'搞事业线可能盖过主线',
-    rule7:'不再规避职场戏太实、文艺片感等常见错误'
+    rule0:t('将从痛点出发而非幻想出发，创意可能偏"苦情"'),
+    rule1:t('可能生成以 CP 为主线而非女主为主线的概念'),
+    rule2:t('不再检验女主的配得感、快意恩仇、主体性'),
+    rule3:t('标题不再受5铁律约束，可能出现6-8字中间地带'),
+    rule4:t('概念不再要求"一句话=情绪过山车"'),
+    rule5:t('CP 可能回到"命运安排"的老套路'),
+    rule6:t('搞事业线可能盖过主线'),
+    rule7:t('不再规避职场戏太实、文艺片感等常见错误')
   };
   offRules.forEach(function(k){
     h+='<div style="margin-bottom:4px">· <strong>'+labRules[k].name+'</strong>：'+impacts[k]+'</div>';
   });
-  h+='<div style="margin-top:12px;color:var(--tm)">关闭规则后点击「生成创意 Prompt」查看变化。</div>';
+  h+='<div style="margin-top:12px;color:var(--tm)">'+t('关闭规则后点击「生成创意 Prompt」查看变化。')+'</div>';
   box.innerHTML=h;
 }
 
@@ -1273,7 +1279,7 @@ document.addEventListener('click',function(e){
 /* ============================================
    i18n 中英文切换
    ============================================ */
-var ZH_TO_EN={"短剧创意炼金坊 — 创意方法论引擎":"Short Drama Creative Alchemy — Creative Methodology Engine","短剧创意炼金坊":"Short Drama Creative Alchemy","基于2025H2-2026Q1短剧市场观察的":"Based on 2025H2-2026Q1 short drama market research","结构化创意方法论引擎":"Structured Creative Methodology Engine","，帮助创作者/制片人从受众需求出发，系统化激发高质量短剧创意。":", helping creators/producers systematically inspire high-quality short drama concepts starting from audience needs.","这个工具想解决的问题":"Problems this tool aims to solve","市场规律":"Market Patterns","和":"and","创作者个人特质":"Creator Personal Traits","AI 做执行，你做判断。画像跟着你一起成长。":"AI executes, you judge. The profile grows with you.","——帮你把方法论变成可操作的规则链，交给大模型跑出有亮点的半成品。":"— Turns methodology into actionable rule chains, letting the LLM produce a semi-finished product with highlights.","——观察哪些题材受欢迎、哪些模式具备爆款潜质，找到背后的结构性规律。":"— Observe which genres are popular, which patterns have hit potential, and uncover underlying structural patterns.","——通过持续的反馈沉淀，逐渐了解你的审美偏好、能力范围、兴趣方向，让每次激发都更贴合你这个人。":"— Through continuous feedback accumulation, gradually understand your aesthetic preferences, skill range, and interests, making each inspiration more tailored to you.","↓ 下一步：把大模型生成的结果粘贴回来":"↓ Next: Paste the LLM output back here","① 选参数 → ② 生成创意 Prompt → ③ 拿到大模型跑 → ④ 挑出亮点，写下反馈":"① Set Parameters → ② Generate Creative Prompt → ③ Run with LLM → ④ Pick highlights, write feedback","⑤ 画像自动更新 → ⑥ 调整参数再激发 →":"⑤ Profile auto-updates → ⑥ Adjust parameters, re-inspire →","⚙ 模型配置":"⚙ Model Configuration","同一个创意简报发给不同模型，对比输出差异。":"Send the same creative brief to different models, compare output differences.","创作不像代码——大纲、台词、人物无法拆分给不同模型拼装，需要整体交付、整体评估。":"Creation isn't like code — outlines, dialogue, and characters can't be split across models; it requires holistic delivery and evaluation.","添加 / 编辑模型":"Add / Edit Model","模型名称":"Model Name","模型 ID":"Model ID","保存模型":"Save Model","测试连接":"Test Connection","API Key（所有模型共享）":"API Key (Shared Across All Models)","保存 Key":"Save Key","⚠️ Key 仅临时存储（sessionStorage），关闭标签页后自动清空，需重新输入。":"⚠️ Keys are stored temporarily (sessionStorage) and cleared when you close the tab. Re-enter required.","⚡ 点选模式":"⚡ Point Mode","✅ 值得继续的方向":"✅ Worth Continuing","✅ 我喜欢的元素":"✅ Elements I Like","✅ 正向标签权重（反馈中「继续」的元素）":"✅ Positive Tag Weight (elements to continue)","✎ 写反馈":"✎ Write Feedback","✏️ 文本模式":"✏️ Text Mode","❌ 我不要的方向":"❌ Directions I Don't Want","❌ 要放弃的方向":"❌ Directions to Abandon","❌ 负向标签权重（反馈中「放弃」的原因）":"❌ Negative Tag Weight (reasons for abandoning)","一、提炼市场规律":"1. Extract Market Patterns","不从痛点出发，从\"观众想成为什么样的人\"出发。三种幻想：能力/身份/行动":"Not from pain points, but from \"who viewers want to become.\" Three fantasies: ability/identity/action","二、适配创作者":"2. Adapt to Creator","他被她吸引因为她太强":"He's drawn to her because she's too strong","参考爆款（选填）":"Reference hits (optional)","反馈轮次":"Feedback Rounds","创作":"Creation","创作者画像":"Creator Profile","创意激发":"Creative Inspiration","创意激发引擎":"Creative Inspiration Engine","参考与补充":"References & Supplements","数据":"Data","数据看板":"Dashboard","方法论实验室":"Methodology Lab","快速示例：":"Quick Example:","目标不是让你去追市场热点，而是帮你在市场机会和你的个人特质之间，":"Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,","找到那个只属于你的交汇点。":"Find the intersection that belongs only to you.","这个工具做两件事：":"This tool does two things:","避免太实的职场戏 / 避免电影文艺片感 / 避免自媒体vlog感":"Avoid overly realistic workplace drama / avoid arthouse film feel / avoid vlog feel","生成创意 Prompt":"Generate Creative Prompt","质检":"Quality Check","预览反馈提示词":"Preview Feedback Prompt","查看完整规则与数据":"View Full Rules & Data","查看方法论":"View Methodology","保存反馈 & 更新画像":"Save Feedback & Update Profile","保存结构化反馈 & 更新画像":"Save Structured Feedback & Update Profile","发送到模型":"Send to Model","下载 .txt":"Download .txt","复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「质检」自动分析":"Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste result below → click \"QC\" for auto-analysis","配得感 / 快意恩仇 / 主体性":"Worthiness / Immediate Vengeance / Agency","大女主原则：":"Strong Heroine Principle:","观众追的是女主不是CP · 每个转折是她的决定 · CP是调味料":"Audiences follow the heroine, not the CP · Every turn is her decision · CP is seasoning","规则一 · 主引擎是\"看她怎么做\"":"Rule 1 · Main Engine: \"Watch What She Does\"","规则二 · 女主三关：":"Rule 2 · Heroine's Three Tests:","规则三 · 标题5铁律：":"Rule 3 · Title's 5 Iron Laws:","规则四 · 概念3铁律：":"Rule 4 · Concept's 3 Iron Laws:","规则五 · CP：":"Rule 5 · CP:","规则六 · 搞事业是燃料":"Rule 6 · The Career Arc is Fuel","规则七 · 常见错误：":"Rule 7 · Common Pitfalls:","规则零 · 从幻想开始":"Rule 0 · Start from Fantasy","甜宠喜剧":"Sweet Romance Comedy","复仇爽感":"Revenge Satisfaction","年代怀旧":"Era Nostalgia","现代都市":"Modern Urban","古装喜剧":"Period Comedy","古装权谋":"Period Political Intrigue","乡村田园":"Rural Pastoral","仙侠虐恋":"Fantasy Romance Tragic","奇幻穿越":"Fantasy Transmigration","奇幻脑洞":"Fantasy Imagination","穿书":"Book Transmigration","穿书反套路":"Book Transmigration Subversion","大女主逆袭":"Strong Heroine Counterattack","家庭喜剧":"Family Comedy","女性成长":"Female Growth","搞笑解压":"Comedy Stress Relief","悬疑复仇":"Suspense Revenge","甜宠心动":"Sweet Romance Heartflutter","豪门甜宠":"Wealthy Romance","闺蜜情":"Best Friend Bond","重生宅斗":"Rebirth Mansion Struggle","一句话=情绪过山车 / 核心是她做了什么 / 兴奋不是沉重":"One-liner = emotional rollercoaster / Core = what she did / Excitement not heaviness","至少包含3/5要素才算通过":"Must contain at least 3/5 elements to pass","中。":"Medium.","版本更新":"Version Update","v6新增":"v6 New","· 首版发布：7大规则体系 + 自动质检 + 创作者画像 + 多模型对比 + 数据看板":"· Initial release: 7 rule system + auto QC + creator profile + multi-model comparison + dashboard","系列化成新爆款密码 · 喜剧元素出圈率显著提升 · 地域特色题材崛起":"Series format becomes new hit code · Comedy elements breakout rate significantly up · Region-specific genres rising","本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。Key 不会上传到任何第三方服务器。":"This tool is single-file zero-dependency, no third-party scripts, no network requests (except your LLM API calls). Keys never uploaded.","我的创作者画像":"My Creator Profile","题材偏好":"Genre Preference","题材方向":"Genre Direction","目标受众":"Target Audience","核心情绪":"Core Emotion","🎨 我的风格偏好":"🎨 My Style Preferences","🏠 豪门甜宠":"🏠 Wealthy Family Sweet Romance","👨‍👩‍👧 家庭喜剧":"👨‍👩‍👧 Family Comedy","👩‍👩‍👩 女性成长":"👩‍👩‍👩 Female Growth","💡 使用方式":"💡 How to Use","📋 历史记录":"📋 History","📋 粘贴大模型的输出结果":"📋 Paste LLM Output","📖 穿书穿越":"📖 Book Transmigration","📝 补充说明（选填）":"📝 Additional Notes (Optional)","🔍 自动质检":"🔍 Auto QC","点选标签或自由书写 → 更新创作者画像 → 下次激发更精准":"Select tags or freewrite → update creator profile → more precise next inspiration","画像迭代":"Profile Iteration","生成次数":"Generation Count","生成 Prompt":"Generate Prompt","提示词片段":"Prompt Snippet","以下为反馈 + 画像生成的提示词片段：":"Here's a snippet of the prompt for feedback + profile generation:","你的判断标准、审美偏好、经验积累，都会沉淀到":"Your judgment criteria, aesthetic preferences, and experience will all precipitate into","先婚后爱":"Marriage First, Love Later","性别互换":"Gender Swap","身份反转":"Identity Reversal","武林高手在校园":"Martial Arts Master in School","-select-":"- Select -","以下是反馈 + 画像生成的提示词片段：":"Prompt snippet for feedback + profile generation:","保存画像":"Save Profile","反馈沉淀":"Feedback Accumulation","取消":"Cancel","受众与题材":"Audience & Genre","喜剧公式":"Comedy Engine Formula","地域烟火气":"Local Atmosphere & Flavor","地域特色":"Regional Characteristics","基于2025H2-2026Q1短剧市场爆款观察 · 女性观众占比67% · 25-34岁占比近五成":"Based on 2025H2-2026Q1 short drama hit observation · Female audience 67% · 25-34 age group ~50%","复制":"Copy","奇幻触发器 × 极端身份错位 × 家庭/情感关系 × 喜剧 × 治愈":"Fantasy Trigger × Extreme Identity Misplacement × Family/Emotional Line × Comedy × Healing","好的创意不是凭空生成的，也不是简单复制市场爆款。好的创意来自":"Good ideas aren't conjured from thin air, nor simple copies of hits. Good ideas come from","完整循环：":"Complete Loop:","实验室":"Lab","将此 Prompt 拿到大模型中跑出结果，挑出你感兴趣的亮点，再回来调整参数重新激发。好的创意是迭代出来的。":"Run this prompt through the LLM, pick highlights of interest, then return to adjust and re-inspire. Good ideas are iterated.","开关规则，观察 Prompt 变化":"Toggle rules, observe prompt changes","循环往复，越来越好":"Cycle and repeat, getting better","情绪标签使用":"Emotion Label Usage","数据基础":"Data Foundation","有情绪承诺 / 有反差 / 有动词 / 4字或长句 / 迭代高频词":"Has emotional promise / Has contrast / Has action verb / 4-char or long phrase / Iterative high-frequency words","核心":"Core","治愈亲情":"Healing Family Bond","清空":"Clear","燃向成长":"Passionate Growth","的交汇点。":"intersection.","编辑":"Edit","编辑创作者画像":"Edit Creator Profile","自定义规则（选填）":"Custom Rules (Optional)","这不是一键生成工具。它是一个":"This is not a one-click generator. It's a","（可多选）":"(multiple select allowed)"};
+var ZH_TO_EN={"短剧创意炼金坊 — 创意方法论引擎":"Short Drama Creative Alchemy — Creative Methodology Engine","短剧创意炼金坊":"Short Drama Creative Alchemy","基于2025H2-2026Q1短剧市场观察的":"Based on 2025H2-2026Q1 short drama market research","结构化创意方法论引擎":"Structured Creative Methodology Engine","，帮助创作者/制片人从受众需求出发，系统化激发高质量短剧创意。":", helping creators/producers systematically inspire high-quality short drama concepts starting from audience needs.","这个工具想解决的问题":"Problems this tool aims to solve","市场规律":"Market Patterns","和":"and","创作者个人特质":"Creator Personal Traits","AI 做执行，你做判断。画像跟着你一起成长。":"AI executes, you judge. The profile grows with you.","——帮你把方法论变成可操作的规则链，交给大模型跑出有亮点的半成品。":"— Turns methodology into actionable rule chains, letting the LLM produce a semi-finished product with highlights.","——观察哪些题材受欢迎、哪些模式具备爆款潜质，找到背后的结构性规律。":"— Observe which genres are popular, which patterns have hit potential, and uncover underlying structural patterns.","——通过持续的反馈沉淀，逐渐了解你的审美偏好、能力范围、兴趣方向，让每次激发都更贴合你这个人。":"— Through continuous feedback accumulation, gradually understand your aesthetic preferences, skill range, and interests, making each inspiration more tailored to you.","↓ 下一步：把大模型生成的结果粘贴回来":"↓ Next: Paste the LLM output back here","① 选参数 → ② 生成创意 Prompt → ③ 拿到大模型跑 → ④ 挑出亮点，写下反馈":"① Set Parameters → ② Generate Creative Prompt → ③ Run with LLM → ④ Pick highlights, write feedback","⑤ 画像自动更新 → ⑥ 调整参数再激发 →":"⑤ Profile auto-updates → ⑥ Adjust parameters, re-inspire →","⚙ 模型配置":"⚙ Model Configuration","同一个创意简报发给不同模型，对比输出差异。":"Send the same creative brief to different models, compare output differences.","创作不像代码——大纲、台词、人物无法拆分给不同模型拼装，需要整体交付、整体评估。":"Creation isn't like code — outlines, dialogue, and characters can't be split across models; it requires holistic delivery and evaluation.","添加 / 编辑模型":"Add / Edit Model","模型名称":"Model Name","模型 ID":"Model ID","保存模型":"Save Model","测试连接":"Test Connection","API Key（所有模型共享）":"API Key (Shared Across All Models)","保存 Key":"Save Key","⚠️ Key 仅临时存储（sessionStorage），关闭标签页后自动清空，需重新输入。":"⚠️ Keys are stored temporarily (sessionStorage) and cleared when you close the tab. Re-enter required.","⚡ 点选模式":"⚡ Point Mode","✅ 值得继续的方向":"✅ Worth Continuing","✅ 我喜欢的元素":"✅ Elements I Like","✅ 正向标签权重（反馈中「继续」的元素）":"✅ Positive Tag Weight (elements to continue)","✎ 写反馈":"✎ Write Feedback","✏️ 文本模式":"✏️ Text Mode","❌ 我不要的方向":"❌ Directions I Don't Want","❌ 要放弃的方向":"❌ Directions to Abandon","❌ 负向标签权重（反馈中「放弃」的原因）":"❌ Negative Tag Weight (reasons for abandoning)","一、提炼市场规律":"1. Extract Market Patterns","不从痛点出发，从\"观众想成为什么样的人\"出发。三种幻想：能力/身份/行动":"Not from pain points, but from \"who viewers want to become.\" Three fantasies: ability/identity/action","二、适配创作者":"2. Adapt to Creator","他被她吸引因为她太强":"He's drawn to her because she's too strong","参考爆款（选填）":"Reference hits (optional)","反馈轮次":"Feedback Rounds","创作":"Creation","创作者画像":"Creator Profile","创意激发":"Creative Inspiration","创意激发引擎":"Creative Inspiration Engine","参考与补充":"References & Supplements","数据":"Data","数据看板":"Dashboard","方法论实验室":"Methodology Lab","快速示例：":"Quick Example:","目标不是让你去追市场热点，而是帮你在市场机会和你的个人特质之间，":"Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,","找到那个只属于你的交汇点。":"Find the intersection that belongs only to you.","这个工具做两件事：":"This tool does two things:","避免太实的职场戏 / 避免电影文艺片感 / 避免自媒体vlog感":"Avoid overly realistic workplace drama / avoid arthouse film feel / avoid vlog feel","生成创意 Prompt":"Generate Creative Prompt","质检":"Quality Check","预览反馈提示词":"Preview Feedback Prompt","查看完整规则与数据":"View Full Rules & Data","查看方法论":"View Methodology","保存反馈 & 更新画像":"Save Feedback & Update Profile","保存结构化反馈 & 更新画像":"Save Structured Feedback & Update Profile","发送到模型":"Send to Model","下载 .txt":"Download .txt","复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「质检」自动分析":"Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste result below → click \"QC\" for auto-analysis","配得感 / 快意恩仇 / 主体性":"Worthiness / Immediate Vengeance / Agency","大女主原则：":"Strong Heroine Principle:","观众追的是女主不是CP · 每个转折是她的决定 · CP是调味料":"Audiences follow the heroine, not the CP · Every turn is her decision · CP is seasoning","规则一 · 主引擎是\"看她怎么做\"":"Rule 1 · Main Engine: \"Watch What She Does\"","规则二 · 女主三关：":"Rule 2 · Heroine's Three Tests:","规则三 · 标题5铁律：":"Rule 3 · Title's 5 Iron Laws:","规则四 · 概念3铁律：":"Rule 4 · Concept's 3 Iron Laws:","规则五 · CP：":"Rule 5 · CP:","规则六 · 搞事业是燃料":"Rule 6 · The Career Arc is Fuel","规则七 · 常见错误：":"Rule 7 · Common Pitfalls:","规则零 · 从幻想开始":"Rule 0 · Start from Fantasy","甜宠喜剧":"Sweet Romance Comedy","复仇爽感":"Revenge Satisfaction","年代怀旧":"Era Nostalgia","现代都市":"Modern Urban","古装喜剧":"Period Comedy","古装权谋":"Period Political Intrigue","乡村田园":"Rural Pastoral","仙侠虐恋":"Fantasy Romance Tragic","奇幻穿越":"Fantasy Transmigration","奇幻脑洞":"Fantasy Imagination","穿书":"Book Transmigration","穿书反套路":"Book Transmigration Subversion","大女主逆袭":"Strong Heroine Counterattack","家庭喜剧":"Family Comedy","女性成长":"Female Growth","搞笑解压":"Comedy Stress Relief","悬疑复仇":"Suspense Revenge","甜宠心动":"Sweet Romance Heartflutter","豪门甜宠":"Wealthy Romance","闺蜜情":"Best Friend Bond","重生宅斗":"Rebirth Mansion Struggle","一句话=情绪过山车 / 核心是她做了什么 / 兴奋不是沉重":"One-liner = emotional rollercoaster / Core = what she did / Excitement not heaviness","至少包含3/5要素才算通过":"Must contain at least 3/5 elements to pass","中。":"Medium.","版本更新":"Version Update","v6新增":"v6 New","· 首版发布：7大规则体系 + 自动质检 + 创作者画像 + 多模型对比 + 数据看板":"· Initial release: 7 rule system + auto QC + creator profile + multi-model comparison + dashboard","系列化成新爆款密码 · 喜剧元素出圈率显著提升 · 地域特色题材崛起":"Series format becomes new hit code · Comedy elements breakout rate significantly up · Region-specific genres rising","本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。Key 不会上传到任何第三方服务器。":"This tool is single-file zero-dependency, no third-party scripts, no network requests (except your LLM API calls). Keys never uploaded.","我的创作者画像":"My Creator Profile","题材偏好":"Genre Preference","题材方向":"Genre Direction","目标受众":"Target Audience","核心情绪":"Core Emotion","🎨 我的风格偏好":"🎨 My Style Preferences","🏠 豪门甜宠":"🏠 Wealthy Family Sweet Romance","👨‍👩‍👧 家庭喜剧":"👨‍👩‍👧 Family Comedy","👩‍👩‍👩 女性成长":"👩‍👩‍👩 Female Growth","💡 使用方式":"💡 How to Use","📋 历史记录":"📋 History","📋 粘贴大模型的输出结果":"📋 Paste LLM Output","📖 穿书穿越":"📖 Book Transmigration","📝 补充说明（选填）":"📝 Additional Notes (Optional)","🔍 自动质检":"🔍 Auto QC","点选标签或自由书写 → 更新创作者画像 → 下次激发更精准":"Select tags or freewrite → update creator profile → more precise next inspiration","画像迭代":"Profile Iteration","生成次数":"Generation Count","生成 Prompt":"Generate Prompt","提示词片段":"Prompt Snippet","以下为反馈 + 画像生成的提示词片段：":"Here's a snippet of the prompt for feedback + profile generation:","你的判断标准、审美偏好、经验积累，都会沉淀到":"Your judgment criteria, aesthetic preferences, and experience will all precipitate into","先婚后爱":"Marriage First, Love Later","性别互换":"Gender Swap","身份反转":"Identity Reversal","武林高手在校园":"Martial Arts Master in School","-select-":"- Select -","以下是反馈 + 画像生成的提示词片段：":"Prompt snippet for feedback + profile generation:","保存画像":"Save Profile","反馈沉淀":"Feedback Accumulation","取消":"Cancel","受众与题材":"Audience & Genre","喜剧公式":"Comedy Engine Formula","地域烟火气":"Local Atmosphere & Flavor","地域特色":"Regional Characteristics","基于2025H2-2026Q1短剧市场爆款观察 · 女性观众占比67% · 25-34岁占比近五成":"Based on 2025H2-2026Q1 short drama hit observation · Female audience 67% · 25-34 age group ~50%","复制":"Copy","奇幻触发器 × 极端身份错位 × 家庭/情感关系 × 喜剧 × 治愈":"Fantasy Trigger × Extreme Identity Misplacement × Family/Emotional Line × Comedy × Healing","好的创意不是凭空生成的，也不是简单复制市场爆款。好的创意来自":"Good ideas aren't conjured from thin air, nor simple copies of hits. Good ideas come from","完整循环：":"Complete Loop:","实验室":"Lab","将此 Prompt 拿到大模型中跑出结果，挑出你感兴趣的亮点，再回来调整参数重新激发。好的创意是迭代出来的。":"Run this prompt through the LLM, pick highlights of interest, then return to adjust and re-inspire. Good ideas are iterated.","开关规则，观察 Prompt 变化":"Toggle rules, observe prompt changes","循环往复，越来越好":"Cycle and repeat, getting better","情绪标签使用":"Emotion Label Usage","数据基础":"Data Foundation","有情绪承诺 / 有反差 / 有动词 / 4字或长句 / 迭代高频词":"Has emotional promise / Has contrast / Has action verb / 4-char or long phrase / Iterative high-frequency words","核心":"Core","治愈亲情":"Healing Family Bond","清空":"Clear","燃向成长":"Passionate Growth","的交汇点。":"intersection.","编辑":"Edit","编辑创作者画像":"Edit Creator Profile","自定义规则（选填）":"Custom Rules (Optional)","这不是一键生成工具。它是一个":"This is not a one-click generator. It's a","（可多选）":"(multiple select allowed)","已加载预设":"Loaded preset","已加载历史记录":"History loaded","已清空历史记录":"History cleared","已切换到":"Switched to","请填写完整信息":"Please fill in all fields","模型已保存":"Model saved","请先保存 API Key":"Please save your API Key first","连接":"Connecting","中...":"...","连接成功":"Connected","网络错误:":"Network error:","请先在设置中配置 API Key":"Please configure an API Key in settings first","生成中...":"Generating...","正在调用":"Calling","生成创意...":"generating ideas...","生成完成":"completed","生成失败:":"Generation failed:","请检查 API 设置是否正确。":"Please check your API settings.","请先点击「生成创意 Prompt」":"Please click \"Generate Creative Prompt\" first","请先将大模型的输出结果粘贴到上方文本框":"Please paste the LLM output in the text box above","请先将大模型的输出粘贴到上方文本框":"Please paste the LLM output in the text box above","已从粘贴内容识别出":"Identified","个概念":"concepts from pasted content","请至少对一个概念做出判断":"Please make a judgment on at least one concept","反馈已保存":"Feedback saved","请填写反馈":"Please fill in feedback","反馈已保存，画像已更新":"Feedback saved, profile updated","已复制":"Copied","已下载":"Downloaded","请填写目标受众":"Please fill in target audience","请至少选择一个核心情绪":"Please select at least one core emotion","已删除":"Deleted","请填写 API Key":"Please fill in API Key","API Key 已保存":"API Key saved","画像已保存":"Profile saved","画像已清空":"Profile cleared","已清空":"Cleared","暂无数据":"No data yet","暂无正面标签数据":"No positive tag data yet","暂无负面标签数据":"No negative tag data yet","所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。":"All rules enabled. The generated prompt will include the complete methodology system.","已关闭":"Disabled","条规则：":"rules:","将从痛点出发而非幻想出发，创意可能偏\"苦情\"":"Will start from pain points instead of fantasy, ideas may become \"melodrama\"","可能生成以 CP 为主线而非女主为主线的概念":"May generate concepts where CP is the main thread instead of the heroine","不再检验女主的配得感、快意恩仇、主体性":"No longer checks heroine worthiness, immediate vengeance, agency","标题不再受5铁律约束，可能出现6-8字中间地带":"Title no longer bound by 5 iron laws, may fall in the 6-8 char dead zone","概念不再要求\"一句话=情绪过山车\"":"Concept no longer requires \"one-liner = emotional rollercoaster\"","CP 可能回到\"命运安排\"的老套路":"CP may revert to the \"fate arranged\" trope","搞事业线可能盖过主线":"Career arc may overshadow the main story","不再规避职场戏太实、文艺片感等常见错误":"No longer avoids common pitfalls like overly realistic workplace drama, arthouse feel","关闭规则后点击「生成创意 Prompt」查看变化。":"Click \"Generate Creative Prompt\" after disabling rules to see changes.","结构化反馈已保存，画像已更新":"Structured feedback saved, profile updated","反馈已保存，创作者画像已更新":"Feedback saved, creator profile updated","还没有画像数据。使用工具生成创意后，在下方写反馈，你的偏好会自动沉淀到这里。":"No profile data yet. After generating ideas, write feedback below and your preferences will accumulate here.","为什么值得在这里反馈？":"Why give feedback here?","大模型里反馈关窗口就没了，这里的反馈会积累成你的「创作者画像」——一个跨模型、跨会话持久化的偏好档案，每次生成自动带上。":"Feedback in LLMs disappears when you close the window. Here it accumulates into your Creator Profile — a persistent preference file across models and sessions, auto-attached to every generation.","轮反馈":"rounds of feedback","偏好：":"Preferences:","避免：":"Avoid:","风格：":"Style:","备注：":"Notes:","↑ 此画像自动附加到每次生成的 Prompt 末尾，随反馈轮次更新":"↑ This profile is auto-appended to every generated prompt, updated with each feedback round","当前模型：":"Current model:","已配置":"Configured","未配置":"Not configured","切换":"Switch","确定清空创作者画像？":"Clear creator profile?","请先生成创意（点击「生成创意 Prompt」或「发送到模型」）":"Generate ideas first (click \"Generate Creative Prompt\" or \"Send to Model\")","值得继续的点：":"Points worth continuing:","问题点：":"Issues:","自由补充...":"Free notes...","轮）":"rounds)"};
 
 var EN_TO_ZH={};
 Object.keys(ZH_TO_EN).forEach(function(k){EN_TO_ZH[ZH_TO_EN[k]]=k});
@@ -1322,12 +1328,25 @@ function applyLang(){
       var txt=node2.textContent.trim();
       if(EN_TO_ZH[txt])node2.textContent=EN_TO_ZH[txt];
     }
+    // restore <option> tags
+    document.querySelectorAll('select option').forEach(function(opt){
+      var orig=opt.getAttribute('data-zh');
+      if(orig){opt.textContent=orig;opt.removeAttribute('data-zh')}
+    });
     applied=false;
     snapshotPage();
     return;
   }
   if(applied)return;
   originalTexts.forEach(function(orig,node){node.textContent=ZH_TO_EN[orig]});
+  // translate <option> tags
+  document.querySelectorAll('select option').forEach(function(opt){
+    var zh=opt.textContent.trim();
+    if(ZH_TO_EN[zh]){
+      opt.setAttribute('data-zh',zh);
+      opt.textContent=ZH_TO_EN[zh];
+    }
+  });
   applied=true;
 }
 
