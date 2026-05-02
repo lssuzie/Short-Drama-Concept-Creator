@@ -1758,32 +1758,6 @@ gen=function(){
   document.getElementById('fbPreview').style.display='none';
 };
 
-
-/* ============================================
-   初始化
-   ============================================ */
-renderHist();
-renderProfile();
-renderPresetList();
-
-/* --- Tab 切换 --- */
-function switchTab(tab){
-  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active')});
-  event.target.classList.add('active');
-  document.getElementById('dashboard').classList.remove('visible');
-  document.getElementById('labPanel').classList.remove('visible');
-  if(tab==='dashboard')toggleDashboard();
-  if(tab==='lab')toggleLab();
-  if(tab==='create'){/* show default sections */}
-}
-
-
-document.addEventListener('click',function(e){
-  var sp=document.getElementById('settingsPanel');
-  var btn=document.querySelector('.settings-btn');
-  if(sp&&!sp.contains(e.target)&&!btn.contains(e.target))sp.classList.remove('visible');
-});
-
 /* ============================================
    i18n 中英文切换
    ============================================ */
@@ -1863,6 +1837,33 @@ window.addEventListener('load',function(){
   applyLang();
   updateLangButton();
 });
+
+
+/* ============================================
+   初始化
+   ============================================ */
+renderHist();
+renderProfile();
+renderPresetList();
+
+/* --- Tab 切换 --- */
+function switchTab(tab){
+  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  document.getElementById('dashboard').classList.remove('visible');
+  document.getElementById('labPanel').classList.remove('visible');
+  if(tab==='dashboard')toggleDashboard();
+  if(tab==='lab')toggleLab();
+  if(tab==='create'){/* show default sections */}
+}
+
+
+document.addEventListener('click',function(e){
+  var sp=document.getElementById('settingsPanel');
+  var btn=document.querySelector('.settings-btn');
+  if(sp&&!sp.contains(e.target)&&!btn.contains(e.target))sp.classList.remove('visible');
+});
+
 </script>
 </body>
 </html>
