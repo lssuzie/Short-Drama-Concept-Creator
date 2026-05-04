@@ -21,9 +21,9 @@ function t(zh){
 /* ============================================
    Supabase 认证
    ============================================ */
+var _sbUser=null;
 function sbCurrentUser(){
-  if(!sb)return null;
-  return sb.auth.user();
+  return _sbUser;
 }
 
 function showLoginUI(){
@@ -1558,12 +1558,16 @@ async function initApp(){
   if(sb){
     // 监听登录状态变化（处理 GitHub OAuth 回调）
     sb.auth.onAuthStateChange(function(event,session){
-      if(session&&session.user){
+      _sbUser=session&&session.user?session.user:null;
+      if(_sbUser){
         onLogin();
+      }else{
+        document.getElementById('userInfoBar').style.display='none';
       }
     });
     var session=await sb.auth.getSession();
     if(session.data&&session.data.session&&session.data.session.user){
+      _sbUser=session.data.session.user;
       showUserInfo();
       loadCloudData().then(function(){renderProfile();renderHist()});
     }
