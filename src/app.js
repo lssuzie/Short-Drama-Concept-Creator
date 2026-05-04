@@ -1430,6 +1430,8 @@ gen=function(){
   document.getElementById('fbSection').style.display='none';
   document.getElementById('fbSaved').style.display='none';
   document.getElementById('fbPreview').style.display='none';
+  // 自动滚到粘贴区
+  document.getElementById('pasteArea').scrollIntoView({behavior:'smooth',block:'center'});
 };
 
 /* ============================================
