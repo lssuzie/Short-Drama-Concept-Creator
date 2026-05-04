@@ -722,32 +722,6 @@ function dl(){
 }
 
 /* --- 测试 Supabase 连接 --- */
-async function testSupabase(){
-  if(!sb){document.getElementById('testResult').textContent='Supabase client 未初始化';return}
-  var user=sbCurrentUser();
-  if(!user){document.getElementById('testResult').textContent='未登录';return}
-  var resultEl=document.getElementById('testResult');
-  resultEl.textContent='测试中...';
-  try{
-    // 1. 读取测试
-    var r=await sb.from('history').select('*').eq('user_id',user.id);
-    var readMsg='云端共 '+((r.data&&r.data.length)||0)+' 条记录';
-    // 2. 插入测试
-    var testItem={user_id:user.id,ts:Date.now(),aud:'测试',genre:'测试',tags:['测试'],prompt:'测试插入',model:'test',result:'测试结果'};
-    var ins=await sb.from('history').insert(testItem).select();
-    var insMsg='插入：成功';
-    if(ins.error)insMsg='插入失败：'+ins.error.message+' (code: '+ins.error.code+')';
-    // 3. 删除测试数据
-    if(ins.data&&ins.data[0]){
-      await sb.from('history').delete().eq('id',ins.data[0].id);
-      insMsg+=' (已清理测试数据)';
-    }
-    resultEl.innerHTML='<div style="color:#22c55e">'+readMsg+'</div><div style="color:'+(ins.error?'#ef4444':'#22c55e')+'">'+insMsg+'</div>';
-  }catch(e){
-    resultEl.innerHTML='<div style="color:#ef4444">出错：'+e.message+'</div>';
-  }
-}
-
 /* --- 导出云端数据 --- */
 async function exportCloudData(){
   if(!sb||!sbCurrentUser()){ts('请先登录');return}
