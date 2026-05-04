@@ -820,9 +820,10 @@ async function archiveResult(){
   statusEl.style.color='#22c55e';
   if(sbCurrentUser()){
     ts(t('已入库') + ' · ☁ 已同步云端');
+    document.getElementById('archiveCloudHint').style.display='none';
   }else{
     ts(t('已入库'));
-    statusEl.innerHTML='✅ 已入库 · <a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">登录后可同步云端，换设备不丢</a>';
+    document.getElementById('archiveCloudHint').style.display='block';
   }
 
   // 4. 滚到质检结果
@@ -1084,6 +1085,7 @@ async function genAI(){
     document.getElementById('pasteInput').value='';
     document.getElementById('qcResults').innerHTML='';
     document.getElementById('qcToFeedbackHint').style.display='none';
+    document.getElementById('archiveCloudHint').style.display=sbCurrentUser()?'none':'block';
     document.getElementById('fbSection').style.display='none';
     document.getElementById('fbSaved').style.display='none';
     document.getElementById('fbPreview').style.display='none';
@@ -1582,6 +1584,7 @@ gen=function(){
   document.getElementById('pasteInput').value='';
   document.getElementById('qcResults').innerHTML='';
   document.getElementById('qcToFeedbackHint').style.display='none';
+  document.getElementById('archiveCloudHint').style.display=sbCurrentUser()?'none':'block';
   // 反馈区先隐藏，等用户粘贴大模型输出后再显示
   document.getElementById('fbSection').style.display='none';
   document.getElementById('fbSaved').style.display='none';

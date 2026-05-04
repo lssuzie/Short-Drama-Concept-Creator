@@ -414,6 +414,9 @@ select option{background:var(--s);color:var(--tp)}
       <button class="bg" onclick="archiveResult()" style="font-size:14px;padding:12px 32px">📚 入库</button>
       <span id="archiveStatus" style="font-size:12px;color:var(--tm)"></span>
     </div>
+    <div id="archiveCloudHint" style="display:none;font-size:11px;color:var(--tm);margin-top:8px">
+      💾 本地保存 · <a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">登录后自动同步云端</a>
+    </div>
     <div id="qcResults" style="margin-top:20px"></div>
     <div id="qcToFeedbackHint" style="display:none;margin-top:16px;padding:12px 16px;background:var(--as);border:1px solid rgba(232,87,42,.2);border-radius:10px;font-size:12px;line-height:1.8;color:var(--a)">
       ✅ 质检完成 ↑ 请在下方完成反馈 → 你的偏好会沉淀到<strong>创作者画像</strong>，下次生成更精准
@@ -1378,9 +1381,10 @@ async function archiveResult(){
   statusEl.style.color='#22c55e';
   if(sbCurrentUser()){
     ts(t('已入库') + ' · ☁ 已同步云端');
+    document.getElementById('archiveCloudHint').style.display='none';
   }else{
     ts(t('已入库'));
-    statusEl.innerHTML='✅ 已入库 · <a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">登录后可同步云端，换设备不丢</a>';
+    document.getElementById('archiveCloudHint').style.display='block';
   }
 
   // 4. 滚到质检结果
@@ -1642,6 +1646,7 @@ async function genAI(){
     document.getElementById('pasteInput').value='';
     document.getElementById('qcResults').innerHTML='';
     document.getElementById('qcToFeedbackHint').style.display='none';
+    document.getElementById('archiveCloudHint').style.display=sbCurrentUser()?'none':'block';
     document.getElementById('fbSection').style.display='none';
     document.getElementById('fbSaved').style.display='none';
     document.getElementById('fbPreview').style.display='none';
@@ -2140,6 +2145,7 @@ gen=function(){
   document.getElementById('pasteInput').value='';
   document.getElementById('qcResults').innerHTML='';
   document.getElementById('qcToFeedbackHint').style.display='none';
+  document.getElementById('archiveCloudHint').style.display=sbCurrentUser()?'none':'block';
   // 反馈区先隐藏，等用户粘贴大模型输出后再显示
   document.getElementById('fbSection').style.display='none';
   document.getElementById('fbSaved').style.display='none';
