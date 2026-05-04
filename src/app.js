@@ -180,7 +180,7 @@ function saveProfileData(data){
       style_text:data.style||'',
       extra_text:data.extra||'',
       feedback_count:_memProfCnt
-    }).catch(function(e){console.error('Supabase sync error:',e)});
+    }).select().catch(function(e){console.error('Supabase sync error:',e)});
   }
 }
 
