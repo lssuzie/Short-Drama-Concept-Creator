@@ -394,7 +394,7 @@ function renderHist(){
     var summary=it.result?it.result.replace(/#[^\n]*/g,'').replace(/\n+/g,' ').trim().slice(0,80):'';
     h+='<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 20px;margin-bottom:10px;cursor:pointer;transition:border-color .2s;position:relative" onmouseenter="this.style.borderColor=\'var(--bf)\'" onmouseleave="this.style.borderColor=\'var(--b)\'" onclick="loadHist('+i+')">';
     h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">';
-    h+='<span style="font-size:13px;font-weight:500;color:var(--tp)">《'+title+'》'+(it.model?' · '+it.model:'')+'</span>';
+    h+='<span style="font-size:13px;font-weight:500;color:var(--tp)">《'+title+'》'+(it.model&&it.model!=='手动'?' · '+it.model:'')+'</span>';
     h+='<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">';
     h+='<span style="font-size:11px;color:var(--tm)">'+ds+'</span>';
     h+='<button onclick="event.stopPropagation();deleteHist('+i+')" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:2px 8px;cursor:pointer;transition:all .2s" onmouseenter="this.style.color=\'#ef4444\';this.style.borderColor=\'#ef4444\'" onmouseleave="this.style.color=\'var(--tm)\';this.style.borderColor=\'var(--b)\'">✕</button>';
