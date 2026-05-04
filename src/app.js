@@ -104,10 +104,18 @@ function showUserInfo(){
 }
 
 async function onLogin(){
-  showUserInfo();
-  await loadCloudData();
+  try{
+    showUserInfo();
+    await loadCloudData();
+  }catch(e){
+    console.error('onLogin error:',e);
+    // 即使云端加载失败，也显示主界面
+    document.getElementById('authSection').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  }
   renderProfile();
   renderHist();
+  renderPresetList();
 }
 
 async function loadCloudData(){
@@ -1504,6 +1512,12 @@ window.addEventListener('load',function(){
    ============================================ */
 async function initApp(){
   if(sb){
+    // 监听登录状态变化（处理 GitHub OAuth 回调）
+    sb.auth.onAuthStateChange(function(event,session){
+      if(session&&session.user){
+        onLogin();
+      }
+    });
     var session=await sb.auth.getSession();
     if(session.data&&session.data.session&&session.data.session.user){
       onLogin();
