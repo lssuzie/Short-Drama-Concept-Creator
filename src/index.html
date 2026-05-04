@@ -237,31 +237,30 @@
     </div>
     <div class="ob" id="obox"></div>
     <p style="margin-top:12px;font-size:12px;color:var(--tm)">将此 Prompt 拿到大模型中跑出结果，挑出你感兴趣的亮点，再回来调整参数重新激发。好的创意是迭代出来的。</p>
+  </div>
 
-    <!-- 流程指引 -->
-    <div id="workflowHint" style="margin-top:20px;padding:16px 20px;background:var(--ds);border:1px solid var(--db);border-radius:12px;font-size:13px;line-height:2;color:#b0d8e0">
-      <strong style="color:var(--d)">↓ 下一步：把大模型生成的结果粘贴回来</strong><br>
-      复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「质检」自动分析
-    </div>
-
-    <!-- 粘贴区：大模型结果粘贴到这里 -->
-    <div id="pasteArea" style="margin-top:20px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-size:13px;font-weight:600;color:var(--tp)">📋 粘贴大模型的输出结果</div>
-        <div style="display:flex;gap:6px">
-          <span id="autoSaveStatus" style="font-size:11px;color:var(--tm);line-height:28px"></span>
-          <button onclick="document.getElementById('pasteInput').value='';ts('已清空')" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer">清空</button>
-        </div>
-      </div>
-      <textarea id="pasteInput" rows="10" placeholder="将大模型生成的创意概念粘贴到这里...&#10;&#10;例如：&#10;### 概念一：《亲妈她18岁》&#10;奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...&#10;她是谁：拥有现代顶级育儿智慧的"少女"妈妈..." oninput="autoSaveResult()"></textarea>
-      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-        <button class="bc" onclick="runQC()" style="color:var(--d);border-color:var(--d)">🔍 自动质检</button>
-        <button class="bc" onclick="initFeedbackFromPaste()" style="color:var(--cm);border-color:var(--cm)">✎ 写反馈</button>
+  <!-- 粘贴区：始终可见，随时可以粘贴大模型结果 -->
+  <div id="pasteArea" style="margin-top:32px;background:var(--s);border:1px solid var(--b);border-radius:14px;padding:24px 28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:600;color:var(--tp)">📋 粘贴大模型的输出结果</div>
+      <div style="display:flex;gap:6px">
+        <span id="autoSaveStatus" style="font-size:11px;color:var(--tm);line-height:28px"></span>
+        <button onclick="document.getElementById('pasteInput').value='';ts('已清空')" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer">清空</button>
       </div>
     </div>
-
-    <!-- 质检结果 -->
+    <p style="font-size:12px;color:var(--tm);margin-bottom:12px">把大模型（DeepSeek / ChatGPT / Claude 等）生成的创意概念粘贴到这里，自动保存到云端。</p>
+    <textarea id="pasteInput" rows="10" placeholder="将大模型生成的创意概念粘贴到这里...&#10;&#10;例如：&#10;### 概念一：《亲妈她18岁》&#10;奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...&#10;她是谁：拥有现代顶级育儿智慧的"少女"妈妈..." oninput="autoSaveResult()"></textarea>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+      <button class="bc" onclick="runQC()" style="color:var(--d);border-color:var(--d)">🔍 自动质检</button>
+      <button class="bc" onclick="initFeedbackFromPaste()" style="color:var(--cm);border-color:var(--cm)">✎ 写反馈</button>
+    </div>
     <div id="qcResults" style="margin-top:20px"></div>
+  </div>
+
+  <!-- 流程指引（生成后显示） -->
+  <div id="workflowHint" style="display:none;margin-top:20px;padding:16px 20px;background:var(--ds);border:1px solid var(--db);border-radius:12px;font-size:13px;line-height:2;color:#b0d8e0">
+    <strong style="color:var(--d)">↓ 下一步：把大模型生成的结果粘贴到下方文本框</strong><br>
+    复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「质检」或「写反馈」
   </div>
 
   <!-- 反馈沉淀区 -->
