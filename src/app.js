@@ -361,8 +361,8 @@ function preset(key){
    ============================================ */
 var HIST_KEY='sdcc_history';
 
-function saveHist(prompt,modelName){
-  var item={ts:Date.now(),aud:document.getElementById('aud').value,genre:document.getElementById('genre').value,tags:gt(),prompt:prompt,model:modelName||'手动'};
+function saveHist(prompt,modelName,result){
+  var item={ts:Date.now(),aud:document.getElementById('aud').value,genre:document.getElementById('genre').value,tags:gt(),prompt:prompt,model:modelName||'手动',result:result||''};
   _memHistory.unshift(item);
   if(_memHistory.length>50)_memHistory=_memHistory.slice(0,50);
   localStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
@@ -371,7 +371,7 @@ function saveHist(prompt,modelName){
   if(sb&&sbCurrentUser()){
     sb.from('history').insert({
       user_id:sbCurrentUser().id,
-      ts:item.ts,aud:item.aud,genre:item.genre,tags:item.tags,prompt:item.prompt,model:item.model
+      ts:item.ts,aud:item.aud,genre:item.genre,tags:item.tags,prompt:item.prompt,model:item.model,result:item.result
     }).catch(function(e){console.error('Supabase history sync error:',e)});
   }
 }
@@ -663,6 +663,15 @@ function dl(){
   var u=URL.createObjectURL(b);var a=document.createElement('a');
   a.href=u;a.download='短剧策划_v9_'+new Date().toISOString().slice(0,10)+'.txt';
   a.click();URL.revokeObjectURL(u);ts(t('已下载'));
+}
+
+/* --- 保存到云端（Prompt + LLM结果） --- */
+function saveToCloud(){
+  var prompt=document.getElementById('obox').textContent;
+  var result=document.getElementById('pasteInput').value.trim();
+  if(!prompt){ts(t('没有可保存的内容'));return}
+  saveHist(prompt,null,result);
+  ts(t('已保存到云端'));
 }
 
 
