@@ -404,6 +404,9 @@ function renderHist(){
     h+='</div>';
   });
   box.innerHTML=h;
+  // 未登录时显示云端同步提示
+  var hint=document.getElementById('cloudHint');
+  if(hint)hint.style.display=sbCurrentUser()?'none':'block';
 }
 
 function deleteHist(i){

@@ -328,12 +328,15 @@
   <div class="dv"></div>
 
   <div id="histSection">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <h2 style="font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700">📚 创意库</h2>
       <div style="display:flex;gap:8px">
         <button onclick="downloadHist()" style="font-size:12px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:8px;padding:6px 16px;cursor:pointer;transition:all .2s">📥 下载全部</button>
         <button onclick="clearHist()" style="font-size:12px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:8px;padding:6px 16px;cursor:pointer;transition:all .2s">清空</button>
       </div>
+    </div>
+    <div id="cloudHint" style="display:none;font-size:12px;color:var(--tm);margin-bottom:12px;padding:8px 14px;background:var(--ds);border:1px solid var(--db);border-radius:8px">
+      创意库存储在浏览器本地 · <a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">登录后自动同步云端，换设备不丢</a>
     </div>
     <div id="histList"></div>
   </div>
