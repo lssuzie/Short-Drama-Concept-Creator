@@ -686,7 +686,9 @@ function saveToCloud(){
 /* --- 自动保存（需登录，粘贴后自动存） --- */
 var _autoSaveTimer=null;
 function autoSaveResult(){
-  if(!sbCurrentUser())return; // 未登录不自动保存
+  // 始终保存到 localStorage（本地备份）
+  localStorage.setItem('sdcc_paste_draft',document.getElementById('pasteInput').value);
+  if(!sbCurrentUser())return; // 未登录不存云端
   var status=document.getElementById('autoSaveStatus');
   if(_autoSaveTimer)clearTimeout(_autoSaveTimer);
   if(status)status.textContent='输入中...';
@@ -1555,6 +1557,9 @@ async function initApp(){
   renderProfile();
   renderHist();
   renderPresetList();
+  // 恢复粘贴区草稿
+  var draft=localStorage.getItem('sdcc_paste_draft');
+  if(draft){document.getElementById('pasteInput').value=draft}
   if(sb){
     // 监听登录状态变化（处理 GitHub OAuth 回调）
     sb.auth.onAuthStateChange(function(event,session){
