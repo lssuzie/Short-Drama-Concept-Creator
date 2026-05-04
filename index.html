@@ -1333,7 +1333,12 @@ async function archiveResult(){
   renderHist();
   statusEl.textContent='✅ 已入库';
   statusEl.style.color='#22c55e';
-  ts(t('已入库') + (sbCurrentUser() ? ' · ☁ 已同步云端' : ' · ' + t('请完成反馈')));
+  if(sbCurrentUser()){
+    ts(t('已入库') + ' · ☁ 已同步云端');
+  }else{
+    ts(t('已入库'));
+    statusEl.innerHTML='✅ 已入库 · <a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">登录后可同步云端，换设备不丢</a>';
+  }
 
   // 4. 滚到质检结果
   document.getElementById('qcResults').scrollIntoView({behavior:'smooth',block:'start'});
