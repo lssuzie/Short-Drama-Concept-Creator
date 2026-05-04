@@ -1218,8 +1218,8 @@ function pv(){
 }
 
 function cp(){
-  var t=document.getElementById('obox').textContent;
-  navigator.clipboard.writeText(t).then(function(){ts(t('已复制'))}).catch(function(){
+  var txt=document.getElementById('obox').textContent;
+  navigator.clipboard.writeText(txt).then(function(){ts(t('已复制'))}).catch(function(){
     var r=document.createRange();r.selectNodeContents(document.getElementById('obox'));
     var s=window.getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();ts(t('已复制'));
   });
