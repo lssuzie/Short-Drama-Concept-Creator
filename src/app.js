@@ -693,8 +693,9 @@ function autoSaveResult(){
     if(!result)return;
     var prompt=document.getElementById('obox').textContent||'';
     saveHist(prompt,null,result);
-    if(status)status.textContent='✓ 已自动保存';
-    setTimeout(function(){if(status)status.textContent=''},2000);
+    if(status){status.textContent='✓ 已保存到云端';status.style.color='#22c55e'}
+    ts('✓ 已保存到云端');
+    setTimeout(function(){if(status){status.textContent='';status.style.color=''}},3000);
   },1000);
 }
 

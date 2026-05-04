@@ -452,7 +452,7 @@ select option{background:var(--s);color:var(--tp)}
 
   <div class="dv"></div>
 
-  <div id="histSection" style="display:none">
+  <div id="histSection">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <h2 style="font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700">📋 历史记录</h2>
       <button onclick="clearHist()" style="font-size:12px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:8px;padding:6px 16px;cursor:pointer;transition:all .2s">清空</button>
@@ -1229,8 +1229,9 @@ function autoSaveResult(){
     if(!result)return;
     var prompt=document.getElementById('obox').textContent||'';
     saveHist(prompt,null,result);
-    if(status)status.textContent='✓ 已自动保存';
-    setTimeout(function(){if(status)status.textContent=''},2000);
+    if(status){status.textContent='✓ 已保存到云端';status.style.color='#22c55e'}
+    ts('✓ 已保存到云端');
+    setTimeout(function(){if(status){status.textContent='';status.style.color=''}},3000);
   },1000);
 }
 
