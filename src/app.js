@@ -1325,6 +1325,7 @@ function saveStructuredFeedback(){
 
   document.getElementById('fbSaved').innerHTML='✓ '+t('结构化反馈已保存，画像已更新')+'（第 '+_memProfCnt+' '+t('轮）')+'）';
   document.getElementById('fbSaved').style.display='block';
+  document.getElementById('fbSaved').scrollIntoView({behavior:'smooth',block:'center'});
   ts(t('反馈已保存'));
   renderProfile();
 }
@@ -1362,6 +1363,7 @@ function saveFb(){
     document.getElementById('fbPref').value='';
     document.getElementById('fbSaved').innerHTML='✓ '+t('反馈已保存，创作者画像已更新')+'（第 '+_memProfCnt+' '+t('轮）')+'）';
     document.getElementById('fbSaved').style.display='block';
+    document.getElementById('fbSaved').scrollIntoView({behavior:'smooth',block:'center'});
     ts(t('反馈已保存，画像已更新'));
   }
 }
