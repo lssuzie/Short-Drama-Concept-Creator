@@ -152,10 +152,12 @@ select option{background:var(--s);color:var(--tp)}
 </head>
 <body>
 <div class="app">
-<!-- Auth Section -->
-<div id="authSection">
-  <div id="authLogin"></div>
-  <div id="authRegister" style="display:none"></div>
+<!-- Auth Modal (弹窗式，保存时才出现) -->
+<div id="authModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center">
+  <div style="background:var(--sr);border:1px solid var(--b);border-radius:14px;padding:32px;width:90%;max-width:400px;position:relative">
+    <button onclick="closeAuthModal()" style="position:absolute;top:12px;right:16px;font-size:18px;color:var(--tm);background:none;border:none;cursor:pointer">✕</button>
+    <div id="authModalBody"></div>
+  </div>
 </div>
 
 <!-- User Info Bar (shown when logged in) -->
@@ -164,8 +166,8 @@ select option{background:var(--s);color:var(--tp)}
   <button onclick="sbLogout()" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer;transition:all .2s">退出登录</button>
 </div>
 
-<!-- Main Content (hidden until login) -->
-<div id="mainContent" style="display:none">
+<!-- Main Content -->
+<div id="mainContent">
 <!-- Settings Button -->
 <button class="settings-btn" onclick="toggleSettings()" title="API 设置">⚙</button>
 <!-- Language Toggle -->
@@ -563,35 +565,39 @@ function sbCurrentUser(){
 }
 
 function showLoginUI(){
-  document.getElementById('authLogin').innerHTML=
-    '<div class="auth-card">'+
-    '<h2 style="font-family:\'Noto Serif SC\',serif;font-size:20px;font-weight:700;margin-bottom:8px">短剧创意炼金坊</h2>'+
-    '<p style="font-size:12px;color:var(--tm);margin-bottom:24px">登录后创意数据云端同步，换设备也不丢</p>'+
+  document.getElementById('authModalBody').innerHTML=
+    '<h2 style="font-family:\'Noto Serif SC\',serif;font-size:20px;font-weight:700;margin-bottom:8px">登录后云端同步</h2>'+
+    '<p style="font-size:12px;color:var(--tm);margin-bottom:20px">登录后创意数据保存到云端，换设备也不丢</p>'+
     '<button onclick="sbLoginGitHub()" style="width:100%;font-size:14px;padding:14px;border-radius:12px;border:1px solid var(--b);background:var(--s);color:var(--tp);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;transition:all .2s;font-family:\'Noto Sans SC\',sans-serif;font-weight:500"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>用 GitHub 登录</button>'+
-    '<div style="position:relative;margin-bottom:20px"><div style="position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--b)"></div><div style="position:relative;text-align:center"><span style="background:var(--s);padding:0 12px;font-size:12px;color:var(--tm)">或用邮箱</span></div></div>'+
+    '<div style="position:relative;margin-bottom:20px"><div style="position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--b)"></div><div style="position:relative;text-align:center"><span style="background:var(--sr);padding:0 12px;font-size:12px;color:var(--tm)">或用邮箱</span></div></div>'+
     '<div class="fg" style="margin-bottom:12px"><label>邮箱</label><input type="email" id="loginEmail" placeholder="your@email.com"></div>'+
     '<div class="fg" style="margin-bottom:16px"><label>密码</label><input type="password" id="loginPass" placeholder="至少6位"></div>'+
     '<button class="bg" onclick="sbLogin()" style="width:100%;font-size:14px;padding:14px">登录</button>'+
     '<div style="text-align:center;margin-top:16px;font-size:12px;color:var(--tm)">没有账号？<a href="javascript:void(0)" onclick="showRegisterUI()" style="color:var(--d)">注册一个</a></div>'+
-    '<div id="authError" style="color:#ef4444;font-size:12px;margin-top:12px"></div>'+
-    '</div>';
-  document.getElementById('authRegister').style.display='none';
-  document.getElementById('authLogin').style.display='block';
+    '<div id="authError" style="color:#ef4444;font-size:12px;margin-top:12px"></div>';
+  document.getElementById('authModal').style.display='flex';
 }
 
 function showRegisterUI(){
-  document.getElementById('authRegister').innerHTML=
-    '<div class="auth-card">'+
+  document.getElementById('authModalBody').innerHTML=
     '<h2 style="font-family:\'Noto Serif SC\',serif;font-size:20px;font-weight:700;margin-bottom:8px">注册账号</h2>'+
-    '<p style="font-size:12px;color:var(--tm);margin-bottom:24px">注册后需要到邮箱验证才能登录</p>'+
+    '<p style="font-size:12px;color:var(--tm);margin-bottom:20px">注册后需要到邮箱验证才能登录</p>'+
     '<div class="fg" style="margin-bottom:12px"><label>邮箱</label><input type="email" id="regEmail" placeholder="your@email.com"></div>'+
     '<div class="fg" style="margin-bottom:16px"><label>密码</label><input type="password" id="regPass" placeholder="至少6位"></div>'+
     '<button class="bg" onclick="sbRegister()" style="width:100%;font-size:14px;padding:14px">注册</button>'+
     '<div style="text-align:center;margin-top:16px;font-size:12px;color:var(--tm)">已有账号？<a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">去登录</a></div>'+
-    '<div id="regError" style="color:#ef4444;font-size:12px;margin-top:12px"></div>'+
-    '</div>';
-  document.getElementById('authLogin').style.display='none';
-  document.getElementById('authRegister').style.display='block';
+    '<div id="regError" style="color:#ef4444;font-size:12px;margin-top:12px"></div>';
+}
+
+function closeAuthModal(){
+  document.getElementById('authModal').style.display='none';
+}
+
+function requireLogin(callback){
+  if(sbCurrentUser()){callback();return}
+  showLoginUI();
+  // 登录成功后自动执行回调
+  window._loginCallback=callback;
 }
 
 async function sbRegister(){
@@ -623,19 +629,15 @@ async function sbLoginGitHub(){
 
 async function sbLogout(){
   await sb.auth.signOut();
-  document.getElementById('authSection').style.display='block';
   document.getElementById('userInfoBar').style.display='none';
-  document.getElementById('mainContent').style.display='none';
-  showLoginUI();
   renderProfile();
+  ts('已退出登录');
 }
 
 function showUserInfo(){
   var user=sbCurrentUser();
   if(!user)return;
-  document.getElementById('authSection').style.display='none';
   document.getElementById('userInfoBar').style.display='flex';
-  document.getElementById('mainContent').style.display='block';
   document.getElementById('userEmail').textContent=user.email;
   var settingsEmail=document.getElementById('settingsUserEmail');
   if(settingsEmail)settingsEmail.textContent='已登录：'+user.email;
@@ -647,13 +649,13 @@ async function onLogin(){
     await loadCloudData();
   }catch(e){
     console.error('onLogin error:',e);
-    // 即使云端加载失败，也显示主界面
-    document.getElementById('authSection').style.display='none';
-    document.getElementById('mainContent').style.display='block';
   }
+  closeAuthModal();
   renderProfile();
   renderHist();
   renderPresetList();
+  // 执行登录前的回调
+  if(window._loginCallback){window._loginCallback();window._loginCallback=null}
 }
 
 async function loadCloudData(){
@@ -1209,18 +1211,21 @@ function dl(){
   a.click();URL.revokeObjectURL(u);ts(t('已下载'));
 }
 
-/* --- 保存到云端（Prompt + LLM结果） --- */
+/* --- 保存到云端（需登录） --- */
 function saveToCloud(){
-  var prompt=document.getElementById('obox').textContent;
-  var result=document.getElementById('pasteInput').value.trim();
-  if(!prompt){ts(t('没有可保存的内容'));return}
-  saveHist(prompt,null,result);
-  ts(t('已保存到云端'));
+  requireLogin(function(){
+    var prompt=document.getElementById('obox').textContent;
+    var result=document.getElementById('pasteInput').value.trim();
+    if(!prompt){ts(t('没有可保存的内容'));return}
+    saveHist(prompt,null,result);
+    ts('✓ 已保存到云端');
+  });
 }
 
-/* --- 自动保存大模型结果（粘贴后自动存云端） --- */
+/* --- 自动保存（需登录，粘贴后自动存） --- */
 var _autoSaveTimer=null;
 function autoSaveResult(){
+  if(!sbCurrentUser())return; // 未登录不自动保存
   var status=document.getElementById('autoSaveStatus');
   if(_autoSaveTimer)clearTimeout(_autoSaveTimer);
   if(status)status.textContent='输入中...';
@@ -2085,6 +2090,10 @@ window.addEventListener('load',function(){
    初始化
    ============================================ */
 async function initApp(){
+  // 直接显示主界面
+  renderProfile();
+  renderHist();
+  renderPresetList();
   if(sb){
     // 监听登录状态变化（处理 GitHub OAuth 回调）
     sb.auth.onAuthStateChange(function(event,session){
@@ -2094,19 +2103,9 @@ async function initApp(){
     });
     var session=await sb.auth.getSession();
     if(session.data&&session.data.session&&session.data.session.user){
-      onLogin();
-    }else{
-      showLoginUI();
-      renderProfile();
-      renderPresetList();
+      showUserInfo();
+      loadCloudData().then(function(){renderProfile();renderHist()});
     }
-  }else{
-    // Supabase 未配置，直接进入
-    document.getElementById('authSection').style.display='none';
-    document.getElementById('mainContent').style.display='block';
-    renderProfile();
-    renderHist();
-    renderPresetList();
   }
 }
 initApp();

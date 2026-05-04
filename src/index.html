@@ -11,10 +11,12 @@
 </head>
 <body>
 <div class="app">
-<!-- Auth Section -->
-<div id="authSection">
-  <div id="authLogin"></div>
-  <div id="authRegister" style="display:none"></div>
+<!-- Auth Modal (弹窗式，保存时才出现) -->
+<div id="authModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center">
+  <div style="background:var(--sr);border:1px solid var(--b);border-radius:14px;padding:32px;width:90%;max-width:400px;position:relative">
+    <button onclick="closeAuthModal()" style="position:absolute;top:12px;right:16px;font-size:18px;color:var(--tm);background:none;border:none;cursor:pointer">✕</button>
+    <div id="authModalBody"></div>
+  </div>
 </div>
 
 <!-- User Info Bar (shown when logged in) -->
@@ -23,8 +25,8 @@
   <button onclick="sbLogout()" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer;transition:all .2s">退出登录</button>
 </div>
 
-<!-- Main Content (hidden until login) -->
-<div id="mainContent" style="display:none">
+<!-- Main Content -->
+<div id="mainContent">
 <!-- Settings Button -->
 <button class="settings-btn" onclick="toggleSettings()" title="API 设置">⚙</button>
 <!-- Language Toggle -->
