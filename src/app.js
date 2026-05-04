@@ -402,6 +402,14 @@ function loadHist(i){
   document.querySelectorAll('#tags input').forEach(function(c){c.checked=it.tags.indexOf(c.value)>=0});
   document.getElementById('obox').textContent=it.prompt;
   document.getElementById('otitle').textContent='历史记录 · '+it.genre;
+  // 恢复大模型结果
+  if(it.result){
+    document.getElementById('pasteInput').value=it.result;
+    document.getElementById('pasteArea').style.display='block';
+    document.getElementById('workflowHint').style.display='block';
+    document.getElementById('fbSection').style.display='block';
+    initFeedbackCards(it.result);
+  }
   var o=document.getElementById('opanel');
   o.classList.add('v');o.style.animation='none';o.offsetHeight;
   o.style.animation='fu .6s ease forwards';
@@ -672,6 +680,22 @@ function saveToCloud(){
   if(!prompt){ts(t('没有可保存的内容'));return}
   saveHist(prompt,null,result);
   ts(t('已保存到云端'));
+}
+
+/* --- 自动保存大模型结果（粘贴后自动存云端） --- */
+var _autoSaveTimer=null;
+function autoSaveResult(){
+  var status=document.getElementById('autoSaveStatus');
+  if(_autoSaveTimer)clearTimeout(_autoSaveTimer);
+  if(status)status.textContent='输入中...';
+  _autoSaveTimer=setTimeout(function(){
+    var result=document.getElementById('pasteInput').value.trim();
+    if(!result)return;
+    var prompt=document.getElementById('obox').textContent||'';
+    saveHist(prompt,null,result);
+    if(status)status.textContent='✓ 已自动保存';
+    setTimeout(function(){if(status)status.textContent=''},2000);
+  },1000);
 }
 
 

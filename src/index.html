@@ -248,9 +248,12 @@
     <div id="pasteArea" style="display:none;margin-top:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div style="font-size:13px;font-weight:600;color:var(--tp)">📋 粘贴大模型的输出结果</div>
-        <button onclick="document.getElementById('pasteInput').value='';ts('已清空')" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer">清空</button>
+        <div style="display:flex;gap:6px">
+          <span id="autoSaveStatus" style="font-size:11px;color:var(--tm);line-height:28px"></span>
+          <button onclick="document.getElementById('pasteInput').value='';ts('已清空')" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer">清空</button>
+        </div>
       </div>
-      <textarea id="pasteInput" rows="10" placeholder="将大模型生成的创意概念粘贴到这里...&#10;&#10;例如：&#10;### 概念一：《亲妈她18岁》&#10;奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...&#10;她是谁：拥有现代顶级育儿智慧的"少女"妈妈..."></textarea>
+      <textarea id="pasteInput" rows="10" placeholder="将大模型生成的创意概念粘贴到这里...&#10;&#10;例如：&#10;### 概念一：《亲妈她18岁》&#10;奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...&#10;她是谁：拥有现代顶级育儿智慧的"少女"妈妈..." oninput="autoSaveResult()"></textarea>
       <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
         <button class="bc" onclick="runQC()" style="color:var(--d);border-color:var(--d)">🔍 自动质检</button>
         <button class="bc" onclick="initFeedbackFromPaste()" style="color:var(--cm);border-color:var(--cm)">✎ 写反馈</button>
