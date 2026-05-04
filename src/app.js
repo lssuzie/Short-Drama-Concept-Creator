@@ -773,6 +773,9 @@ async function archiveResult(){
   document.getElementById('fbSaved').style.display='none';
   document.getElementById('fbPreview').style.display='none';
 
+  // 显示质检→反馈衔接提示
+  document.getElementById('qcToFeedbackHint').style.display='block';
+
   // 3. 保存到创意库（本地必存，已登录则同步云端）
   saveHist(null,text);
   renderHist();
@@ -1038,6 +1041,7 @@ async function genAI(){
     document.getElementById('pasteArea').style.display='block';
     document.getElementById('pasteInput').value='';
     document.getElementById('qcResults').innerHTML='';
+    document.getElementById('qcToFeedbackHint').style.display='none';
     document.getElementById('fbSection').style.display='none';
     document.getElementById('fbSaved').style.display='none';
     document.getElementById('fbPreview').style.display='none';
@@ -1533,6 +1537,7 @@ gen=function(){
   document.getElementById('pasteArea').style.display='block';
   document.getElementById('pasteInput').value='';
   document.getElementById('qcResults').innerHTML='';
+  document.getElementById('qcToFeedbackHint').style.display='none';
   // 反馈区先隐藏，等用户粘贴大模型输出后再显示
   document.getElementById('fbSection').style.display='none';
   document.getElementById('fbSaved').style.display='none';
