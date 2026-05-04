@@ -394,6 +394,7 @@ select option{background:var(--s);color:var(--tp)}
     <p style="font-size:12px;color:var(--tm);margin-bottom:12px">把大模型（DeepSeek / ChatGPT / Claude 等）生成的创意概念粘贴到这里，自动保存到云端。</p>
     <textarea id="pasteInput" rows="10" placeholder="将大模型生成的创意概念粘贴到这里...&#10;&#10;例如：&#10;### 概念一：《亲妈她18岁》&#10;奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...&#10;她是谁：拥有现代顶级育儿智慧的"少女"妈妈..." oninput="autoSaveResult()"></textarea>
     <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+      <button class="bc" onclick="saveToCloud()" style="color:var(--cm);border-color:var(--cm)">☁ 保存到云端</button>
       <button class="bc" onclick="runQC()" style="color:var(--d);border-color:var(--d)">🔍 自动质检</button>
       <button class="bc" onclick="initFeedbackFromPaste()" style="color:var(--cm);border-color:var(--cm)">✎ 写反馈</button>
     </div>
@@ -697,7 +698,6 @@ var PROF_CNT_KEY='sdcc_prof_cnt';  // 反馈轮次计数
 var _memProfile=JSON.parse(localStorage.getItem(PROF_KEY)||'null');
 var _memProfCnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
 var _memHistory=JSON.parse(localStorage.getItem('sdcc_history')||'[]');
-var _memLang=localStorage.getItem('sdcc-lang')||'zh';
 
 // 读取画像（从内存）
 function getProfile(){

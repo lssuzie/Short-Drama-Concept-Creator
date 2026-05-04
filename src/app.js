@@ -159,7 +159,6 @@ var PROF_CNT_KEY='sdcc_prof_cnt';  // 反馈轮次计数
 var _memProfile=JSON.parse(localStorage.getItem(PROF_KEY)||'null');
 var _memProfCnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
 var _memHistory=JSON.parse(localStorage.getItem('sdcc_history')||'[]');
-var _memLang=localStorage.getItem('sdcc-lang')||'zh';
 
 // 读取画像（从内存）
 function getProfile(){
