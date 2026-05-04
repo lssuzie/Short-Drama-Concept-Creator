@@ -133,3 +133,7 @@ select option{background:var(--s);color:var(--tp)}
 .lang-btn:hover{background:var(--b);border-color:var(--bf)}
 .lang-btn:active{transform:scale(.96)}
 
+/* === auth === */
+.auth-card{max-width:400px;margin:80px auto 40px;background:var(--s);border:1px solid var(--b);border-radius:14px;padding:32px}
+.user-info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;margin-bottom:20px;background:var(--s);border:1px solid var(--b);border-radius:10px}
+

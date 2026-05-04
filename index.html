@@ -142,10 +142,29 @@ select option{background:var(--s);color:var(--tp)}
 .lang-btn:hover{background:var(--b);border-color:var(--bf)}
 .lang-btn:active{transform:scale(.96)}
 
+/* === auth === */
+.auth-card{max-width:400px;margin:80px auto 40px;background:var(--s);border:1px solid var(--b);border-radius:14px;padding:32px}
+.user-info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;margin-bottom:20px;background:var(--s);border:1px solid var(--b);border-radius:10px}
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="app">
+<!-- Auth Section -->
+<div id="authSection">
+  <div id="authLogin"></div>
+  <div id="authRegister" style="display:none"></div>
+</div>
+
+<!-- User Info Bar (shown when logged in) -->
+<div id="userInfoBar" style="display:none" class="user-info-bar">
+  <span id="userEmail" style="font-size:12px;color:var(--ts)"></span>
+  <button onclick="sbLogout()" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer;transition:all .2s">退出登录</button>
+</div>
+
+<!-- Main Content (hidden until login) -->
+<div id="mainContent" style="display:none">
 <!-- Settings Button -->
 <button class="settings-btn" onclick="toggleSettings()" title="API 设置">⚙</button>
 <!-- Language Toggle -->
@@ -502,10 +521,21 @@ select option{background:var(--s);color:var(--tp)}
     你的判断标准、审美偏好、经验积累，都会沉淀到<strong style="color:var(--cm)">创作者画像</strong>中。<br>
     <strong style="color:var(--tp)">AI 做执行，你做判断。画像跟着你一起成长。</strong>
   </div>
-</div>
+</div><!-- /mainContent -->
+</div><!-- /app -->
 <div class="toast" id="tst"></div>
 
 <script>
+/* ============================================
+   Supabase 配置
+   ============================================ */
+var SB_URL='https://lvnfjedrksbbbdsxgr.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2bWZqZWRya3NwYmJiYmRzeGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODU4NzMsImV4cCI6MjA5MzQ2MTg3M30.V9OF--N-1LDp8BklyWTZ30MJPFlOZ6boczTUF4VV9Go';
+var sb=null;
+if(typeof supabase!=='undefined'&&supabase.createClient){
+  sb=supabase.createClient(SB_URL,SB_KEY);
+}
+
 function gt(){var t=[];document.querySelectorAll('#tags input:checked').forEach(function(c){t.push(c.value)});return t}
 function tr(){document.getElementById('rtog').classList.toggle('open');document.getElementById('rpv').classList.toggle('visible')}
 function ts(m){var t=document.getElementById('tst');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)}
@@ -517,20 +547,153 @@ function t(zh){
 }
 
 /* ============================================
+   Supabase 认证
+   ============================================ */
+function sbCurrentUser(){
+  if(!sb)return null;
+  return sb.auth.user();
+}
+
+function showLoginUI(){
+  document.getElementById('authLogin').innerHTML=
+    '<div class="auth-card">'+
+    '<h2 style="font-family:\'Noto Serif SC\',serif;font-size:20px;font-weight:700;margin-bottom:8px">短剧创意炼金坊</h2>'+
+    '<p style="font-size:12px;color:var(--tm);margin-bottom:24px">登录后创意数据云端同步，换设备也不丢</p>'+
+    '<div class="fg" style="margin-bottom:12px"><label>邮箱</label><input type="email" id="loginEmail" placeholder="your@email.com"></div>'+
+    '<div class="fg" style="margin-bottom:16px"><label>密码</label><input type="password" id="loginPass" placeholder="至少6位"></div>'+
+    '<button class="bg" onclick="sbLogin()" style="width:100%;font-size:14px;padding:14px">登录</button>'+
+    '<div style="text-align:center;margin-top:16px;font-size:12px;color:var(--tm)">没有账号？<a href="javascript:void(0)" onclick="showRegisterUI()" style="color:var(--d)">注册一个</a></div>'+
+    '<div id="authError" style="color:#ef4444;font-size:12px;margin-top:12px"></div>'+
+    '</div>';
+  document.getElementById('authRegister').style.display='none';
+  document.getElementById('authLogin').style.display='block';
+}
+
+function showRegisterUI(){
+  document.getElementById('authRegister').innerHTML=
+    '<div class="auth-card">'+
+    '<h2 style="font-family:\'Noto Serif SC\',serif;font-size:20px;font-weight:700;margin-bottom:8px">注册账号</h2>'+
+    '<p style="font-size:12px;color:var(--tm);margin-bottom:24px">注册后需要到邮箱验证才能登录</p>'+
+    '<div class="fg" style="margin-bottom:12px"><label>邮箱</label><input type="email" id="regEmail" placeholder="your@email.com"></div>'+
+    '<div class="fg" style="margin-bottom:16px"><label>密码</label><input type="password" id="regPass" placeholder="至少6位"></div>'+
+    '<button class="bg" onclick="sbRegister()" style="width:100%;font-size:14px;padding:14px">注册</button>'+
+    '<div style="text-align:center;margin-top:16px;font-size:12px;color:var(--tm)">已有账号？<a href="javascript:void(0)" onclick="showLoginUI()" style="color:var(--d)">去登录</a></div>'+
+    '<div id="regError" style="color:#ef4444;font-size:12px;margin-top:12px"></div>'+
+    '</div>';
+  document.getElementById('authLogin').style.display='none';
+  document.getElementById('authRegister').style.display='block';
+}
+
+async function sbRegister(){
+  var email=document.getElementById('regEmail').value.trim();
+  var pass=document.getElementById('regPass').value;
+  if(!email||!pass){document.getElementById('regError').textContent='请填写邮箱和密码';return}
+  var errEl=document.getElementById('regError');
+  errEl.textContent='注册中...';errEl.style.color='var(--d)';
+  var result=await sb.auth.signUp({email:email,password:pass});
+  if(result.error){errEl.textContent=result.error.message;errEl.style.color='#ef4444';return}
+  errEl.textContent='注册成功！请到邮箱验证后登录。';errEl.style.color='#22c55e';
+}
+
+async function sbLogin(){
+  var email=document.getElementById('loginEmail').value.trim();
+  var pass=document.getElementById('loginPass').value;
+  if(!email||!pass){document.getElementById('authError').textContent='请填写邮箱和密码';return}
+  var errEl=document.getElementById('authError');
+  errEl.textContent='登录中...';errEl.style.color='var(--d)';
+  var result=await sb.auth.signInWithPassword({email:email,password:pass});
+  if(result.error){errEl.textContent=result.error.message;errEl.style.color='#ef4444';return}
+  onLogin();
+}
+
+async function sbLogout(){
+  await sb.auth.signOut();
+  document.getElementById('authSection').style.display='block';
+  document.getElementById('userInfoBar').style.display='none';
+  document.getElementById('mainContent').style.display='none';
+  showLoginUI();
+  renderProfile();
+}
+
+function showUserInfo(){
+  var user=sbCurrentUser();
+  if(!user)return;
+  document.getElementById('authSection').style.display='none';
+  document.getElementById('userInfoBar').style.display='flex';
+  document.getElementById('mainContent').style.display='block';
+  document.getElementById('userEmail').textContent=user.email;
+}
+
+async function onLogin(){
+  showUserInfo();
+  await loadCloudData();
+  renderProfile();
+  renderHist();
+}
+
+async function loadCloudData(){
+  if(!sb||!sbCurrentUser())return;
+  var uid=sbCurrentUser().id;
+
+  // 加载画像
+  var profResult=await sb.from('profiles').select('*').eq('id',uid).single();
+  if(profResult.data){
+    _memProfile={
+      like:profResult.data.like_text||'',
+      avoid:profResult.data.avoid_text||'',
+      style:profResult.data.style_text||'',
+      extra:profResult.data.extra_text||''
+    };
+    _memProfCnt=profResult.data.feedback_count||0;
+    if(profResult.data.lang){
+      _memLang=profResult.data.lang;
+      currentLang=profResult.data.lang;
+    }
+  }
+
+  // 加载历史
+  var histResult=await sb.from('history').select('*').eq('user_id',uid).order('ts',{ascending:false}).limit(50);
+  if(histResult.data){
+    _memHistory=histResult.data.map(function(r){
+      return{ts:r.ts,aud:r.aud,genre:r.genre,tags:r.tags||[],prompt:r.prompt,model:r.model};
+    });
+  }
+}
+
+/* ============================================
    创作者画像系统（核心升级）
    ============================================ */
 var PROF_KEY='sdcc_profile';       // 画像数据
 var PROF_CNT_KEY='sdcc_prof_cnt';  // 反馈轮次计数
 
-// 读取画像
+/* 内存变量（同步数据源） */
+var _memProfile=JSON.parse(localStorage.getItem(PROF_KEY)||'null');
+var _memProfCnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
+var _memHistory=JSON.parse(localStorage.getItem('sdcc_history')||'[]');
+var _memLang=localStorage.getItem('sdcc-lang')||'zh';
+
+// 读取画像（从内存）
 function getProfile(){
-  return JSON.parse(localStorage.getItem(PROF_KEY)||'null');
+  return _memProfile;
 }
 
-// 保存画像
+// 保存画像（同步到内存 + localStorage + Supabase）
 function saveProfileData(data){
+  _memProfile=data;
   localStorage.setItem(PROF_KEY,JSON.stringify(data));
   renderProfile();
+  // 同步到 Supabase
+  if(sb&&sbCurrentUser()){
+    var uid=sbCurrentUser().id;
+    sb.from('profiles').upsert({
+      id:uid,
+      like_text:data.like||'',
+      avoid_text:data.avoid||'',
+      style_text:data.style||'',
+      extra_text:data.extra||'',
+      feedback_count:_memProfCnt
+    }).catch(function(e){console.error('Supabase sync error:',e)});
+  }
 }
 
 // 渲染画像到页面
@@ -540,7 +703,7 @@ function renderProfile(){
   var rounds=document.getElementById('profileRounds');
   var hint=document.getElementById('profileHint');
   var btns=document.getElementById('profileBtns');
-  var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
+  var cnt=_memProfCnt;
 
   if(!p||(!p.like&&!p.avoid&&!p.style&&!p.extra)){
     display.innerHTML='<div style="color:var(--tm)">'+t('还没有画像数据。使用工具生成创意后，在下方写反馈，你的偏好会自动沉淀到这里。')+'</div>';
@@ -571,7 +734,7 @@ function buildProfileSnippet(){
   var hasContent=p.like||p.avoid||p.style||p.extra;
   if(!hasContent)return '';
 
-  var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
+  var cnt=_memProfCnt;
   var s='## 创作者画像（基于 '+cnt+' 轮反馈沉淀）\n\n';
   if(p.like)s+='偏好方向：'+p.like+'\n';
   if(p.avoid)s+='避免方向：'+p.avoid+'\n';
@@ -612,10 +775,15 @@ function saveProfile(){
 // 清空画像
 function clearProfile(){
   if(!confirm(t('确定清空创作者画像？')))return;
+  _memProfile=null;_memProfCnt=0;
   localStorage.removeItem(PROF_KEY);
   localStorage.removeItem(PROF_CNT_KEY);
   renderProfile();
   ts(t('画像已清空'));
+  // 同步清空 Supabase
+  if(sb&&sbCurrentUser()){
+    sb.from('profiles').delete().eq('id',sbCurrentUser().id).catch(function(){});
+  }
 }
 
 /* ============================================
@@ -645,8 +813,8 @@ function updateProfileFromFeedback(){
     if(current.style.length>200)current.style=current.style.slice(-200);
   }
 
-  var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
-  localStorage.setItem(PROF_CNT_KEY,String(cnt+1));
+  _memProfCnt++;
+  localStorage.setItem(PROF_CNT_KEY,String(_memProfCnt));
 
   saveProfileData(current);
 }
@@ -705,22 +873,27 @@ function preset(key){
 var HIST_KEY='sdcc_history';
 
 function saveHist(prompt,modelName){
-  var list=JSON.parse(localStorage.getItem(HIST_KEY)||'[]');
   var item={ts:Date.now(),aud:document.getElementById('aud').value,genre:document.getElementById('genre').value,tags:gt(),prompt:prompt,model:modelName||'手动'};
-  list.unshift(item);
-  if(list.length>10)list=list.slice(0,10);
-  localStorage.setItem(HIST_KEY,JSON.stringify(list));
+  _memHistory.unshift(item);
+  if(_memHistory.length>50)_memHistory=_memHistory.slice(0,50);
+  localStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
   renderHist();
+  // 同步到 Supabase
+  if(sb&&sbCurrentUser()){
+    sb.from('history').insert({
+      user_id:sbCurrentUser().id,
+      ts:item.ts,aud:item.aud,genre:item.genre,tags:item.tags,prompt:item.prompt,model:item.model
+    }).catch(function(e){console.error('Supabase history sync error:',e)});
+  }
 }
 
 function renderHist(){
-  var list=JSON.parse(localStorage.getItem(HIST_KEY)||'[]');
   var sec=document.getElementById('histSection');
   var box=document.getElementById('histList');
-  if(!list.length){sec.style.display='none';return}
+  if(!_memHistory.length){sec.style.display='none';return}
   sec.style.display='block';
   var h='';
-  list.forEach(function(it,i){
+  _memHistory.forEach(function(it,i){
     var d=new Date(it.ts);
     var ds=(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
     h+='<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 20px;margin-bottom:10px;cursor:pointer;transition:border-color .2s" onmouseenter="this.style.borderColor=\'var(--bf)\'" onmouseleave="this.style.borderColor=\'var(--b)\'" onclick="loadHist('+i+')">';
@@ -734,8 +907,7 @@ function renderHist(){
 }
 
 function loadHist(i){
-  var list=JSON.parse(localStorage.getItem(HIST_KEY)||'[]');
-  var it=list[i];if(!it)return;
+  var it=_memHistory[i];if(!it)return;
   document.getElementById('aud').value=it.aud;
   document.getElementById('genre').value=it.genre;
   document.querySelectorAll('#tags input').forEach(function(c){c.checked=it.tags.indexOf(c.value)>=0});
@@ -749,9 +921,14 @@ function loadHist(i){
 }
 
 function clearHist(){
+  _memHistory=[];
   localStorage.removeItem(HIST_KEY);
   renderHist();
   ts(t('已清空历史记录'));
+  // 同步清空 Supabase
+  if(sb&&sbCurrentUser()){
+    sb.from('history').delete().eq('user_id',sbCurrentUser().id).catch(function(){});
+  }
 }
 
 /* ============================================
@@ -1533,10 +1710,10 @@ function saveStructuredFeedback(){
   // 同时更新文本画像
   updateProfileFromStructured();
 
-  var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
-  localStorage.setItem(PROF_CNT_KEY,String(cnt+1));
+  _memProfCnt++;
+  localStorage.setItem(PROF_CNT_KEY,String(_memProfCnt));
 
-  document.getElementById('fbSaved').innerHTML='✓ '+t('结构化反馈已保存，画像已更新')+'（第 '+(cnt+1)+' '+t('轮）')+'）';
+  document.getElementById('fbSaved').innerHTML='✓ '+t('结构化反馈已保存，画像已更新')+'（第 '+_memProfCnt+' '+t('轮）')+'）';
   document.getElementById('fbSaved').style.display='block';
   ts(t('反馈已保存'));
   renderProfile();
@@ -1573,8 +1750,7 @@ function saveFb(){
     document.getElementById('fbGood').value='';
     document.getElementById('fbBad').value='';
     document.getElementById('fbPref').value='';
-    var cnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
-    document.getElementById('fbSaved').innerHTML='✓ '+t('反馈已保存，创作者画像已更新')+'（第 '+cnt+' '+t('轮）')+'）';
+    document.getElementById('fbSaved').innerHTML='✓ '+t('反馈已保存，创作者画像已更新')+'（第 '+_memProfCnt+' '+t('轮）')+'）';
     document.getElementById('fbSaved').style.display='block';
     ts(t('反馈已保存，画像已更新'));
   }
@@ -1588,7 +1764,7 @@ function toggleDashboard(){
 }
 
 function renderDashboard(){
-  var hist=JSON.parse(localStorage.getItem(HIST_KEY)||'[]');
+  var hist=_memHistory;
   var fbList=JSON.parse(localStorage.getItem(FB_CONCEPTS_KEY)||'[]');
   var fbText=JSON.parse(localStorage.getItem(FB_KEY)||'[]');
   var weights=JSON.parse(localStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
@@ -1597,7 +1773,7 @@ function renderDashboard(){
   // 概览数字
   document.getElementById('dashGen').textContent=hist.length;
   document.getElementById('dashFb').textContent=totalFb;
-  document.getElementById('dashProfile').textContent=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
+  document.getElementById('dashProfile').textContent=_memProfCnt;
 
   // 题材统计
   var genreCount={};
@@ -1785,9 +1961,14 @@ function snapshotPage(){
 
 function toggleLang(){
   currentLang=currentLang==='zh'?'en':'zh';
+  _memLang=currentLang;
   localStorage.setItem('sdcc-lang',currentLang);
   applyLang();
   updateLangButton();
+  // 同步到 Supabase
+  if(sb&&sbCurrentUser()){
+    sb.from('profiles').upsert({id:sbCurrentUser().id,lang:currentLang}).catch(function(){});
+  }
 }
 
 function updateLangButton(){
@@ -1842,9 +2023,26 @@ window.addEventListener('load',function(){
 /* ============================================
    初始化
    ============================================ */
-renderHist();
-renderProfile();
-renderPresetList();
+async function initApp(){
+  if(sb){
+    var session=await sb.auth.getSession();
+    if(session.data&&session.data.session&&session.data.session.user){
+      onLogin();
+    }else{
+      showLoginUI();
+      renderProfile();
+      renderPresetList();
+    }
+  }else{
+    // Supabase 未配置，直接进入
+    document.getElementById('authSection').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+    renderProfile();
+    renderHist();
+    renderPresetList();
+  }
+}
+initApp();
 
 /* --- Tab 切换 --- */
 function switchTab(tab){

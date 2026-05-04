@@ -7,9 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="app">
+<!-- Auth Section -->
+<div id="authSection">
+  <div id="authLogin"></div>
+  <div id="authRegister" style="display:none"></div>
+</div>
+
+<!-- User Info Bar (shown when logged in) -->
+<div id="userInfoBar" style="display:none" class="user-info-bar">
+  <span id="userEmail" style="font-size:12px;color:var(--ts)"></span>
+  <button onclick="sbLogout()" style="font-size:11px;color:var(--tm);background:none;border:1px solid var(--b);border-radius:6px;padding:4px 12px;cursor:pointer;transition:all .2s">退出登录</button>
+</div>
+
+<!-- Main Content (hidden until login) -->
+<div id="mainContent" style="display:none">
 <!-- Settings Button -->
 <button class="settings-btn" onclick="toggleSettings()" title="API 设置">⚙</button>
 <!-- Language Toggle -->
@@ -366,7 +381,8 @@
     你的判断标准、审美偏好、经验积累，都会沉淀到<strong style="color:var(--cm)">创作者画像</strong>中。<br>
     <strong style="color:var(--tp)">AI 做执行，你做判断。画像跟着你一起成长。</strong>
   </div>
-</div>
+</div><!-- /mainContent -->
+</div><!-- /app -->
 <div class="toast" id="tst"></div>
 
 <script src="app.js"></script>
