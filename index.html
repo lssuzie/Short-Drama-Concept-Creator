@@ -379,14 +379,14 @@ select option{background:var(--s);color:var(--tp)}
     <div class="ob" id="obox"></div>
     <p style="margin-top:12px;font-size:12px;color:var(--tm)">将此 Prompt 拿到大模型中跑出结果，挑出你感兴趣的亮点，再回来调整参数重新激发。好的创意是迭代出来的。</p>
 
-    <!-- 流程指引：生成后自动出现 -->
-    <div id="workflowHint" style="display:none;margin-top:20px;padding:16px 20px;background:var(--ds);border:1px solid var(--db);border-radius:12px;font-size:13px;line-height:2;color:#b0d8e0">
+    <!-- 流程指引 -->
+    <div id="workflowHint" style="margin-top:20px;padding:16px 20px;background:var(--ds);border:1px solid var(--db);border-radius:12px;font-size:13px;line-height:2;color:#b0d8e0">
       <strong style="color:var(--d)">↓ 下一步：把大模型生成的结果粘贴回来</strong><br>
       复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「质检」自动分析
     </div>
 
     <!-- 粘贴区：大模型结果粘贴到这里 -->
-    <div id="pasteArea" style="display:none;margin-top:20px">
+    <div id="pasteArea" style="margin-top:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div style="font-size:13px;font-weight:600;color:var(--tp)">📋 粘贴大模型的输出结果</div>
         <div style="display:flex;gap:6px">
