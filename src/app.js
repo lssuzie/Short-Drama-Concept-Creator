@@ -675,9 +675,9 @@ function dl(){
 /* --- 保存到云端（需登录） --- */
 function saveToCloud(){
   requireLogin(function(){
-    var prompt=document.getElementById('obox').textContent;
+    var prompt=document.getElementById('obox').textContent||'';
     var result=document.getElementById('pasteInput').value.trim();
-    if(!prompt){ts(t('没有可保存的内容'));return}
+    if(!prompt&&!result){ts('没有可保存的内容');return}
     saveHist(prompt,null,result);
     ts('✓ 已保存到云端');
   });
