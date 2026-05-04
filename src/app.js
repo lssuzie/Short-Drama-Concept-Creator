@@ -441,15 +441,34 @@ function clearHist(){
 
 function downloadHist(){
   if(!_memHistory.length){ts(t('创意库为空'));return}
-  var data={
-    exported_at:new Date().toISOString(),
-    source:'short-drama-concept-creator',
-    items:_memHistory
-  };
-  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var lines=[];
+  lines.push('短剧创意炼金坊 · 创意库导出');
+  lines.push('导出时间：'+new Date().toLocaleString('zh-CN'));
+  lines.push('共 '+_memHistory.length+' 条记录');
+  lines.push('');
+  lines.push('='.repeat(40));
+  lines.push('');
+  _memHistory.forEach(function(it,i){
+    var d=new Date(it.ts);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    var title=extractTitle(it.result)||it.genre;
+    lines.push('# '+(i+1)+'. 《'+title+'》');
+    lines.push('时间：'+ds);
+    if(it.model&&it.model!=='手动')lines.push('模型：'+it.model);
+    lines.push('受众：'+it.aud);
+    lines.push('题材：'+it.genre);
+    if(it.tags&&it.tags.length)lines.push('情绪标签：'+it.tags.join('、'));
+    lines.push('');
+    if(it.result)lines.push(it.result.trim());
+    lines.push('');
+    lines.push('-'.repeat(40));
+    lines.push('');
+  });
+  var text=lines.join('\n');
+  var blob=new Blob([text],{type:'text/plain;charset=utf-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url;a.download='创意库_'+new Date().toISOString().slice(0,10)+'.json';
+  a.href=url;a.download='创意库_'+new Date().toISOString().slice(0,10)+'.txt';
   a.click();URL.revokeObjectURL(url);
   ts(t('已下载')+' '+_memHistory.length+' '+t('条记录'));
 }
