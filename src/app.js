@@ -101,6 +101,8 @@ function showUserInfo(){
   document.getElementById('userInfoBar').style.display='flex';
   document.getElementById('mainContent').style.display='block';
   document.getElementById('userEmail').textContent=user.email;
+  var settingsEmail=document.getElementById('settingsUserEmail');
+  if(settingsEmail)settingsEmail.textContent='已登录：'+user.email;
 }
 
 async function onLogin(){
