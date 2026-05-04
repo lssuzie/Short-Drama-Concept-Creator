@@ -1,7 +1,7 @@
 /* ============================================
    Supabase 配置
    ============================================ */
-var SB_URL='https://lvnfjedrksbbbdsxgr.supabase.co';
+var SB_URL='https://lvmfjedrkspbbbbdsxgr.supabase.co';
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2bWZqZWRya3NwYmJiYmRzeGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODU4NzMsImV4cCI6MjA5MzQ2MTg3M30.V9OF--N-1LDp8BklyWTZ30MJPFlOZ6boczTUF4VV9Go';
 var sb=null;
 if(typeof supabase!=='undefined'&&supabase.createClient){
@@ -31,6 +31,8 @@ function showLoginUI(){
     '<div class="auth-card">'+
     '<h2 style="font-family:\'Noto Serif SC\',serif;font-size:20px;font-weight:700;margin-bottom:8px">短剧创意炼金坊</h2>'+
     '<p style="font-size:12px;color:var(--tm);margin-bottom:24px">登录后创意数据云端同步，换设备也不丢</p>'+
+    '<button onclick="sbLoginGitHub()" style="width:100%;font-size:14px;padding:14px;border-radius:12px;border:1px solid var(--b);background:var(--s);color:var(--tp);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;transition:all .2s;font-family:\'Noto Sans SC\',sans-serif;font-weight:500"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>用 GitHub 登录</button>'+
+    '<div style="position:relative;margin-bottom:20px"><div style="position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--b)"></div><div style="position:relative;text-align:center"><span style="background:var(--s);padding:0 12px;font-size:12px;color:var(--tm)">或用邮箱</span></div></div>'+
     '<div class="fg" style="margin-bottom:12px"><label>邮箱</label><input type="email" id="loginEmail" placeholder="your@email.com"></div>'+
     '<div class="fg" style="margin-bottom:16px"><label>密码</label><input type="password" id="loginPass" placeholder="至少6位"></div>'+
     '<button class="bg" onclick="sbLogin()" style="width:100%;font-size:14px;padding:14px">登录</button>'+
@@ -76,6 +78,11 @@ async function sbLogin(){
   var result=await sb.auth.signInWithPassword({email:email,password:pass});
   if(result.error){errEl.textContent=result.error.message;errEl.style.color='#ef4444';return}
   onLogin();
+}
+
+async function sbLoginGitHub(){
+  var result=await sb.auth.signInWithOAuth({provider:'github'});
+  if(result.error)alert(result.error.message);
 }
 
 async function sbLogout(){
