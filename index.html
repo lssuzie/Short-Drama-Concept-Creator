@@ -1211,6 +1211,22 @@ function dl(){
   a.click();URL.revokeObjectURL(u);ts(t('已下载'));
 }
 
+/* --- 测试 Supabase 连接 --- */
+async function testSupabase(){
+  if(!sb){console.log('Supabase client not initialized');return}
+  var user=sbCurrentUser();
+  console.log('Current user:',user);
+  if(!user){console.log('Not logged in');return}
+  try{
+    var r=await sb.from('history').select('*').eq('user_id',user.id).limit(1);
+    console.log('History query result:',r);
+    alert('Supabase 连接正常！history 表有 '+((r.data&&r.data.length)||0)+' 条数据');
+  }catch(e){
+    console.error('Supabase test error:',e);
+    alert('Supabase 出错: '+e.message);
+  }
+}
+
 /* --- 保存到云端（需登录） --- */
 function saveToCloud(){
   requireLogin(function(){
