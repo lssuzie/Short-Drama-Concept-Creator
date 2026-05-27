@@ -15,7 +15,7 @@
 
 但我们相信，**好故事不等于粗制滥造。一个真正能打动人心的创意概念，依然需要创作者耗费心血去雕琢、去推敲、去拷问。**
 
-本项目拒绝成为那种“输入一句话，吐出万字平庸剧本”的复制机。它的初衷，是为精品故事创作者提供一块**结构化的创意磨刀石**。它将前沿的爆款规律与类型叙事逻辑熔炼成 7 大核心规则，在人机碰撞的过程中，逼你去推翻第一反应的平庸套路，反复拷问大女主的主体性、极端身份的错位冲突，以及情感的真实张力。
+本项目拒绝成为那种“输入一句话，吐出万字平庸剧本”的复制机。它的初衷，是为精品故事创作者提供一块**结构化的创意磨刀石**。它将前沿的爆款规律与类型叙事逻辑熔炼成 7 大核心规则，在人机碰撞的过程中，逼你去推翻第一反应的平庸套路，一起探索你的独特创作偏好和长板。
 
 创意无法一键生成，它只会在反复的磨砺中，显现出金子般的底色。
 
@@ -31,7 +31,7 @@ But we believe **good stories do not equal low quality. A truly captivating stor
 
 This is a **"Story Concept Creator (Story Alchemy)"**. It refuses to be a generator of mediocre scripts. Instead, it serves as a **structured creative whetstone** for narrative creators (short dramas, webtoons, films, etc.) facing a blank page.
 
-The core mechanics of drama are universal: fantasy triggers, extreme misplacement of identity, character agency, and authentic emotional tension. Whether you are prepping a female-oriented short-form series, a webtoon outline, or a feature film's story idea, this tool forces you to push past your first mediocre instinct and polish the sharpest edge of your story.
+The core mechanics of drama are universal: fantasy triggers, extreme misplacement of identity, character agency, and authentic emotional tension. Whether you are prepping a female-oriented short-form series, a webtoon outline, or a feature film's story idea, this tool forces you to push past your first mediocre instinct, exploring your unique creative preferences and strengths together.
 
 A great story cannot be generated with one click; it only shines like gold through relentless refining.
 
