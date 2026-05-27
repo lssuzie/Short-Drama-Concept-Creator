@@ -91,6 +91,10 @@ Comedy naturally carries: surprise, contrast, relaxation, satisfaction, status g
 - He falls for her because she's too strong, not because of fate
 - CP is seasoning, not the main course
 
+> 💡 **Male-oriented & Generic Adaptation Tip**:
+> If you are writing for male-oriented or other protagonist archetypes, this rule maps directly to "Male Protagonist's Agency and Dignity" — the audience follows the hero's growth, choices, and personal charisma, rather than mindless face-slapping or relying purely on external systems to advance the plot.
+
+
 ---
 
 ### Rule 1: "Watch What She Does" as Main Engine (规则一：主引擎是"看她怎么做")
@@ -107,6 +111,13 @@ What viewers chase isn't "will they get together?" — it's "what will she do ne
 1. **Worthiness** — She is inherently worthy, not only worthy after counter-attack
 2. **Immediate Vengeance** — Retaliate on the spot, no overnight brooding, no mental drain
 3. **Agency** — She makes choices, she is not chosen
+
+> 💡 **Male-oriented & Generic Adaptation Tip**:
+> These three trials are crucial indicators of a premium narrative. They apply equally to male protagonists:
+> 1. **Worthiness**: The hero possesses inherent strength and self-worth from the very beginning, rather than groveling before rising.
+> 2. **Immediate Vengeance**: Counter back instantly, act decisively, avoid mental drain, and break the deadlock immediately.
+> 3. **Agency**: Make choices and actively strategize, refusing to be a passive puppet manipulated by fate or systems.
+
 
 ---
 

@@ -1,18 +1,19 @@
 {
-  "name": "short-drama-concept-creator",
-  "version": "1.0.0",
-  "description": "短剧创意炼金坊 — 基于结构化方法论的短剧创意工坊，垂直聚焦女频、精品导向",
-  "description_en": "Short Drama Concept Creator — Generate high-quality short drama concepts based on structured methodology, focused on female-oriented premium content",
+  "name": "story-concept-creator",
+  "version": "1.1.0",
+  "description": "故事创意炼金坊 — 基于结构化方法论的故事创意工坊，聚焦精品故事、短剧、漫剧概念打磨",
+  "description_en": "Story Concept Creator — Generate high-quality story concepts based on structured methodology, focused on premium narrative content",
   "author": "lssuzie",
   "license": "MIT",
   "keywords": [
+    "故事",
     "短剧",
     "创意",
     "写作",
     "剧本",
-    "女频",
-    "短剧策划",
-    "drama",
+    "漫剧",
+    "故事策划",
+    "story",
     "creative writing",
     "concept",
     "storytelling"
@@ -22,24 +23,26 @@
 
   "triggers": {
     "patterns": [
+      "故事创意",
+      "故事概念",
       "短剧创意",
       "短剧概念",
       "短剧策划",
-      "短剧方向",
-      "生成短剧",
+      "故事策划",
+      "漫剧大纲",
+      "故事大纲",
       "写短剧",
-      "短剧大纲",
-      "女频创意",
+      "故事idea",
       "甜宠创意",
       "穿书创意",
       "短剧idea",
-      "drama concept"
+      "story concept"
     ],
     "exclude": [
-      "帮我写短剧剧本",
+      "帮我写剧本",
       "把这个大纲写成剧本",
       "帮我写第.*集",
-      "续写短剧"
+      "续写故事"
     ]
   },
 
@@ -58,7 +61,8 @@
         "穿书反套路（打破第四面墙型）",
         "家庭喜剧（身份错位型）",
         "大女主逆袭（古装/现代权谋型）",
-        "女性成长（自我觉醒型）"
+        "女性成长（自我觉醒型）",
+        "热血逆袭（男频燃向型）"
       ]
     },
     "emotions": {
