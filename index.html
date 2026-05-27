@@ -35,24 +35,24 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 select option{background:var(--s);color:var(--tp)}
 .tg{display:flex;flex-wrap:wrap;gap:8px}
 .to{position:relative}.to input{position:absolute;opacity:0;width:0;height:0}
-.to label{display:inline-block;font-size:13px;font-weight:400;color:var(--ts);background:var(--s);border:1px solid var(--b);border-radius:20px;padding:7px 18px;cursor:pointer;transition:all .2s;user-select:none}
-.to label:hover{background:var(--sh);color:var(--tp)}
-.to input:checked+label{background:var(--as);border-color:var(--a);color:var(--a);font-weight:500}
+.to label{display:inline-block;font-size:13px;font-weight:400;color:var(--ts);background:rgba(19,19,24,.4);border:1px solid var(--b);border-radius:20px;padding:7px 18px;cursor:pointer;transition:all .25s cubic-bezier(0.4,0,0.2,1);user-select:none}
+.to label:hover{background:var(--sh);color:var(--tp);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.to input:checked+label{background:var(--as);border-color:var(--a);color:var(--a);font-weight:500;box-shadow:0 0 14px var(--as);transform:translateY(-1px)}
 .gs{margin-top:56px;opacity:0;animation:fu .7s ease .35s forwards}
 .br{display:flex;gap:12px;flex-wrap:wrap}
-.bg{font-family:'Noto Sans SC',sans-serif;font-size:15px;font-weight:700;letter-spacing:.08em;color:#fff;background:var(--a);border:none;border-radius:12px;padding:16px 48px;cursor:pointer;transition:all .25s}
-.bg:hover{background:#d44a1f;transform:translateY(-1px);box-shadow:0 8px 30px var(--ag)}
+.bg{font-family:'Noto Sans SC',sans-serif;font-size:15px;font-weight:700;letter-spacing:.08em;color:#fff;background:var(--a);border:none;border-radius:12px;padding:16px 48px;cursor:pointer;transition:all .25s cubic-bezier(0.4,0,0.2,1);box-shadow:0 4px 12px rgba(232,87,42,0.15)}
+.bg:hover{background:#d44a1f;transform:translateY(-2px);box-shadow:0 8px 30px var(--ag)}
 .bg:active{transform:translateY(0)}
-.bs{font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:500;color:var(--ts);background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 28px;cursor:pointer;transition:all .2s}
-.bs:hover{background:var(--sh);color:var(--tp)}
+.bs{font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:500;color:var(--ts);background:rgba(19,19,24,.4);border:1px solid var(--b);border-radius:12px;padding:16px 28px;cursor:pointer;transition:all .25s cubic-bezier(0.4,0,0.2,1)}
+.bs:hover{background:var(--sh);color:var(--tp);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 .op{display:none;margin-top:48px;opacity:0;animation:fu .6s ease forwards}
 .op.v{display:block}
 .oh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
 .oh h2{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700}
 .oa{display:flex;gap:8px}
-.bc{font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:500;color:var(--a);background:transparent;border:1px solid var(--a);border-radius:10px;padding:10px 28px;cursor:pointer;transition:all .2s}
-.bc:hover{background:var(--as)}
-.ob{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:28px 32px;font-size:13px;line-height:1.9;color:var(--ts);white-space:pre-wrap;word-break:break-word;max-height:65vh;overflow-y:auto}
+.bc{font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:500;color:var(--a);background:transparent;border:1px solid var(--a);border-radius:10px;padding:10px 28px;cursor:pointer;transition:all .25s cubic-bezier(0.4,0,0.2,1)}
+.bc:hover{background:var(--as);transform:translateY(-1px);box-shadow:0 4px 12px var(--as)}
+.ob{background:rgba(10,10,12,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--b);border-radius:14px;padding:28px 32px;font-size:14px;line-height:1.95;color:var(--tp);font-family:'Noto Sans SC',sans-serif;white-space:pre-wrap;word-break:break-word;max-height:65vh;overflow-y:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.3)}
 .ob::-webkit-scrollbar{width:5px}.ob::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 .dv{height:1px;background:linear-gradient(90deg,transparent,var(--b),transparent);margin:48px 0}
 .rt{font-size:13px;color:var(--tm);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:color .2s;border:none;background:none;padding:0;font-family:'Noto Sans SC',sans-serif}
@@ -72,7 +72,7 @@ select option{background:var(--s);color:var(--tp)}
 /* === additions === */
 .settings-btn{position:fixed;top:20px;right:20px;z-index:50;width:40px;height:40px;border-radius:10px;background:var(--s);border:1px solid var(--b);color:var(--ts);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .settings-btn:hover{border-color:var(--bf);color:var(--tp)}
-.settings-panel{display:none;position:fixed;top:68px;right:20px;z-index:50;width:360px;max-height:80vh;overflow-y:auto;background:var(--sr);border:1px solid var(--b);border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.settings-panel{display:none;position:fixed;top:68px;right:20px;z-index:50;width:360px;max-height:80vh;overflow-y:auto;background:rgba(26,26,34,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.6);transition:all .3s cubic-bezier(0.4,0,0.2,1)}
 .settings-panel.visible{display:block}
 .settings-panel h3{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:700;margin-bottom:16px;color:var(--tp)}
 .sp-field{margin-bottom:14px}
@@ -89,17 +89,16 @@ select option{background:var(--s);color:var(--tp)}
 .gen-streaming::after{content:'';display:inline-block;width:8px;height:8px;background:var(--a);border-radius:50%;animation:pulse .8s infinite;margin-left:8px;vertical-align:middle}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .qc-section{margin-top:32px;opacity:0;animation:fu .6s ease forwards}
-.qc-card{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 20px;margin-bottom:10px;font-size:12px;line-height:2}
-.qc-card.pass{border-left:3px solid #22c55e}
-.qc-card.warn{border-left:3px solid #eab308}
-.qc-card.fail{border-left:3px solid #ef4444}
+.qc-card{background:rgba(19,19,24,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:16px 20px;margin-bottom:10px;font-size:12px;line-height:2;transition:all .25s ease}
+.qc-card:hover{border-color:rgba(255,255,255,0.1);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.15)}
 .qc-title{font-weight:600;color:var(--tp);font-size:13px;margin-bottom:6px}
 .qc-line{color:var(--ts);font-size:12px;display:flex;align-items:center;gap:6px}
 .qc-icon{font-size:14px}
 .fb-mode-toggle{display:flex;gap:4px;background:var(--s);border:1px solid var(--b);border-radius:10px;padding:4px;margin-bottom:20px;width:fit-content}
 .fb-mode-btn{font-size:12px;padding:6px 16px;border-radius:8px;border:none;background:transparent;color:var(--ts);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif}
 .fb-mode-btn.active{background:var(--as);color:var(--a);font-weight:500}
-.fb-concept-card{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 20px;margin-bottom:12px}
+.fb-concept-card{background:rgba(19,19,24,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:16px 20px;margin-bottom:12px;transition:all .25s ease}
+.fb-concept-card:hover{border-color:rgba(255,255,255,0.1);box-shadow:0 4px 20px rgba(0,0,0,0.15)}
 .fb-concept-title{font-size:13px;font-weight:600;color:var(--tp);margin-bottom:10px}
 .fb-decision-row{display:flex;gap:6px;margin-bottom:10px}
 .fb-dec-btn{font-size:12px;padding:5px 14px;border-radius:16px;border:1px solid var(--b);background:transparent;color:var(--ts);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif}
@@ -114,7 +113,8 @@ select option{background:var(--s);color:var(--tp)}
 .dashboard{display:none;margin-top:32px;opacity:0;animation:fu .6s ease forwards}
 .dashboard.visible{display:block}
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
-.dash-card{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:20px;text-align:center}
+.dash-card{background:rgba(19,19,24,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:20px;text-align:center;transition:all .25s ease}
+.dash-card:hover{border-color:var(--a);box-shadow:0 4px 20px rgba(0,0,0,0.15)}
 .dash-num{font-family:'Noto Serif SC',serif;font-size:32px;font-weight:900;color:var(--a);line-height:1.2}
 .dash-label{font-size:11px;color:var(--tm);margin-top:4px}
 .dash-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
@@ -147,6 +147,11 @@ select option{background:var(--s);color:var(--tp)}
 .auth-card input{font-size:16px;padding:14px 18px}
 .user-info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;margin-bottom:20px;background:var(--s);border:1px solid var(--b);border-radius:10px}
 
+/* === modal content & history card === */
+.modal-content{background:rgba(26,26,34,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:32px;width:90%;max-width:400px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.history-card{background:rgba(19,19,24,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:16px 20px;margin-bottom:10px;cursor:pointer;transition:all .25s ease;position:relative}
+.history-card:hover{border-color:var(--bf);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -154,7 +159,7 @@ select option{background:var(--s);color:var(--tp)}
 <div class="app">
 <!-- Auth Modal (弹窗式，保存时才出现) -->
 <div id="authModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center">
-  <div style="background:var(--sr);border:1px solid var(--b);border-radius:14px;padding:32px;width:90%;max-width:400px;position:relative">
+  <div class="modal-content">
     <button onclick="closeAuthModal()" style="position:absolute;top:12px;right:16px;font-size:18px;color:var(--tm);background:none;border:none;cursor:pointer">✕</button>
     <div id="authModalBody"></div>
   </div>
@@ -298,6 +303,7 @@ select option{background:var(--s);color:var(--tp)}
     <button onclick="preset('穿书')" style="font-size:12px;color:var(--r0);background:var(--r0s);border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">📖 穿书穿越</button>
     <button onclick="preset('家庭喜剧')" style="font-size:12px;color:var(--d);background:var(--ds);border:1px solid rgba(34,211,238,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">👨‍👩‍👧 家庭喜剧</button>
     <button onclick="preset('女性成长')" style="font-size:12px;color:var(--cm);background:var(--cms);border:1px solid rgba(244,114,182,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">👩‍👩‍👩 女性成长</button>
+    <button onclick="preset('热血逆袭')" style="font-size:12px;color:var(--a);background:var(--as);border:1px solid rgba(232,87,42,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">🔥 热血逆袭</button>
   </div>
 
   <div class="sec">
@@ -313,6 +319,7 @@ select option{background:var(--s);color:var(--tp)}
           <option value="女性成长">女性成长</option><option value="年代怀旧">年代怀旧</option>
           <option value="地域特色">地域特色</option><option value="仙侠虐恋">仙侠虐恋</option>
           <option value="乡村田园">乡村田园</option><option value="悬疑复仇">悬疑复仇</option>
+          <option value="热血逆袭">热血逆袭</option><option value="科幻脑洞">科幻脑洞</option>
         </select>
       </div>
     </div>
@@ -335,6 +342,9 @@ select option{background:var(--s);color:var(--tp)}
       <div class="to"><input type="checkbox" id="e12" value="闺蜜情"><label for="e12">闺蜜情</label></div>
       <div class="to"><input type="checkbox" id="e13" value="先婚后爱"><label for="e13">先婚后爱</label></div>
       <div class="to"><input type="checkbox" id="e14" value="穿书反套路"><label for="e14">穿书反套路</label></div>
+      <div class="to"><input type="checkbox" id="e15" value="热血燃向"><label for="e15">热血燃向</label></div>
+      <div class="to"><input type="checkbox" id="e16" value="反转逆袭"><label for="e16">反转逆袭</label></div>
+      <div class="to"><input type="checkbox" id="e17" value="逆风翻盘"><label for="e17">逆风翻盘</label></div>
     </div>
   </div>
 
@@ -902,7 +912,7 @@ var presets={
   '穿书':{aud:'女频 18-30岁',genre:'穿书',tags:['搞笑解压','奇幻脑洞','穿书反套路'],ref:''},
   '家庭喜剧':{aud:'全年龄 25-45岁',genre:'家庭喜剧',tags:['搞笑解压','治愈亲情','身份反转'],ref:''},
   '女性成长':{aud:'女频 25-40岁',genre:'女性成长',tags:['燃向成长','女性成长','大女主逆袭'],ref:''},
-  '热血逆袭':{aud:'男频 18-35岁',genre:'热血逆袭',tags:['热血燃向','反转逆袭','莫欺少年穷'],ref:''}
+  '热血逆袭':{aud:'男频 18-35岁',genre:'热血逆袭',tags:['热血燃向','反转逆袭','逆风翻盘'],ref:''}
 };
 
 function preset(key){
@@ -957,7 +967,7 @@ function renderHist(){
     var ds=(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
     var title=extractTitle(it.result)||extractTitle(it.prompt)||it.genre;
     var summary=it.result?it.result.replace(/#[^\n]*/g,'').replace(/\n+/g,' ').trim().slice(0,80):'';
-    h+='<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 20px;margin-bottom:10px;cursor:pointer;transition:border-color .2s;position:relative" onmouseenter="this.style.borderColor=\'var(--bf)\'" onmouseleave="this.style.borderColor=\'var(--b)\'" onclick="loadHist('+i+')">';
+    h+='<div class="history-card" onclick="loadHist('+i+')">';
     h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">';
     h+='<span style="font-size:13px;font-weight:500;color:var(--tp)">《'+title+'》'+(it.model&&it.model!=='手动'?' · '+it.model:'')+'</span>';
     h+='<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">';
@@ -2136,89 +2146,400 @@ gen=function(){
 
 /* ============================================
    i18n 中英文切换
-   ============================================ */
-var ZH_TO_EN={"短剧创意炼金坊 — 创意方法论引擎":"Short Drama Creative Alchemy — Creative Methodology Engine","短剧创意炼金坊":"Short Drama Creative Alchemy","基于2025H2-2026Q1短剧市场观察的":"Based on 2025H2-2026Q1 short drama market research","结构化创意方法论引擎":"Structured Creative Methodology Engine","，帮助创作者/制片人从受众需求出发，系统化激发高质量短剧创意。":", helping creators/producers systematically inspire high-quality short drama concepts starting from audience needs.","这个工具想解决的问题":"Problems this tool aims to solve","市场规律":"Market Patterns","和":"and","创作者个人特质":"Creator Personal Traits","AI 做执行，你做判断。画像跟着你一起成长。":"AI executes, you judge. The profile grows with you.","——帮你把方法论变成可操作的规则链，交给大模型跑出有亮点的半成品。":"— Turns methodology into actionable rule chains, letting the LLM produce a semi-finished product with highlights.","——观察哪些题材受欢迎、哪些模式具备爆款潜质，找到背后的结构性规律。":"— Observe which genres are popular, which patterns have hit potential, and uncover underlying structural patterns.","——通过持续的反馈沉淀，逐渐了解你的审美偏好、能力范围、兴趣方向，让每次激发都更贴合你这个人。":"— Through continuous feedback accumulation, gradually understand your aesthetic preferences, skill range, and interests, making each inspiration more tailored to you.","↓ 下一步：把大模型生成的结果粘贴回来":"↓ Next: Paste the LLM output back here","① 选参数 → ② 生成创意 Prompt → ③ 拿到大模型跑 → ④ 挑出亮点，写下反馈":"① Set Parameters → ② Generate Creative Prompt → ③ Run with LLM → ④ Pick highlights, write feedback","⑤ 画像自动更新 → ⑥ 调整参数再激发 →":"⑤ Profile auto-updates → ⑥ Adjust parameters, re-inspire →","⚙ 模型配置":"⚙ Model Configuration","同一个创意简报发给不同模型，对比输出差异。":"Send the same creative brief to different models, compare output differences.","创作不像代码——大纲、台词、人物无法拆分给不同模型拼装，需要整体交付、整体评估。":"Creation isn't like code — outlines, dialogue, and characters can't be split across models; it requires holistic delivery and evaluation.","添加 / 编辑模型":"Add / Edit Model","模型名称":"Model Name","模型 ID":"Model ID","保存模型":"Save Model","测试连接":"Test Connection","API Key（所有模型共享）":"API Key (Shared Across All Models)","保存 Key":"Save Key","⚠️ Key 仅临时存储（sessionStorage），关闭标签页后自动清空，需重新输入。":"⚠️ Keys are stored temporarily (sessionStorage) and cleared when you close the tab. Re-enter required.","⚡ 点选模式":"⚡ Point Mode","✅ 值得继续的方向":"✅ Worth Continuing","✅ 我喜欢的元素":"✅ Elements I Like","✅ 正向标签权重（反馈中「继续」的元素）":"✅ Positive Tag Weight (elements to continue)","✎ 写反馈":"✎ Write Feedback","✏️ 文本模式":"✏️ Text Mode","❌ 我不要的方向":"❌ Directions I Don't Want","❌ 要放弃的方向":"❌ Directions to Abandon","❌ 负向标签权重（反馈中「放弃」的原因）":"❌ Negative Tag Weight (reasons for abandoning)","一、提炼市场规律":"1. Extract Market Patterns","不从痛点出发，从\"观众想成为什么样的人\"出发。三种幻想：能力/身份/行动":"Not from pain points, but from \"who viewers want to become.\" Three fantasies: ability/identity/action","二、适配创作者":"2. Adapt to Creator","他被她吸引因为她太强":"He's drawn to her because she's too strong","参考爆款（选填）":"Reference hits (optional)","反馈轮次":"Feedback Rounds","创作":"Creation","创作者画像":"Creator Profile","创意激发":"Creative Inspiration","创意激发引擎":"Creative Inspiration Engine","参考与补充":"References & Supplements","数据":"Data","数据看板":"Dashboard","方法论实验室":"Methodology Lab","快速示例：":"Quick Example:","目标不是让你去追市场热点，而是帮你在市场机会和你的个人特质之间，":"Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,","找到那个只属于你的交汇点。":"Find the intersection that belongs only to you.","这个工具做两件事：":"This tool does two things:","避免太实的职场戏 / 避免电影文艺片感 / 避免自媒体vlog感":"Avoid overly realistic workplace drama / avoid arthouse film feel / avoid vlog feel","生成创意 Prompt":"Generate Creative Prompt","质检":"Quality Check","预览反馈提示词":"Preview Feedback Prompt","查看完整规则与数据":"View Full Rules & Data","查看方法论":"View Methodology","保存反馈 & 更新画像":"Save Feedback & Update Profile","保存结构化反馈 & 更新画像":"Save Structured Feedback & Update Profile","发送到模型":"Send to Model","下载 .txt":"Download .txt","复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「质检」自动分析":"Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste result below → click \"QC\" for auto-analysis","配得感 / 快意恩仇 / 主体性":"Worthiness / Immediate Vengeance / Agency","大女主原则：":"Strong Heroine Principle:","观众追的是女主不是CP · 每个转折是她的决定 · CP是调味料":"Audiences follow the heroine, not the CP · Every turn is her decision · CP is seasoning","规则一 · 主引擎是\"看她怎么做\"":"Rule 1 · Main Engine: \"Watch What She Does\"","规则二 · 女主三关：":"Rule 2 · Heroine's Three Tests:","规则三 · 标题5铁律：":"Rule 3 · Title's 5 Iron Laws:","规则四 · 概念3铁律：":"Rule 4 · Concept's 3 Iron Laws:","规则五 · CP：":"Rule 5 · CP:","规则六 · 搞事业是燃料":"Rule 6 · The Career Arc is Fuel","规则七 · 常见错误：":"Rule 7 · Common Pitfalls:","规则零 · 从幻想开始":"Rule 0 · Start from Fantasy","甜宠喜剧":"Sweet Romance Comedy","复仇爽感":"Revenge Satisfaction","年代怀旧":"Era Nostalgia","现代都市":"Modern Urban","古装喜剧":"Period Comedy","古装权谋":"Period Political Intrigue","乡村田园":"Rural Pastoral","仙侠虐恋":"Fantasy Romance Tragic","奇幻穿越":"Fantasy Transmigration","奇幻脑洞":"Fantasy Imagination","穿书":"Book Transmigration","穿书反套路":"Book Transmigration Subversion","大女主逆袭":"Strong Heroine Counterattack","家庭喜剧":"Family Comedy","女性成长":"Female Growth","搞笑解压":"Comedy Stress Relief","悬疑复仇":"Suspense Revenge","甜宠心动":"Sweet Romance Heartflutter","豪门甜宠":"Wealthy Romance","闺蜜情":"Best Friend Bond","重生宅斗":"Rebirth Mansion Struggle","一句话=情绪过山车 / 核心是她做了什么 / 兴奋不是沉重":"One-liner = emotional rollercoaster / Core = what she did / Excitement not heaviness","至少包含3/5要素才算通过":"Must contain at least 3/5 elements to pass","中。":"Medium.","版本更新":"Version Update","v6新增":"v6 New","· 首版发布：7大规则体系 + 自动质检 + 创作者画像 + 多模型对比 + 数据看板":"· Initial release: 7 rule system + auto QC + creator profile + multi-model comparison + dashboard","系列化成新爆款密码 · 喜剧元素出圈率显著提升 · 地域特色题材崛起":"Series format becomes new hit code · Comedy elements breakout rate significantly up · Region-specific genres rising","本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。Key 不会上传到任何第三方服务器。":"This tool is single-file zero-dependency, no third-party scripts, no network requests (except your LLM API calls). Keys never uploaded.","我的创作者画像":"My Creator Profile","题材偏好":"Genre Preference","题材方向":"Genre Direction","目标受众":"Target Audience","核心情绪":"Core Emotion","🎨 我的风格偏好":"🎨 My Style Preferences","🏠 豪门甜宠":"🏠 Wealthy Family Sweet Romance","👨‍👩‍👧 家庭喜剧":"👨‍👩‍👧 Family Comedy","👩‍👩‍👩 女性成长":"👩‍👩‍👩 Female Growth","💡 使用方式":"💡 How to Use","📋 历史记录":"📋 History","📋 粘贴大模型的输出结果":"📋 Paste LLM Output","📖 穿书穿越":"📖 Book Transmigration","📝 补充说明（选填）":"📝 Additional Notes (Optional)","🔍 自动质检":"🔍 Auto QC","点选标签或自由书写 → 更新创作者画像 → 下次激发更精准":"Select tags or freewrite → update creator profile → more precise next inspiration","画像迭代":"Profile Iteration","生成次数":"Generation Count","生成 Prompt":"Generate Prompt","提示词片段":"Prompt Snippet","以下为反馈 + 画像生成的提示词片段：":"Here's a snippet of the prompt for feedback + profile generation:","你的判断标准、审美偏好、经验积累，都会沉淀到":"Your judgment criteria, aesthetic preferences, and experience will all precipitate into","先婚后爱":"Marriage First, Love Later","性别互换":"Gender Swap","身份反转":"Identity Reversal","武林高手在校园":"Martial Arts Master in School","-select-":"- Select -","以下是反馈 + 画像生成的提示词片段：":"Prompt snippet for feedback + profile generation:","保存画像":"Save Profile","反馈沉淀":"Feedback Accumulation","取消":"Cancel","受众与题材":"Audience & Genre","喜剧公式":"Comedy Engine Formula","地域烟火气":"Local Atmosphere & Flavor","地域特色":"Regional Characteristics","基于2025H2-2026Q1短剧市场爆款观察 · 女性观众占比67% · 25-34岁占比近五成":"Based on 2025H2-2026Q1 short drama hit observation · Female audience 67% · 25-34 age group ~50%","复制":"Copy","奇幻触发器 × 极端身份错位 × 家庭/情感关系 × 喜剧 × 治愈":"Fantasy Trigger × Extreme Identity Misplacement × Family/Emotional Line × Comedy × Healing","好的创意不是凭空生成的，也不是简单复制市场爆款。好的创意来自":"Good ideas aren't conjured from thin air, nor simple copies of hits. Good ideas come from","完整循环：":"Complete Loop:","实验室":"Lab","将此 Prompt 拿到大模型中跑出结果，挑出你感兴趣的亮点，再回来调整参数重新激发。好的创意是迭代出来的。":"Run this prompt through the LLM, pick highlights of interest, then return to adjust and re-inspire. Good ideas are iterated.","开关规则，观察 Prompt 变化":"Toggle rules, observe prompt changes","循环往复，越来越好":"Cycle and repeat, getting better","情绪标签使用":"Emotion Label Usage","数据基础":"Data Foundation","有情绪承诺 / 有反差 / 有动词 / 4字或长句 / 迭代高频词":"Has emotional promise / Has contrast / Has action verb / 4-char or long phrase / Iterative high-frequency words","核心":"Core","治愈亲情":"Healing Family Bond","清空":"Clear","燃向成长":"Passionate Growth","的交汇点。":"intersection.","编辑":"Edit","编辑创作者画像":"Edit Creator Profile","自定义规则（选填）":"Custom Rules (Optional)","这不是一键生成工具。它是一个":"This is not a one-click generator. It's a","（可多选）":"(multiple select allowed)","已加载预设":"Loaded preset","已加载历史记录":"History loaded","已清空历史记录":"History cleared","已切换到":"Switched to","请填写完整信息":"Please fill in all fields","模型已保存":"Model saved","请先保存 API Key":"Please save your API Key first","连接":"Connecting","中...":"...","连接成功":"Connected","网络错误:":"Network error:","请先在设置中配置 API Key":"Please configure an API Key in settings first","生成中...":"Generating...","正在调用":"Calling","生成创意...":"generating ideas...","生成完成":"completed","生成失败:":"Generation failed:","请检查 API 设置是否正确。":"Please check your API settings.","请先点击「生成创意 Prompt」":"Please click \"Generate Creative Prompt\" first","请先将大模型的输出结果粘贴到上方文本框":"Please paste the LLM output in the text box above","请先将大模型的输出粘贴到上方文本框":"Please paste the LLM output in the text box above","已从粘贴内容识别出":"Identified","个概念":"concepts from pasted content","请至少对一个概念做出判断":"Please make a judgment on at least one concept","反馈已保存":"Feedback saved","请填写反馈":"Please fill in feedback","反馈已保存，画像已更新":"Feedback saved, profile updated","已复制":"Copied","已下载":"Downloaded","请填写目标受众":"Please fill in target audience","请至少选择一个核心情绪":"Please select at least one core emotion","已删除":"Deleted","请填写 API Key":"Please fill in API Key","API Key 已保存":"API Key saved","画像已保存":"Profile saved","画像已清空":"Profile cleared","已清空":"Cleared","暂无数据":"No data yet","暂无正面标签数据":"No positive tag data yet","暂无负面标签数据":"No negative tag data yet","所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。":"All rules enabled. The generated prompt will include the complete methodology system.","已关闭":"Disabled","条规则：":"rules:","将从痛点出发而非幻想出发，创意可能偏\"苦情\"":"Will start from pain points instead of fantasy, ideas may become \"melodrama\"","可能生成以 CP 为主线而非女主为主线的概念":"May generate concepts where CP is the main thread instead of the heroine","不再检验女主的配得感、快意恩仇、主体性":"No longer checks heroine worthiness, immediate vengeance, agency","标题不再受5铁律约束，可能出现6-8字中间地带":"Title no longer bound by 5 iron laws, may fall in the 6-8 char dead zone","概念不再要求\"一句话=情绪过山车\"":"Concept no longer requires \"one-liner = emotional rollercoaster\"","CP 可能回到\"命运安排\"的老套路":"CP may revert to the \"fate arranged\" trope","搞事业线可能盖过主线":"Career arc may overshadow the main story","不再规避职场戏太实、文艺片感等常见错误":"No longer avoids common pitfalls like overly realistic workplace drama, arthouse feel","关闭规则后点击「生成创意 Prompt」查看变化。":"Click \"Generate Creative Prompt\" after disabling rules to see changes.","结构化反馈已保存，画像已更新":"Structured feedback saved, profile updated","反馈已保存，创作者画像已更新":"Feedback saved, creator profile updated","还没有画像数据。使用工具生成创意后，在下方写反馈，你的偏好会自动沉淀到这里。":"No profile data yet. After generating ideas, write feedback below and your preferences will accumulate here.","为什么值得在这里反馈？":"Why give feedback here?","大模型里反馈关窗口就没了，这里的反馈会积累成你的「创作者画像」——一个跨模型、跨会话持久化的偏好档案，每次生成自动带上。":"Feedback in LLMs disappears when you close the window. Here it accumulates into your Creator Profile — a persistent preference file across models and sessions, auto-attached to every generation.","轮反馈":"rounds of feedback","偏好：":"Preferences:","避免：":"Avoid:","风格：":"Style:","备注：":"Notes:","↑ 此画像自动附加到每次生成的 Prompt 末尾，随反馈轮次更新":"↑ This profile is auto-appended to every generated prompt, updated with each feedback round","当前模型：":"Current model:","已配置":"Configured","未配置":"Not configured","切换":"Switch","确定清空创作者画像？":"Clear creator profile?","请先生成创意（点击「生成创意 Prompt」或「发送到模型」）":"Generate ideas first (click \"Generate Creative Prompt\" or \"Send to Model\")","值得继续的点：":"Points worth continuing:","问题点：":"Issues:","自由补充...":"Free notes...","轮）":"rounds)","请先粘贴大模型的输出结果":"Please paste the LLM output first","已入库":"Archived","请完成反馈":"please complete feedback","确定删除这条记录？":"Delete this record?","已入库 · 请完成反馈":"Archived · please complete feedback","请粘贴大模型输出后点「📚 入库」":"paste LLM output then click Archive","已同步云端":"synced to cloud","创意库为空":"Library is empty","条记录":"records"};
+var ZH_TO_EN = {
+  // Slogan & Slogan background
+  "故事创意炼金坊 — 创意方法论引擎": "Story Creative Alchemy — Creative Methodology Engine",
+  "故事创意炼金坊": "Story Creative Alchemy",
+  "基于爆款数据与核心戏剧逻辑的": "Based on hit data and core drama logic, ",
+  "结构化创意方法论引擎": "Structured Creative Methodology Engine",
+  "，帮助创作者/制片人从受众需求出发，系统化激发高质量故事创意。": ", helping creators/producers systematically inspire high-quality story concepts starting from audience needs.",
+  "这个工具想解决的问题": "Problems this tool aims to solve",
+  "市场规律": "Market Patterns",
+  "和": "and",
+  "创作者个人特质": "Creator Personal Traits",
+  "好的创意不是凭空生成的，也不是简单复制市场爆款。好的创意来自": "Good ideas aren't conjured from thin air, nor simple copies of hits. Good ideas come from",
+  "的交汇点。": "intersection.",
+  "一、提炼市场规律": "1. Extract Market Patterns",
+  "——观察哪些题材受欢迎、哪些模式具备爆款潜质，找到背后的结构性规律。": "— Observe which genres are popular, which patterns have hit potential, and uncover underlying structural patterns.",
+  "二、适配创作者": "2. Adapt to Creator",
+  "——通过持续的反馈沉淀，逐渐了解你的审美偏好、能力范围、兴趣方向，让每次激发都更贴合你这个人。": "— Through continuous feedback accumulation, gradually understand your aesthetic preferences, skill range, and interests, making each inspiration more tailored to you.",
+  "目标不是让你去追市场热点，而是帮你在市场机会 and 你的个人特质之间，": "Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,",
+  "目标不是让你去追市场热点，而是帮你在市场机会和你的个人特质之间，": "Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,",
+  "找到那个只属于你的交汇点": "find the intersection that belongs only to you",
+  
+  // Settings & Presets
+  "⚙ 模型配置": "⚙ Model Configuration",
+  "同一个创意简报发给不同模型，对比输出差异。": "Send the same creative brief to different models, compare output differences.",
+  "创作不像代码——大纲、台词、人物无法拆分给不同模型拼装，需要整体交付、整体评估。": "Creation isn't like code — outlines, dialogue, and characters can't be split across models; it requires holistic delivery and evaluation.",
+  "添加 / 编辑模型": "Add / Edit Model",
+  "模型名称": "Model Name",
+  "模型 ID": "Model ID",
+  "保存模型": "Save Model",
+  "测试连接": "Test Connection",
+  "API Key（所有模型共享）": "API Key (Shared Across All Models)",
+  "保存 Key": "Save Key",
+  "⚠️ Key 仅临时存储（sessionStorage），关闭标签页后自动清空，需重新输入。": "⚠️ Keys are stored temporarily (sessionStorage) and cleared when you close the tab. Re-enter required.",
+  "本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。Key 不会上传到任何第三方服务器。": "This tool is single-file zero-dependency, no third-party scripts, no network requests (except your LLM API calls). Keys never uploaded.",
+  "☁ 云端同步": "☁ Cloud Sync",
+  "本工具是网页应用，数据存在浏览器里，清缓存就没了。": "This tool is a web app. Data is stored in your browser; clearing cache deletes it.",
+  "登录后保存到云端：": "Save to cloud after logging in:",
+  "· 创意历史永久保存，不怕丢": "· Creative history permanently saved",
+  "· 创作者画像跨设备同步，AI 记忆不中断": "· Creator profile synced across devices, uninterrupted AI memory",
+  "· 换手机、换电脑，登录即用": "· Use on any phone or computer upon login",
+  "📥 导出云端数据": "📥 Export Cloud Data",
+  "退出登录": "Log Out",
+  
+  // Profile
+  "我的创作者画像": "My Creator Profile",
+  "轮反馈": "rounds of feedback",
+  "还没有画像数据。使用工具生成创意后，在下方写反馈，你的偏好会自动沉淀到这里。": "No profile data yet. After generating ideas, write feedback below and your preferences will accumulate here.",
+  "为什么值得在这里反馈？": "Why give feedback here?",
+  "大模型里反馈关窗口就没了，这里的反馈会积累成你的「创作者画像」——一个跨模型、跨会话持久化的偏好档案，每次生成自动带上。": "Feedback in LLMs disappears when you close the window. Here it accumulates into your Creator Profile — a persistent preference file across models and sessions, auto-attached to every generation.",
+  "↑ 此画像自动附加 to 每次生成的 Prompt 末尾，随反馈轮次更新": "↑ This profile is auto-appended to every generated prompt, updated with each feedback round",
+  "↑ 此画像自动附加到每次生成的 Prompt 末尾，随反馈轮次更新": "↑ This profile is auto-appended to every generated prompt, updated with each feedback round",
+  "编辑": "Edit",
+  "清空": "Clear",
+  "编辑创作者画像": "Edit Creator Profile",
+  "✅ 我喜欢的元素": "✅ Elements I Like",
+  "❌ 我不要的方向": "❌ Directions I Don't Want",
+  "🎨 我的风格偏好": "🎨 My Style Preferences",
+  "📝 补充说明（选填）": "📝 Additional Notes (Optional)",
+  "保存画像": "Save Profile",
+  "取消": "Cancel",
+  "画像已保存": "Profile saved",
+  "画像已清空": "Profile cleared",
+  "确定清空创作者画像？": "Clear creator profile?",
+  "偏好：": "Preferences: ",
+  "避免：": "Avoid: ",
+  "风格：": "Style: ",
+  "备注：": "Notes: ",
+  
+  // Presets & Fields
+  "快速示例：": "Quick Example: ",
+  "已加载预设": "Loaded preset",
+  "目标受众": "Target Audience",
+  "题材方向": "Genre Direction",
+  "（可多选）": "(multiple select)",
+  "参考与补充": "References & Supplements",
+  "参考爆款（选填）": "Reference hits (optional)",
+  "自定义规则（选填）": "Custom Rules (Optional)",
+  "查看完整规则与数据": "View Full Rules & Data",
+  "数据基础": "Data Foundation",
+  "规则零 · 从幻想开始": "Rule 0 · Start from Fantasy",
+  "核心": "Core",
+  "喜剧公式": "Comedy Engine Formula",
+  "v6新增": "v6 New",
+  "大女主原则：": "Strong Heroine Principle:",
+  "观众追的是女主不是CP · 每个转折是她的决定 · CP是调味料": "Audiences follow the heroine, not the CP · Every turn is her decision · CP is seasoning",
+  "规则一 · 主引擎是"看她怎么做"": "Rule 1 · Main Engine: "Watch What She Does"",
+  "规则二 · 女主三关：": "Rule 2 · Heroine's Three Tests:",
+  "配得感 / 快意恩仇 / 主体性": "Worthiness / Immediate Vengeance / Agency",
+  "规则三 · 标题5铁律：": "Rule 3 · Title's 5 Iron Laws:",
+  "有情绪承诺 / 有反差 / 有动词 / 4字或长句 / 迭代高频词": "Has emotional promise / Has contrast / Has action verb / 4-char or long phrase / Iterative high-frequency words",
+  "规则四 · 概念3铁律：": "Rule 4 · Concept's 3 Iron Laws:",
+  "一句话=情绪过山车 / 核心是她做了什么 / 兴奋不是沉重": "One-liner = emotional rollercoaster / Core = what she did / Excitement not heaviness",
+  "规则五 · CP：": "Rule 5 · CP:",
+  "他被她吸引因为她太强": "He's drawn to her because she's too strong",
+  "规则六 · 搞事业是燃料": "Rule 6 · The Career Arc is Fuel",
+  "规则七 · 常见错误：": "Rule 7 · Common Pitfalls:",
+  "避免太实的职场戏 / 避免电影文艺片感 / 避免自媒体vlog感": "Avoid overly realistic workplace drama / avoid arthouse film feel / avoid vlog feel",
+  "至少包含3/5要素才算通过": "Must contain at least 3/5 elements to pass",
+  
+  // Genres & Emotions
+  "豪门甜宠": "Wealthy Family Romance",
+  "现代都市": "Modern Urban",
+  "古装权谋": "Period Political Intrigue",
+  "古装喜剧": "Period Comedy",
+  "奇幻穿越": "Fantasy Transmigration",
+  "穿书": "Book Transmigration",
+  "重生宅斗": "Rebirth Mansion Struggle",
+  "家庭喜剧": "Family Comedy",
+  "女性成长": "Female Growth",
+  "年代怀旧": "Era Nostalgia",
+  "地域特色": "Regional Characteristics",
+  "仙侠虐恋": "Fantasy Romance Tragic",
+  "乡村田园": "Rural Pastoral",
+  "悬疑复仇": "Suspense Revenge",
+  "热血逆袭": "Hot-blooded Underdog",
+  "科幻脑洞": "Sci-Fi Imagination",
+  
+  "大女主逆袭": "Strong Heroine Rebirth",
+  "搞笑解压": "Comedy Stress Relief",
+  "治愈亲情": "Healing Family Bond",
+  "甜宠心动": "Sweet Romance Heartflutter",
+  "复仇爽感": "Revenge Satisfaction",
+  "燃向成长": "Passionate Growth",
+  "身份反转": "Identity Reversal",
+  "奇幻脑洞": "Fantasy Imagination",
+  "甜宠喜剧": "Sweet Romance Comedy",
+  "地域烟火气": "Local Atmosphere & Flavor",
+  "闺蜜情": "Best Friend Bond",
+  "先婚后爱": "Marriage First, Love Later",
+  "穿书反套路": "Book Transmigration Subversion",
+  "热血燃向": "Passionate & Fiery",
+  "反转逆袭": "Reversal & Underdog",
+  "逆风翻盘": "Overcoming Adversity",
 
-var EN_TO_ZH={};
-Object.keys(ZH_TO_EN).forEach(function(k){EN_TO_ZH[ZH_TO_EN[k]]=k});
+  // Generation Buttons & Pasting
+  "生成创意 Prompt": "Generate Creative Prompt",
+  "发送到模型": "Send to Model",
+  "查看方法论": "View Methodology",
+  "质检": "Quality Check",
+  "创意激发": "Creative Inspiration",
+  "复制": "Copy",
+  "下载 .txt": "Download .txt",
+  "已复制": "Copied",
+  "已下载": "Downloaded",
+  "当前模型：": "Current Model: ",
+  "已配置": "Configured",
+  "未配置": "Not configured",
+  "切换": "Switch",
+  "创意激发（": "Creative Inspiration (",
+  "生成完成": "completed",
+  "请粘贴大模型输出后点「📚 入库」": "paste LLM output then click Archive",
+  "生成失败": "Generation failed",
+  "生成失败:": "Generation failed: ",
+  "请检查 API 设置是否正确。": "Please check if your API settings are correct.",
+  "请先点击「生成创意 Prompt」": "Please click "Generate Creative Prompt" first",
+  "请先在设置中配置 API Key": "Please configure API Key in settings first",
+  "生成中...": "Generating...",
+  "正在调用": "Calling",
+  "生成创意...": "generating ideas...",
+  
+  // Archive & Feedback
+  "↓ 下一步：把大模型生成的结果粘贴到下方文本框": "↓ Next: Paste the LLM output in the text box below",
+  "复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「📚 入库」": "Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste below → click "Archive"",
+  "📋 粘贴大模型的输出结果": "📋 Paste LLM Output",
+  "清空": "Clear",
+  "把大模型（DeepSeek / ChatGPT / Claude 等）生成的创意概念粘贴到这里。": "Paste concepts generated by LLMs (DeepSeek, ChatGPT, Claude, etc.) here.",
+  "粘贴后点「📚 入库」→ 自动质检 → 写反馈 → 保存到创意库。": "After pasting, click "Archive" -> Auto QC -> Write Feedback -> Save to Library.",
+  "📚 入库": "📚 Archive",
+  "已入库": "Archived",
+  "已入库 · ☁ 已同步云端": "Archived · ☁ Synced to Cloud",
+  "本地保存 · ": "Local save · ",
+  "登录后自动同步云端": "Log in to sync to cloud",
+  "登录后自动同步云端，换设备不丢": "Log in to auto sync to cloud, keep history safe",
+  "确定删除这条记录？": "Delete this record?",
+  "已删除": "Deleted",
+  "已加载历史记录": "History loaded",
+  "已清空本地历史": "Local history cleared",
+  "创意库为空": "Library is empty",
+  "条记录": "records",
+  "请先将大模型的输出结果粘贴到上方文本框": "Please paste the LLM output in the text box above",
+  "请先将大模型的输出粘贴到上方文本框": "Please paste the LLM output in the text box above",
+  "已从粘贴内容识别出": "Identified",
+  "个概念": "concepts from pasted content",
+  "请至少对一个概念做出判断": "Please make a judgment on at least one concept",
+  "结构化反馈已保存，画像已更新": "Structured feedback saved, profile updated",
+  "反馈已保存": "Feedback saved",
+  "画像已更新（第 ": "profile updated (round ",
+  "反馈已保存，创作者画像已更新": "Feedback saved, creator profile updated",
+  "反馈已保存，画像已更新": "Feedback saved, profile updated",
+  "请填写反馈": "Please fill in feedback",
+  "保存反馈 & 更新画像": "Save Feedback & Update Profile",
+  "保存结构化反馈 & 更新画像": "Save Structured Feedback & Update Profile",
+  "预览反馈提示词": "Preview Feedback Prompt",
+  "以下是反馈 + 画像生成的提示词片段：": "Prompt snippet for feedback + profile generation:",
+  "以下为反馈 + 画像生成的提示词片段：": "Prompt snippet for feedback + profile generation:",
+  "你的判断标准、审美偏好、经验积累，都会沉淀到": "Your judgment criteria, aesthetic preferences, and experience will all precipitate into",
+  "AI 做执行，你做判断。画像跟着你一起成长。": "AI executes, you judge. The profile grows with you.",
+  "——帮你把方法论变成可操作的规则链，交给大模型跑出有亮点的半成品。": "— Turns methodology into actionable rule chains, letting the LLM produce a semi-finished product with highlights.",
+  "完整循环：": "Complete Loop:",
+  "① 选参数 → ② 生成创意 Prompt → ③ 发给大模型跑 → ④ 粘贴结果 → ⑤ 点「📚 入库」": "① Select parameters -> ② Generate Prompt -> ③ Run on LLM -> ④ Paste result -> ⑤ Click Archive",
+  "⑥ 自动质检 → ⑦ 写反馈 → ⑧ 画像自动更新 → ⑨ 调整参数再激发 →": "⑥ Auto QC -> ⑦ Write feedback -> ⑧ Profile auto-updates -> ⑨ Adjust parameters, re-inspire ->",
+  "创意库": "Library",
+  "📚 创意库": "📚 Library",
+  "下载全部": "Download All",
+  "创意库存储在浏览器本地 · ": "Creative library is stored in browser local · ",
+  "登录后自动同步云端": "Log in to sync to cloud",
+  
+  // Tabs
+  "创作": "Creation",
+  "数据": "Data",
+  "实验室": "Lab",
+  "📊 数据看板": "📊 Dashboard",
+  "生成次数": "Generation Count",
+  "反馈轮次": "Feedback Rounds",
+  "画像迭代": "Profile Iteration",
+  "题材偏好": "Genre Preference",
+  "情绪标签使用": "Emotion Label Usage",
+  "✅ 正向标签权重（反馈中「继续」的元素）": "✅ Positive Tag Weight (elements to continue)",
+  "❌ 负向标签权重（反馈中「放弃」的原因）": "❌ Negative Tag Weight (reasons for abandoning)",
+  "暂无数据": "No data yet",
+  "暂无正面标签数据": "No positive tag data yet",
+  "暂无负面标签 data": "No negative tag data yet",
+  "暂无负面标签数据": "No negative tag data yet",
+  
+  "🧪 方法论实验室": "🧪 Methodology Lab",
+  "开关规则，观察 Prompt 变化": "Toggle rules, observe prompt changes",
+  "所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。": "All rules enabled. The generated prompt will include the complete methodology system.",
+  "已关闭": "Disabled",
+  "条规则：": "rules:",
+  "将从痛点出发而非幻想出发，创意可能偏"苦情"": "Will start from pain points instead of fantasy, ideas may become melodrama",
+  "可能生成以 CP 为主线而非女主为主线的概念": "May generate concepts where CP is the main thread instead of the heroine",
+  "不再检验女主的配得感、快意恩仇、主体性": "No longer checks heroine worthiness, immediate vengeance, agency",
+  "标题不再受5铁律约束，可能出现6-8字中间地带": "Title no longer bound by 5 iron laws, may fall in the 6-8 char dead zone",
+  "概念不再要求"一句话=情绪过山车"": "Concept no longer requires one-liner = emotional rollercoaster",
+  "CP 可能回到"命运安排"的老套路": "CP may revert to the "fate arranged" trope",
+  "搞事业线可能盖过主线": "Career arc may overshadow the main story",
+  "不再规避职场戏太实、文艺片感等常见错误": "No longer avoids common pitfalls like overly realistic workplace drama, arthouse feel",
+  "关闭规则后点击「生成创意 Prompt」查看变化。": "Click "Generate Creative Prompt" after disabling rules to see changes.",
+  
+  // Placeholders & values (added for dynamic i18n support)
+  "例：女频 25-35岁 / 男频 18-35岁": "e.g., Female 25-35 / Male 18-35",
+  "女频 25-35岁": "Female 25-35",
+  "例：MiMo v2.5 Pro": "e.g., MiMo v2.5 Pro",
+  "https://api.mimo.ai/v1/chat/completions": "https://api.mimo.ai/v1/chat/completions",
+  "mimo-v2.5-pro": "mimo-v2.5-pro",
+  "sk-...": "sk-...",
+  "your@email.com": "your@email.com",
+  "至少6位": "At least 6 characters",
+  "例：身份错位强的、有喜剧常驻梗、地域特色": "e.g., strong identity misplacement, recurring comedy tropes, regional character",
+  "例：预知类金手指太强、七零年代+随身空间（用烂了）": "e.g., overly powerful predictive cheat, 1970s + dimension space (cliché)",
+  "例：轻松解压为主，每集要有明确笑点；不要太沉重": "e.g., lighthearted/stress-relief, clear jokes in every episode; not too heavy",
+  "例：正在做穿书题材的项目，偏好古装设定": "e.g., working on a book transmigration project, preferring historical setting",
+  "填入你想参考的具体作品名（选填）": "Enter the specific hit work you want to reference (optional)",
+  "例：必须有方言元素": "e.g., must include dialect elements",
+  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的"少女"妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: "My 18-Year-Old Mom"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A "teen" mom with modern parenting wisdom...",
+  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的&quot;少女&quot;妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: "My 18-Year-Old Mom"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A "teen" mom with modern parenting wisdom...",
+  "例：第二个概念的地域反差设定很有新意，观众应该会感兴趣": "e.g., the regional contrast in the second concept is novel, viewers should like it",
+  "例：第一个概念的女主身份太平面，缺乏让人想成为她的冲动": "e.g., the heroine in the first concept is too flat, lacking the urge to become her",
+  "例：偏好有喜剧元素的，太沉重的不要；地域特色可以再强一些": "e.g., prefer comedy elements, nothing too heavy; regional flavor can be stronger",
+  "自由补充...": "Free notes..."
+};
 
-var currentLang=localStorage.getItem('sdcc-lang')||'zh';
-var applied=false;
-var originalTexts=new Map();
+var EN_TO_ZH = {};
+Object.keys(ZH_TO_EN).forEach(function(k) {
+  EN_TO_ZH[ZH_TO_EN[k]] = k;
+});
 
-function snapshotPage(){
-  var container=document.querySelector('.app')||document.body;
-  var walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
+var currentLang = localStorage.getItem('sdcc-lang') || 'zh';
+var applied = false;
+var originalTexts = new Map();
+var originalPlaceholders = new Map();
+var originalValues = new Map();
+
+function snapshotPage() {
+  var container = document.querySelector('.app') || document.body;
+  
+  // Snapshot text nodes
+  var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
   var node;
-  while(node=walker.nextNode()){
-    var tag=(node.parentElement&&node.parentElement.tagName||'').toLowerCase();
-    if(['script','style','textarea','noscript','option','code','pre','svg','canvas','img','link','meta'].indexOf(tag)>=0)continue;
-    if(node.parentElement&&node.parentElement.hasAttribute('contenteditable'))continue;
-    var txt=node.textContent.trim();
-    if(txt in ZH_TO_EN)originalTexts.set(node,txt);
+  while (node = walker.nextNode()) {
+    var tag = (node.parentElement && node.parentElement.tagName || '').toLowerCase();
+    if (['script', 'style', 'textarea', 'noscript', 'option', 'code', 'pre', 'svg', 'canvas', 'img', 'link', 'meta'].indexOf(tag) >= 0) continue;
+    if (node.parentElement && node.parentElement.hasAttribute('contenteditable')) continue;
+    var txt = node.textContent.trim();
+    if (txt in ZH_TO_EN) originalTexts.set(node, txt);
   }
+
+  // Snapshot placeholder and default value of inputs and textareas
+  document.querySelectorAll('input, textarea').forEach(function(el) {
+    var ph = el.getAttribute('placeholder');
+    if (ph && (ph.trim() in ZH_TO_EN)) {
+      originalPlaceholders.set(el, ph.trim());
+    }
+    var val = el.value;
+    if (val && (val.trim() in ZH_TO_EN)) {
+      originalValues.set(el, val.trim());
+    }
+  });
 }
 
-function toggleLang(){
-  currentLang=currentLang==='zh'?'en':'zh';
-  _memLang=currentLang;
-  localStorage.setItem('sdcc-lang',currentLang);
+function toggleLang() {
+  currentLang = currentLang === 'zh' ? 'en' : 'zh';
+  _memLang = currentLang;
+  localStorage.setItem('sdcc-lang', currentLang);
   applyLang();
   updateLangButton();
-  // 同步到 Supabase
-  if(sb&&sbCurrentUser()){
-    sb.from('profiles').upsert({id:sbCurrentUser().id,lang:currentLang}).catch(function(){});
+  if (sb && sbCurrentUser()) {
+    sb.from('profiles').upsert({ id: sbCurrentUser().id, lang: currentLang }).catch(function() {});
   }
 }
 
-function updateLangButton(){
-  var btn=document.getElementById('langToggle');
-  if(btn){
-    btn.textContent=currentLang==='zh'?'English':'中文';
+function updateLangButton() {
+  var btn = document.getElementById('langToggle');
+  if (btn) {
+    btn.textContent = currentLang === 'zh' ? 'English' : '中文';
   }
 }
 
-function applyLang(){
-  document.documentElement.setAttribute('data-lang',currentLang);
-  if(currentLang==='zh'){
-    originalTexts.forEach(function(orig,node){node.textContent=orig});
-    var container=document.querySelector('.app')||document.body;
-    var walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
-    var node2;
-    while(node2=walker.nextNode()){
-      var tag=(node2.parentElement&&node2.parentElement.tagName||'').toLowerCase();
-      if(['script','style','textarea','noscript','option','code','pre','svg','canvas','img','link','meta'].indexOf(tag)>=0)continue;
-      var txt=node2.textContent.trim();
-      if(EN_TO_ZH[txt])node2.textContent=EN_TO_ZH[txt];
-    }
-    // restore <option> tags
-    document.querySelectorAll('select option').forEach(function(opt){
-      var orig=opt.getAttribute('data-zh');
-      if(orig){opt.textContent=orig;opt.removeAttribute('data-zh')}
+function applyLang() {
+  document.documentElement.setAttribute('data-lang', currentLang);
+  if (currentLang === 'zh') {
+    // Restore text content
+    originalTexts.forEach(function(orig, node) {
+      node.textContent = orig;
     });
-    applied=false;
+    var container = document.querySelector('.app') || document.body;
+    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    var node2;
+    while (node2 = walker.nextNode()) {
+      var tag = (node2.parentElement && node2.parentElement.tagName || '').toLowerCase();
+      if (['script', 'style', 'textarea', 'noscript', 'option', 'code', 'pre', 'svg', 'canvas', 'img', 'link', 'meta'].indexOf(tag) >= 0) continue;
+      var txt = node2.textContent.trim();
+      if (EN_TO_ZH[txt]) node2.textContent = EN_TO_ZH[txt];
+    }
+    // Restore select option tags
+    document.querySelectorAll('select option').forEach(function(opt) {
+      var orig = opt.getAttribute('data-zh');
+      if (orig) {
+        opt.textContent = orig;
+        opt.removeAttribute('data-zh');
+      }
+    });
+    // Restore placeholders
+    originalPlaceholders.forEach(function(orig, el) {
+      el.setAttribute('placeholder', orig);
+    });
+    // Restore default input values if unchanged from their translated values
+    originalValues.forEach(function(orig, el) {
+      var enVal = ZH_TO_EN[orig];
+      if (el.value === enVal) {
+        el.value = orig;
+      }
+    });
+    applied = false;
     snapshotPage();
     return;
   }
-  if(applied)return;
-  originalTexts.forEach(function(orig,node){node.textContent=ZH_TO_EN[orig]});
-  // translate <option> tags
-  document.querySelectorAll('select option').forEach(function(opt){
-    var zh=opt.textContent.trim();
-    if(ZH_TO_EN[zh]){
-      opt.setAttribute('data-zh',zh);
-      opt.textContent=ZH_TO_EN[zh];
+  
+  if (applied) return;
+  
+  // Translate text content
+  originalTexts.forEach(function(orig, node) {
+    node.textContent = ZH_TO_EN[orig];
+  });
+  
+  // Translate select options
+  document.querySelectorAll('select option').forEach(function(opt) {
+    var zh = opt.textContent.trim();
+    if (ZH_TO_EN[zh]) {
+      opt.setAttribute('data-zh', zh);
+      opt.textContent = ZH_TO_EN[zh];
     }
   });
-  applied=true;
+  
+  // Translate placeholders
+  originalPlaceholders.forEach(function(orig, el) {
+    el.setAttribute('placeholder', ZH_TO_EN[orig]);
+  });
+  
+  // Translate default values (if the user hasn't changed them yet)
+  originalValues.forEach(function(orig, el) {
+    if (el.value === orig) {
+      el.value = ZH_TO_EN[orig];
+    }
+  });
+  
+  applied = true;
 }
 
-window.addEventListener('load',function(){
+window.addEventListener('load', function() {
   snapshotPage();
   applyLang();
   updateLangButton();
-});
-
+});\n
 
 /* ============================================
    初始化

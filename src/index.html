@@ -13,7 +13,7 @@
 <div class="app">
 <!-- Auth Modal (弹窗式，保存时才出现) -->
 <div id="authModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center">
-  <div style="background:var(--sr);border:1px solid var(--b);border-radius:14px;padding:32px;width:90%;max-width:400px;position:relative">
+  <div class="modal-content">
     <button onclick="closeAuthModal()" style="position:absolute;top:12px;right:16px;font-size:18px;color:var(--tm);background:none;border:none;cursor:pointer">✕</button>
     <div id="authModalBody"></div>
   </div>
@@ -157,6 +157,7 @@
     <button onclick="preset('穿书')" style="font-size:12px;color:var(--r0);background:var(--r0s);border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">📖 穿书穿越</button>
     <button onclick="preset('家庭喜剧')" style="font-size:12px;color:var(--d);background:var(--ds);border:1px solid rgba(34,211,238,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">👨‍👩‍👧 家庭喜剧</button>
     <button onclick="preset('女性成长')" style="font-size:12px;color:var(--cm);background:var(--cms);border:1px solid rgba(244,114,182,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">👩‍👩‍👩 女性成长</button>
+    <button onclick="preset('热血逆袭')" style="font-size:12px;color:var(--a);background:var(--as);border:1px solid rgba(232,87,42,.2);border-radius:16px;padding:5px 14px;cursor:pointer;transition:all .2s">🔥 热血逆袭</button>
   </div>
 
   <div class="sec">
@@ -172,6 +173,7 @@
           <option value="女性成长">女性成长</option><option value="年代怀旧">年代怀旧</option>
           <option value="地域特色">地域特色</option><option value="仙侠虐恋">仙侠虐恋</option>
           <option value="乡村田园">乡村田园</option><option value="悬疑复仇">悬疑复仇</option>
+          <option value="热血逆袭">热血逆袭</option><option value="科幻脑洞">科幻脑洞</option>
         </select>
       </div>
     </div>
@@ -194,6 +196,9 @@
       <div class="to"><input type="checkbox" id="e12" value="闺蜜情"><label for="e12">闺蜜情</label></div>
       <div class="to"><input type="checkbox" id="e13" value="先婚后爱"><label for="e13">先婚后爱</label></div>
       <div class="to"><input type="checkbox" id="e14" value="穿书反套路"><label for="e14">穿书反套路</label></div>
+      <div class="to"><input type="checkbox" id="e15" value="热血燃向"><label for="e15">热血燃向</label></div>
+      <div class="to"><input type="checkbox" id="e16" value="反转逆袭"><label for="e16">反转逆袭</label></div>
+      <div class="to"><input type="checkbox" id="e17" value="逆风翻盘"><label for="e17">逆风翻盘</label></div>
     </div>
   </div>
 
