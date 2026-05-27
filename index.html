@@ -986,10 +986,15 @@ function renderHist(){
 
 function deleteHist(i){
   if(!confirm(t('确定删除这条记录？')))return;
+  var item=_memHistory[i];
   _memHistory.splice(i,1);
   localStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
   renderHist();
   ts(t('已删除'));
+  if(sb&&sbCurrentUser()&&item){
+    var uid=sbCurrentUser().id;
+    sb.from('history').delete().eq('user_id',uid).eq('ts',item.ts).catch(function(e){console.error('Supabase delete error:',e)});
+  }
 }
 
 function loadHist(i){
@@ -1010,6 +1015,7 @@ function loadHist(i){
 
 var _histCleared=false;
 function clearHist(){
+  if(!confirm(t('确定清空所有本地历史？')))return;
   _memHistory=[];
   _histCleared=true;
   localStorage.removeItem(HIST_KEY);
@@ -2405,7 +2411,8 @@ var ZH_TO_EN = {
   "例：第二个概念的地域反差设定很有新意，观众应该会感兴趣": "e.g., the regional contrast in the second concept is novel, viewers should like it",
   "例：第一个概念的女主身份太平面，缺乏让人想成为她的冲动": "e.g., the heroine in the first concept is too flat, lacking the urge to become her",
   "例：偏好有喜剧元素的，太沉重的不要；地域特色可以再强一些": "e.g., prefer comedy elements, nothing too heavy; regional flavor can be stronger",
-  "自由补充...": "Free notes..."
+  "自由补充...": "Free notes...",
+  "确定清空所有本地历史？": "Are you sure you want to clear all local history?"
 };
 
 var EN_TO_ZH = {};
