@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-27
+
+### Added
+
+- **通用故事创意炼金系统 (Generic Story Alchemy)**
+  - 从单一女频短剧升级为通用“故事/短剧/漫剧/电影创意炼金术”，支持男频受众下的视角平移映射。
+  - 增设 `热血逆袭` 男频预设，补齐 `热血燃向`、`反转逆袭` 与 `逆风翻盘` 核心情绪标签及 `科幻脑洞` 题材。
+- **无死角双语 (i18n) 动态翻译**
+  - 支持所有 `input` 与 `textarea` 元素的 `placeholder` 属性动态翻译。
+  - 切换语言时智能转换受众默认值 (`女频 25-35岁` / `Female 25-35`)。
+- **高端毛玻璃视觉效果 (Premium UI/UX)**
+  - 引入 `backdrop-filter: blur(12px)` Glassmorphism 磨砂透光质感。
+  - 按钮与情绪标签增加 Hover 上浮与 Glow 发光过渡，重构历史记录为 CSS 类 `.history-card` 控制。
+  - 优化 Prompt 输出框字体（14px）、白骨色 (`var(--tp)`) 与行高，缓解阅读疲劳。
+- **数据同步与安全性**
+  - 本地删除历史记录时，同步向 Supabase 发送请求进行云端清除，保障数据一致性。
+  - 清空本地历史按钮增加二次确认弹窗，防误触。
+
+### Changed
+
+- **文档更新** — 重写并发布了 [HANDOFF.md](file:///Users/lushu/.gemini/antigravity/scratch/Short-Drama-Concept-Creator/HANDOFF.md) 和中英双语 [README.md](file:///Users/lushu/.gemini/antigravity/scratch/Short-Drama-Concept-Creator/README.md)。
+
+### Fixed
+
+- **i18n** — 修复了主页 slogan 描述微调后导致的翻译中英混杂 Bug。
+
+---
+
 ## [1.0.0] - 2026-04-29
 
 ### Added
