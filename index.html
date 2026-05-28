@@ -1289,22 +1289,30 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     }
   }
 
-  if (!testStorage('localStorage')) {
+  if (!testStorage('safeLocalStorage')) {
     if (window.Storage) {
       Storage.prototype.getItem = function(k) {
-        var mem = this === window.localStorage ? memLocal : memSession;
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        var mem = isLocal ? memLocal : memSession;
         return mem[k] || null;
       };
       Storage.prototype.setItem = function(k, v) {
-        var mem = this === window.localStorage ? memLocal : memSession;
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        var mem = isLocal ? memLocal : memSession;
         mem[k] = String(v);
       };
       Storage.prototype.removeItem = function(k) {
-        var mem = this === window.localStorage ? memLocal : memSession;
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        var mem = isLocal ? memLocal : memSession;
         delete mem[k];
       };
       Storage.prototype.clear = function() {
-        if (this === window.localStorage) {
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        if (isLocal) {
           memLocal = {};
         } else {
           memSession = {};
@@ -1312,7 +1320,7 @@ if (window.NodeList && !NodeList.prototype.forEach) {
       };
     } else {
       try {
-        Object.defineProperty(window, 'localStorage', {
+        Object.defineProperty(window, 'safeLocalStorage', {
           value: {
             getItem: function(k) { return memLocal[k] || null; },
             setItem: function(k, v) { memLocal[k] = String(v); },
@@ -1326,10 +1334,10 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     }
   }
 
-  if (!testStorage('sessionStorage')) {
+  if (!testStorage('safeSessionStorage')) {
     if (!window.Storage) {
       try {
-        Object.defineProperty(window, 'sessionStorage', {
+        Object.defineProperty(window, 'safeSessionStorage', {
           value: {
             getItem: function(k) { return memSession[k] || null; },
             setItem: function(k, v) { memSession[k] = String(v); },
@@ -1344,8 +1352,39 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   }
 })();
 
-var localStorage = window.localStorage;
-var sessionStorage = window.sessionStorage;
+var safeLocalStorage;
+try {
+  var testLocal = window.localStorage;
+  var x = '__test__';
+  testLocal.setItem(x, x);
+  testLocal.removeItem(x);
+  safeLocalStorage = testLocal;
+} catch(e) {
+  var memLocal = {};
+  safeLocalStorage = {
+    getItem: function(k) { return memLocal[k] || null; },
+    setItem: function(k, v) { memLocal[k] = String(v); },
+    removeItem: function(k) { delete memLocal[k]; },
+    clear: function() { memLocal = {}; }
+  };
+}
+
+var safeSessionStorage;
+try {
+  var testSession = window.sessionStorage;
+  var y = '__test__';
+  testSession.setItem(y, y);
+  testSession.removeItem(y);
+  safeSessionStorage = testSession;
+} catch(e) {
+  var memSession = {};
+  safeSessionStorage = {
+    getItem: function(k) { return memSession[k] || null; },
+    setItem: function(k, v) { memSession[k] = String(v); },
+    removeItem: function(k) { delete memSession[k]; },
+    clear: function() { memSession = {}; }
+  };
+}
 
 
 /* ============================================
@@ -1501,19 +1540,19 @@ var PROF_KEY='sdcc_profile';       // 画像数据
 var PROF_CNT_KEY='sdcc_prof_cnt';  // 反馈轮次计数
 
 /* 内存变量（同步数据源） */
-var _memProfile=JSON.parse(localStorage.getItem(PROF_KEY)||'null');
-var _memProfCnt=parseInt(localStorage.getItem(PROF_CNT_KEY)||'0');
-var _memHistory=JSON.parse(localStorage.getItem('sdcc_history')||'[]');
+var _memProfile=JSON.parse(safeLocalStorage.getItem(PROF_KEY)||'null');
+var _memProfCnt=parseInt(safeLocalStorage.getItem(PROF_CNT_KEY)||'0');
+var _memHistory=JSON.parse(safeLocalStorage.getItem('sdcc_history')||'[]');
 
 // 读取画像（从内存）
 function getProfile(){
   return _memProfile;
 }
 
-// 保存画像（同步到内存 + localStorage + Supabase）
+// 保存画像（同步到内存 + safeLocalStorage + Supabase）
 function saveProfileData(data){
   _memProfile=data;
-  localStorage.setItem(PROF_KEY,JSON.stringify(data));
+  safeLocalStorage.setItem(PROF_KEY,JSON.stringify(data));
   renderProfile();
   // 同步到 Supabase
   if(sb&&sbCurrentUser()){
@@ -1609,8 +1648,8 @@ function saveProfile(){
 function clearProfile(){
   if(!confirm(t('确定清空创作者画像？')))return;
   _memProfile=null;_memProfCnt=0;
-  localStorage.removeItem(PROF_KEY);
-  localStorage.removeItem(PROF_CNT_KEY);
+  safeLocalStorage.removeItem(PROF_KEY);
+  safeLocalStorage.removeItem(PROF_CNT_KEY);
   renderProfile();
   ts(t('画像已清空'));
   // 同步清空 Supabase
@@ -1647,7 +1686,7 @@ function updateProfileFromFeedback(){
   }
 
   _memProfCnt++;
-  localStorage.setItem(PROF_CNT_KEY,String(_memProfCnt));
+  safeLocalStorage.setItem(PROF_CNT_KEY,String(_memProfCnt));
 
   saveProfileData(current);
 }
@@ -1740,7 +1779,7 @@ function saveHist(modelName,result){
   var item={ts:Date.now(),aud:document.getElementById('aud').value,genre:document.getElementById('genre').value,tags:gt(),model:modelName||'手动',result:result||''};
   _memHistory.unshift(item);
   if(_memHistory.length>50)_memHistory=_memHistory.slice(0,50);
-  localStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
+  safeLocalStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
   renderHist();
   // 同步到 Supabase（不存提示词，只存参数+结果）
   if(sb&&sbCurrentUser()){
@@ -1794,7 +1833,7 @@ function deleteHist(i){
   if(!confirm(t('确定删除这条记录？')))return;
   var item=_memHistory[i];
   _memHistory.splice(i,1);
-  localStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
+  safeLocalStorage.setItem(HIST_KEY,JSON.stringify(_memHistory.slice(0,10)));
   renderHist();
   ts(t('已删除'));
   if(sb&&sbCurrentUser()&&item){
@@ -1827,7 +1866,7 @@ function clearHist(){
   if(!confirm(t('确定清空所有本地历史？')))return;
   _memHistory=[];
   _histCleared=true;
-  localStorage.removeItem(HIST_KEY);
+  safeLocalStorage.removeItem(HIST_KEY);
   renderHist();
   ts(t('已清空本地历史'));
 }
@@ -2158,8 +2197,8 @@ function saveToCloud(){
 /* --- 自动保存（仅保存草稿到本地，不创建新历史记录） --- */
 var _autoSaveTimer=null;
 function autoSaveResult(){
-  // 始终保存到 localStorage（本地备份）
-  localStorage.setItem('sdcc_paste_draft',document.getElementById('pasteInput').value);
+  // 始终保存到 safeLocalStorage（本地备份）
+  safeLocalStorage.setItem('sdcc_paste_draft',document.getElementById('pasteInput').value);
 }
 
 /* --- 入库：质检→反馈→保存一条龙 --- */
@@ -2210,7 +2249,7 @@ async function archiveResult(){
 
 /* --- API 设置（多模型预设） --- */
 var PRESETS_KEY='sdcc_model_presets';
-var API_KEY_KEY='sdcc_api_key';  // Key 存储在 sessionStorage（关闭页面自动清空）
+var API_KEY_KEY='sdcc_api_key';  // Key 存储在 safeSessionStorage（关闭页面自动清空）
 var ACTIVE_KEY='sdcc_active_model';
 
 var defaultPresets=[
@@ -2221,21 +2260,21 @@ var defaultPresets=[
 ];
 
 function getPresets(){
-  var saved=JSON.parse(localStorage.getItem(PRESETS_KEY)||'null');
-  if(!saved){saved=defaultPresets;localStorage.setItem(PRESETS_KEY,JSON.stringify(saved))}
+  var saved=JSON.parse(safeLocalStorage.getItem(PRESETS_KEY)||'null');
+  if(!saved){saved=defaultPresets;safeLocalStorage.setItem(PRESETS_KEY,JSON.stringify(saved))}
   return saved;
 }
 
 function savePresets(presets){
-  localStorage.setItem(PRESETS_KEY,JSON.stringify(presets));
+  safeLocalStorage.setItem(PRESETS_KEY,JSON.stringify(presets));
 }
 
 function getActivePresetId(){
-  return localStorage.getItem(ACTIVE_KEY)||'mimo';
+  return safeLocalStorage.getItem(ACTIVE_KEY)||'mimo';
 }
 
 function setActivePresetId(id){
-  localStorage.setItem(ACTIVE_KEY,id);
+  safeLocalStorage.setItem(ACTIVE_KEY,id);
 }
 
 function getActivePreset(){
@@ -2309,7 +2348,7 @@ function deletePreset(id){
 function saveApiKey(){
   var key=document.getElementById('spKey').value.trim();
   if(!key){ts(t('请填写 API Key'));return}
-  sessionStorage.setItem(API_KEY_KEY,key);
+  safeSessionStorage.setItem(API_KEY_KEY,key);
   document.getElementById('spKey').value='';
   ts(t('API Key 已保存'));
 }
@@ -2332,7 +2371,7 @@ function updateModelSelector(){
 
 function updateActiveModelInfo(){
   var p=getActivePreset();
-  var key=sessionStorage.getItem(API_KEY_KEY)||'';
+  var key=safeSessionStorage.getItem(API_KEY_KEY)||'';
   var el=document.getElementById('activeModelInfo');
   if(!el)return;
   el.innerHTML=t('当前模型：')+'<strong style="color:var(--tp)">'+p.name+'</strong> ('+p.model+') · Key: '+(key?t('已配置'):t('未配置'))+' · <a href="javascript:void(0)" onclick="toggleSettings()" style="color:var(--d)">'+t('切换')+'</a>';
@@ -2343,14 +2382,14 @@ function toggleSettings(){
   p.classList.toggle('visible');
   if(p.classList.contains('visible')){
     renderPresetList();
-    var key=sessionStorage.getItem(API_KEY_KEY)||'';
+    var key=safeSessionStorage.getItem(API_KEY_KEY)||'';
     document.getElementById('spKey').value=key;
   }
 }
 
 async function testConnection(){
   var p=getActivePreset();
-  var key=sessionStorage.getItem(API_KEY_KEY)||'';
+  var key=safeSessionStorage.getItem(API_KEY_KEY)||'';
   if(!key){document.getElementById('spStatus').textContent='✗ '+t('请先保存 API Key');document.getElementById('spStatus').style.color='#ef4444';return}
   document.getElementById('spStatus').textContent=t('连接')+' '+p.name+' '+t('中...');document.getElementById('spStatus').style.color='var(--d)';
   try{
@@ -2373,7 +2412,7 @@ var generating=false;
 async function genAI(){
   if(generating)return;
   var preset=getActivePreset();
-  var key=sessionStorage.getItem(API_KEY_KEY)||'';
+  var key=safeSessionStorage.getItem(API_KEY_KEY)||'';
   if(!key){ts(t('请先在设置中配置 API Key'));toggleSettings();return}
   var p=build();if(!p)return;
   generating=true;
@@ -2712,7 +2751,7 @@ function saveStructuredFeedback(){
   var hasDecision=fbConcepts.some(function(c){return c.decision});
   if(!hasDecision){ts(t('请至少对一个概念做出判断'));return}
 
-  var list=JSON.parse(localStorage.getItem(FB_CONCEPTS_KEY)||'[]');
+  var list=JSON.parse(safeLocalStorage.getItem(FB_CONCEPTS_KEY)||'[]');
   list.unshift({
     ts:Date.now(),
     genre:document.getElementById('genre').value,
@@ -2721,10 +2760,10 @@ function saveStructuredFeedback(){
     note:(document.getElementById('fbNote')||{}).value||''
   });
   if(list.length>50)list=list.slice(0,50);
-  localStorage.setItem(FB_CONCEPTS_KEY,JSON.stringify(list));
+  safeLocalStorage.setItem(FB_CONCEPTS_KEY,JSON.stringify(list));
 
   // 更新标签权重
-  var weights=JSON.parse(localStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
+  var weights=JSON.parse(safeLocalStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
   fbConcepts.forEach(function(c){
     if(c.decision==='continue'){
       c.goodTags.forEach(function(t){weights[t]=(weights[t]||0)+1});
@@ -2735,13 +2774,13 @@ function saveStructuredFeedback(){
       c.badTags.forEach(function(t){weights[t]=(weights[t]||0)-0.5});
     }
   });
-  localStorage.setItem(TAG_WEIGHTS_KEY,JSON.stringify(weights));
+  safeLocalStorage.setItem(TAG_WEIGHTS_KEY,JSON.stringify(weights));
 
   // 同时更新文本画像
   updateProfileFromStructured();
 
   _memProfCnt++;
-  localStorage.setItem(PROF_CNT_KEY,String(_memProfCnt));
+  safeLocalStorage.setItem(PROF_CNT_KEY,String(_memProfCnt));
 
   document.getElementById('fbSaved').innerHTML='✓ '+t('结构化反馈已保存，画像已更新')+'（第 '+_memProfCnt+' '+t('轮）');
   document.getElementById('fbSaved').style.display='block';
@@ -2751,7 +2790,7 @@ function saveStructuredFeedback(){
 }
 
 function updateProfileFromStructured(){
-  var weights=JSON.parse(localStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
+  var weights=JSON.parse(safeLocalStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
   var current=getProfile()||{like:'',avoid:'',style:'',extra:''};
   var positives=[];
   var negatives=[];
@@ -2773,10 +2812,10 @@ function saveFb(){
     var bad=document.getElementById('fbBad').value.trim();
     var pref=document.getElementById('fbPref').value.trim();
     if(!good&&!bad&&!pref){ts(t('请填写反馈'));return}
-    var list=JSON.parse(localStorage.getItem(FB_KEY)||'[]');
+    var list=JSON.parse(safeLocalStorage.getItem(FB_KEY)||'[]');
     list.unshift({ts:Date.now(),good:good,bad:bad,pref:pref,genre:document.getElementById('genre').value,tags:gt()});
     if(list.length>20)list=list.slice(0,20);
-    localStorage.setItem(FB_KEY,JSON.stringify(list));
+    safeLocalStorage.setItem(FB_KEY,JSON.stringify(list));
     updateProfileFromFeedback();
     document.getElementById('fbGood').value='';
     document.getElementById('fbBad').value='';
@@ -2797,9 +2836,9 @@ function toggleDashboard(){
 
 function renderDashboard(){
   var hist=_memHistory;
-  var fbList=JSON.parse(localStorage.getItem(FB_CONCEPTS_KEY)||'[]');
-  var fbText=JSON.parse(localStorage.getItem(FB_KEY)||'[]');
-  var weights=JSON.parse(localStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
+  var fbList=JSON.parse(safeLocalStorage.getItem(FB_CONCEPTS_KEY)||'[]');
+  var fbText=JSON.parse(safeLocalStorage.getItem(FB_KEY)||'[]');
+  var weights=JSON.parse(safeLocalStorage.getItem(TAG_WEIGHTS_KEY)||'{}');
   var totalFb=fbList.length+fbText.length;
 
   // 概览数字
@@ -2973,6 +3012,7 @@ gen=function(){
 
 /* ============================================
    i18n 中英文切换
+   ============================================ */
 var ZH_TO_EN = {
   "暂无有效的生成结果，无法导入": "No valid generation results, cannot import",
   "已成功一键导入并完成入库！": "Successfully imported and archived with one-click!",
@@ -3014,7 +3054,6 @@ var ZH_TO_EN = {
   "——观察哪些题材受欢迎、哪些模式具备爆款潜质，找到背后的结构性规律。": "— Observe which genres are popular, which patterns have hit potential, and uncover underlying structural patterns.",
   "二、适配创作者": "2. Adapt to Creator",
   "——通过持续的反馈沉淀，逐渐了解你的审美偏好、能力范围、兴趣方向，让每次激发都更贴合你这个人。": "— Through continuous feedback accumulation, gradually understand your aesthetic preferences, skill range, and interests, making each inspiration more tailored to you.",
-  "目标不是让你去追市场热点，而是帮你在市场机会 and 你的个人特质之间，": "Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,",
   "目标不是让你去追市场热点，而是帮你在市场机会和你的个人特质之间，": "Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,",
   "找到那个只属于你的交汇点": "find the intersection that belongs only to you",
   
@@ -3029,7 +3068,7 @@ var ZH_TO_EN = {
   "测试连接": "Test Connection",
   "API Key（所有模型共享）": "API Key (Shared Across All Models)",
   "保存 Key": "Save Key",
-  "⚠️ Key 仅临时存储（sessionStorage），关闭标签页后自动清空，需重新输入。": "⚠️ Keys are stored temporarily (sessionStorage) and cleared when you close the tab. Re-enter required.",
+  "⚠️ Key 仅临时存储（safeSessionStorage），关闭标签页后自动清空，需重新输入。": "⚠️ Keys are stored temporarily (safeSessionStorage) and cleared when you close the tab. Re-enter required.",
   "本工具为单文件零依赖，无第三方脚本，无网络请求（除你主动调用的模型 API）。Key 不会上传到任何第三方服务器。": "This tool is single-file zero-dependency, no third-party scripts, no network requests (except your LLM API calls). Keys never uploaded.",
   "☁ 云端同步": "☁ Cloud Sync",
   "本工具是网页应用，数据存在浏览器里，清缓存就没了。": "This tool is a web app. Data is stored in your browser; clearing cache deletes it.",
@@ -3082,7 +3121,7 @@ var ZH_TO_EN = {
   "v6新增": "v6 New",
   "大女主原则：": "Strong Heroine Principle:",
   "观众追的是女主不是CP · 每个转折是她的决定 · CP是调味料": "Audiences follow the heroine, not the CP · Every turn is her decision · CP is seasoning",
-  "规则一 · 主引擎是"看她怎么做"": "Rule 1 · Main Engine: "Watch What She Does"",
+  "规则一 · 主引擎是\"看她怎么做\"": "Rule 1 · Main Engine: \"Watch What She Does\",",
   "规则二 · 女主三关：": "Rule 2 · Heroine's Three Tests:",
   "配得感 / 快意恩仇 / 主体性": "Worthiness / Immediate Vengeance / Agency",
   "规则三 · 标题5铁律：": "Rule 3 · Title's 5 Iron Laws:",
@@ -3151,7 +3190,7 @@ var ZH_TO_EN = {
   "生成失败": "Generation failed",
   "生成失败:": "Generation failed: ",
   "请检查 API 设置是否正确。": "Please check if your API settings are correct.",
-  "请先点击「生成创意 Prompt」": "Please click "Generate Creative Prompt" first",
+  "请先点击「生成创意 Prompt」": "Please click \"Generate Creative Prompt\" first",
   "请先在设置中配置 API Key": "Please configure API Key in settings first",
   "生成中...": "Generating...",
   "正在调用": "Calling",
@@ -3159,11 +3198,11 @@ var ZH_TO_EN = {
   
   // Archive & Feedback
   "↓ 下一步：把大模型生成的结果粘贴到下方文本框": "↓ Next: Paste the LLM output in the text box below",
-  "复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「📚 入库」": "Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste below → click "Archive"",
+  "复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「📚 入库」": "Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste below → click \"Archive\"",
   "📋 粘贴大模型的输出结果": "📋 Paste LLM Output",
   "清空": "Clear",
   "把大模型（DeepSeek / ChatGPT / Claude 等）生成的创意概念粘贴到这里。": "Paste concepts generated by LLMs (DeepSeek, ChatGPT, Claude, etc.) here.",
-  "粘贴后点「📚 入库」→ 自动质检 → 写反馈 → 保存到创意库。": "After pasting, click "Archive" -> Auto QC -> Write Feedback -> Save to Library.",
+  "粘贴后点「📚 入库」→ 自动质检 → 写反馈 → 保存到创意库。": "After pasting, click \"Archive\" -> Auto QC -> Write Feedback -> Save to Library.",
   "📚 入库": "📚 Archive",
   "已入库": "Archived",
   "已入库 · ☁ 已同步云端": "Archived · ☁ Synced to Cloud",
@@ -3226,15 +3265,15 @@ var ZH_TO_EN = {
   "所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。": "All rules enabled. The generated prompt will include the complete methodology system.",
   "已关闭": "Disabled",
   "条规则：": "rules:",
-  "将从痛点出发而非幻想出发，创意可能偏"苦情"": "Will start from pain points instead of fantasy, ideas may become melodrama",
+  "将从痛点出发而非幻想出发，创意可能偏\"苦情\"": "Will start from pain points instead of fantasy, ideas may become melodrama",
   "可能生成以 CP 为主线而非女主为主线的概念": "May generate concepts where CP is the main thread instead of the heroine",
   "不再检验女主的配得感、快意恩仇、主体性": "No longer checks heroine worthiness, immediate vengeance, agency",
   "标题不再受5铁律约束，可能出现6-8字中间地带": "Title no longer bound by 5 iron laws, may fall in the 6-8 char dead zone",
-  "概念不再要求"一句话=情绪过山车"": "Concept no longer requires one-liner = emotional rollercoaster",
-  "CP 可能回到"命运安排"的老套路": "CP may revert to the "fate arranged" trope",
+  "概念不再要求\"一句话=情绪过山车\"": "Concept no longer requires one-liner = emotional rollercoaster",
+  "CP 可能回到\"命运安排\"的老套路": "CP may revert to the \"fate arranged\" trope",
   "搞事业线可能盖过主线": "Career arc may overshadow the main story",
   "不再规避职场戏太实、文艺片感等常见错误": "No longer avoids common pitfalls like overly realistic workplace drama, arthouse feel",
-  "关闭规则后点击「生成创意 Prompt」查看变化。": "Click "Generate Creative Prompt" after disabling rules to see changes.",
+  "关闭规则后点击「生成创意 Prompt」查看变化。": "Click \"Generate Creative Prompt\" after disabling rules to see changes.",
   
   // Placeholders & values (added for dynamic i18n support)
   "例：女频 25-35岁 / 男频 18-35岁": "e.g., Female 25-35 / Male 18-35",
@@ -3251,8 +3290,8 @@ var ZH_TO_EN = {
   "例：正在做穿书题材的项目，偏好古装设定": "e.g., working on a book transmigration project, preferring historical setting",
   "填入你想参考的具体作品名（选填）": "Enter the specific hit work you want to reference (optional)",
   "例：必须有方言元素": "e.g., must include dialect elements",
-  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的"少女"妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: "My 18-Year-Old Mom"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A "teen" mom with modern parenting wisdom...",
-  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的&quot;少女&quot;妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: "My 18-Year-Old Mom"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A "teen" mom with modern parenting wisdom...",
+  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的\"少女\"妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: \"My 18-Year-Old Mom\"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A \"teen\" mom with modern parenting wisdom...",
+  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的&quot;少女&quot;妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: \"My 18-Year-Old Mom\"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A \"teen\" mom with modern parenting wisdom...",
   "例：第二个概念的地域反差设定很有新意，观众应该会感兴趣": "e.g., the regional contrast in the second concept is novel, viewers should like it",
   "例：第一个概念的女主身份太平面，缺乏让人想成为她的冲动": "e.g., the heroine in the first concept is too flat, lacking the urge to become her",
   "例：偏好有喜剧元素的，太沉重的不要；地域特色可以再强一些": "e.g., prefer comedy elements, nothing too heavy; regional flavor can be stronger",
@@ -3265,7 +3304,7 @@ Object.keys(ZH_TO_EN).forEach(function(k) {
   EN_TO_ZH[ZH_TO_EN[k]] = k;
 });
 
-var currentLang = localStorage.getItem('sdcc-lang') || 'zh';
+var currentLang = safeLocalStorage.getItem('sdcc-lang') || 'zh';
 var applied = false;
 var originalTexts = new Map();
 var originalPlaceholders = new Map();
@@ -3301,7 +3340,7 @@ function snapshotPage() {
 function toggleLang() {
   currentLang = currentLang === 'zh' ? 'en' : 'zh';
   _memLang = currentLang;
-  localStorage.setItem('sdcc-lang', currentLang);
+  safeLocalStorage.setItem('sdcc-lang', currentLang);
   applyLang();
   updateLangButton();
   if (sb && sbCurrentUser()) {
@@ -3391,7 +3430,7 @@ window.addEventListener('load', function() {
   snapshotPage();
   applyLang();
   updateLangButton();
-});\n
+});
 
 /* ============================================
    初始化
@@ -3403,7 +3442,7 @@ async function initApp(){
   renderHist();
   renderPresetList();
   // 恢复粘贴区草稿
-  var draft=localStorage.getItem('sdcc_paste_draft');
+  var draft=safeLocalStorage.getItem('sdcc_paste_draft');
   if(draft){document.getElementById('pasteInput').value=draft}
   if(sb){
     // 监听登录状态变化（处理 GitHub OAuth 回调）
@@ -3490,7 +3529,7 @@ document.addEventListener('click',function(e){
 });
 
 /* --- 主题切换 --- */
-var currentTheme = localStorage.getItem('sdcc_theme') || 'dark';
+var currentTheme = safeLocalStorage.getItem('sdcc_theme') || 'dark';
 function initTheme() {
   document.documentElement.setAttribute('data-theme', currentTheme);
   var icon = document.getElementById('themeIcon');
@@ -3500,7 +3539,7 @@ function initTheme() {
 }
 function toggleTheme() {
   currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-  localStorage.setItem('sdcc_theme', currentTheme);
+  safeLocalStorage.setItem('sdcc_theme', currentTheme);
   initTheme();
 }
 

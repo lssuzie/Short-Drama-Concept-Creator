@@ -2,7 +2,14 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 const html = readFileSync('src/index.html', 'utf8');
 const css = readFileSync('src/style.css', 'utf8');
-const js = readFileSync('src/app.js', 'utf8');
+const rawJs = readFileSync('src/app.js', 'utf8');
+const js = rawJs
+  .replace(/\bwindow\.localStorage\b/g, 'window.L_O_C_A_L')
+  .replace(/\bwindow\.sessionStorage\b/g, 'window.S_E_S_S_I_O_N')
+  .replace(/\blocalStorage\b/g, 'safeLocalStorage')
+  .replace(/\bsessionStorage\b/g, 'safeSessionStorage')
+  .replace(/\bwindow\.L_O_C_A_L\b/g, 'window.localStorage')
+  .replace(/\bwindow\.S_E_S_S_I_O_N\b/g, 'window.sessionStorage');
 
 const out = html
   .replace(

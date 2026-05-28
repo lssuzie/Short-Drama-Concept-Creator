@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if git diff --name-only 2>/dev/null | grep -q '\.js$'; then bash /Users/lushu/Short-Drama-Concept-Creator/scripts/check-i18n.sh; fi"
+            "command": "if git diff --name-only 2>/dev/null | grep -q '\\.js$'; then bash /Users/lushu/Short-Drama-Concept-Creator/scripts/check-i18n.sh; fi"
           }
         ]
       }

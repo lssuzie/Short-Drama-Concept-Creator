@@ -22,19 +22,27 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   if (!testStorage('localStorage')) {
     if (window.Storage) {
       Storage.prototype.getItem = function(k) {
-        var mem = this === window.localStorage ? memLocal : memSession;
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        var mem = isLocal ? memLocal : memSession;
         return mem[k] || null;
       };
       Storage.prototype.setItem = function(k, v) {
-        var mem = this === window.localStorage ? memLocal : memSession;
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        var mem = isLocal ? memLocal : memSession;
         mem[k] = String(v);
       };
       Storage.prototype.removeItem = function(k) {
-        var mem = this === window.localStorage ? memLocal : memSession;
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        var mem = isLocal ? memLocal : memSession;
         delete mem[k];
       };
       Storage.prototype.clear = function() {
-        if (this === window.localStorage) {
+        var isLocal = false;
+        try { isLocal = (this === window.localStorage); } catch(e){}
+        if (isLocal) {
           memLocal = {};
         } else {
           memSession = {};
@@ -74,8 +82,39 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   }
 })();
 
-var localStorage = window.localStorage;
-var sessionStorage = window.sessionStorage;
+var safeLocalStorage;
+try {
+  var testLocal = window.localStorage;
+  var x = '__test__';
+  testLocal.setItem(x, x);
+  testLocal.removeItem(x);
+  safeLocalStorage = testLocal;
+} catch(e) {
+  var memLocal = {};
+  safeLocalStorage = {
+    getItem: function(k) { return memLocal[k] || null; },
+    setItem: function(k, v) { memLocal[k] = String(v); },
+    removeItem: function(k) { delete memLocal[k]; },
+    clear: function() { memLocal = {}; }
+  };
+}
+
+var safeSessionStorage;
+try {
+  var testSession = window.sessionStorage;
+  var y = '__test__';
+  testSession.setItem(y, y);
+  testSession.removeItem(y);
+  safeSessionStorage = testSession;
+} catch(e) {
+  var memSession = {};
+  safeSessionStorage = {
+    getItem: function(k) { return memSession[k] || null; },
+    setItem: function(k, v) { memSession[k] = String(v); },
+    removeItem: function(k) { delete memSession[k]; },
+    clear: function() { memSession = {}; }
+  };
+}
 
 
 /* ============================================
@@ -1703,6 +1742,7 @@ gen=function(){
 
 /* ============================================
    i18n 中英文切换
+   ============================================ */
 var ZH_TO_EN = {
   "暂无有效的生成结果，无法导入": "No valid generation results, cannot import",
   "已成功一键导入并完成入库！": "Successfully imported and archived with one-click!",
@@ -1744,7 +1784,6 @@ var ZH_TO_EN = {
   "——观察哪些题材受欢迎、哪些模式具备爆款潜质，找到背后的结构性规律。": "— Observe which genres are popular, which patterns have hit potential, and uncover underlying structural patterns.",
   "二、适配创作者": "2. Adapt to Creator",
   "——通过持续的反馈沉淀，逐渐了解你的审美偏好、能力范围、兴趣方向，让每次激发都更贴合你这个人。": "— Through continuous feedback accumulation, gradually understand your aesthetic preferences, skill range, and interests, making each inspiration more tailored to you.",
-  "目标不是让你去追市场热点，而是帮你在市场机会 and 你的个人特质之间，": "Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,",
   "目标不是让你去追市场热点，而是帮你在市场机会和你的个人特质之间，": "Goal isn't to chase trending topics, but to help you find the intersection between market opportunities and your personal traits,",
   "找到那个只属于你的交汇点": "find the intersection that belongs only to you",
   
@@ -1812,7 +1851,7 @@ var ZH_TO_EN = {
   "v6新增": "v6 New",
   "大女主原则：": "Strong Heroine Principle:",
   "观众追的是女主不是CP · 每个转折是她的决定 · CP是调味料": "Audiences follow the heroine, not the CP · Every turn is her decision · CP is seasoning",
-  "规则一 · 主引擎是"看她怎么做"": "Rule 1 · Main Engine: "Watch What She Does"",
+  "规则一 · 主引擎是\"看她怎么做\"": "Rule 1 · Main Engine: \"Watch What She Does\",",
   "规则二 · 女主三关：": "Rule 2 · Heroine's Three Tests:",
   "配得感 / 快意恩仇 / 主体性": "Worthiness / Immediate Vengeance / Agency",
   "规则三 · 标题5铁律：": "Rule 3 · Title's 5 Iron Laws:",
@@ -1881,7 +1920,7 @@ var ZH_TO_EN = {
   "生成失败": "Generation failed",
   "生成失败:": "Generation failed: ",
   "请检查 API 设置是否正确。": "Please check if your API settings are correct.",
-  "请先点击「生成创意 Prompt」": "Please click "Generate Creative Prompt" first",
+  "请先点击「生成创意 Prompt」": "Please click \"Generate Creative Prompt\" first",
   "请先在设置中配置 API Key": "Please configure API Key in settings first",
   "生成中...": "Generating...",
   "正在调用": "Calling",
@@ -1889,11 +1928,11 @@ var ZH_TO_EN = {
   
   // Archive & Feedback
   "↓ 下一步：把大模型生成的结果粘贴到下方文本框": "↓ Next: Paste the LLM output in the text box below",
-  "复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「📚 入库」": "Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste below → click "Archive"",
+  "复制上方 Prompt → 发给大模型（MiMo / Claude / GPT 等）→ 将结果粘贴到下方 → 点击「📚 入库」": "Copy prompt above → send to LLM (MiMo/Claude/GPT etc.) → paste below → click \"Archive\"",
   "📋 粘贴大模型的输出结果": "📋 Paste LLM Output",
   "清空": "Clear",
   "把大模型（DeepSeek / ChatGPT / Claude 等）生成的创意概念粘贴到这里。": "Paste concepts generated by LLMs (DeepSeek, ChatGPT, Claude, etc.) here.",
-  "粘贴后点「📚 入库」→ 自动质检 → 写反馈 → 保存到创意库。": "After pasting, click "Archive" -> Auto QC -> Write Feedback -> Save to Library.",
+  "粘贴后点「📚 入库」→ 自动质检 → 写反馈 → 保存到创意库。": "After pasting, click \"Archive\" -> Auto QC -> Write Feedback -> Save to Library.",
   "📚 入库": "📚 Archive",
   "已入库": "Archived",
   "已入库 · ☁ 已同步云端": "Archived · ☁ Synced to Cloud",
@@ -1956,15 +1995,15 @@ var ZH_TO_EN = {
   "所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。": "All rules enabled. The generated prompt will include the complete methodology system.",
   "已关闭": "Disabled",
   "条规则：": "rules:",
-  "将从痛点出发而非幻想出发，创意可能偏"苦情"": "Will start from pain points instead of fantasy, ideas may become melodrama",
+  "将从痛点出发而非幻想出发，创意可能偏\"苦情\"": "Will start from pain points instead of fantasy, ideas may become melodrama",
   "可能生成以 CP 为主线而非女主为主线的概念": "May generate concepts where CP is the main thread instead of the heroine",
   "不再检验女主的配得感、快意恩仇、主体性": "No longer checks heroine worthiness, immediate vengeance, agency",
   "标题不再受5铁律约束，可能出现6-8字中间地带": "Title no longer bound by 5 iron laws, may fall in the 6-8 char dead zone",
-  "概念不再要求"一句话=情绪过山车"": "Concept no longer requires one-liner = emotional rollercoaster",
-  "CP 可能回到"命运安排"的老套路": "CP may revert to the "fate arranged" trope",
+  "概念不再要求\"一句话=情绪过山车\"": "Concept no longer requires one-liner = emotional rollercoaster",
+  "CP 可能回到\"命运安排\"的老套路": "CP may revert to the \"fate arranged\" trope",
   "搞事业线可能盖过主线": "Career arc may overshadow the main story",
   "不再规避职场戏太实、文艺片感等常见错误": "No longer avoids common pitfalls like overly realistic workplace drama, arthouse feel",
-  "关闭规则后点击「生成创意 Prompt」查看变化。": "Click "Generate Creative Prompt" after disabling rules to see changes.",
+  "关闭规则后点击「生成创意 Prompt」查看变化。": "Click \"Generate Creative Prompt\" after disabling rules to see changes.",
   
   // Placeholders & values (added for dynamic i18n support)
   "例：女频 25-35岁 / 男频 18-35岁": "e.g., Female 25-35 / Male 18-35",
@@ -1981,8 +2020,8 @@ var ZH_TO_EN = {
   "例：正在做穿书题材的项目，偏好古装设定": "e.g., working on a book transmigration project, preferring historical setting",
   "填入你想参考的具体作品名（选填）": "Enter the specific hit work you want to reference (optional)",
   "例：必须有方言元素": "e.g., must include dialect elements",
-  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的"少女"妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: "My 18-Year-Old Mom"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A "teen" mom with modern parenting wisdom...",
-  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的&quot;少女&quot;妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: "My 18-Year-Old Mom"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A "teen" mom with modern parenting wisdom...",
+  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的\"少女\"妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: \"My 18-Year-Old Mom\"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A \"teen\" mom with modern parenting wisdom...",
+  "将大模型生成的创意概念粘贴到这里...\n\n例如：\n### 概念一：《亲妈她18岁》\n奇幻触发器：40岁金牌育儿师猝后穿进狗血虐文...\n她是谁：拥有现代顶级育儿智慧的&quot;少女&quot;妈妈...": "Paste the LLM generated creative concept here...\n\nExample:\n### Concept 1: \"My 18-Year-Old Mom\"\nFantasy Trigger: 40-year-old parenting expert dies and transmigrates into a melodrama...\nWho she is: A \"teen\" mom with modern parenting wisdom...",
   "例：第二个概念的地域反差设定很有新意，观众应该会感兴趣": "e.g., the regional contrast in the second concept is novel, viewers should like it",
   "例：第一个概念的女主身份太平面，缺乏让人想成为她的冲动": "e.g., the heroine in the first concept is too flat, lacking the urge to become her",
   "例：偏好有喜剧元素的，太沉重的不要；地域特色可以再强一些": "e.g., prefer comedy elements, nothing too heavy; regional flavor can be stronger",
@@ -2121,7 +2160,7 @@ window.addEventListener('load', function() {
   snapshotPage();
   applyLang();
   updateLangButton();
-});\n
+});
 
 /* ============================================
    初始化
