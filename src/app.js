@@ -1,3 +1,29 @@
+if (window.NodeList && !NodeList.prototype.forEach) {
+  NodeList.prototype.forEach = Array.prototype.forEach;
+}
+
+// 解决 file:/// 协议和隐私模式下禁用 Storage 导致的全局 JS 崩溃问题
+var localStorage = (function() {
+  var mem = {};
+  return {
+    getItem: function(k) { try { return window.localStorage.getItem(k); } catch(e) { return mem[k] || null; } },
+    setItem: function(k, v) { try { window.localStorage.setItem(k, v); } catch(e) { mem[k] = v; } },
+    removeItem: function(k) { try { window.localStorage.removeItem(k); } catch(e) { delete mem[k]; } },
+    clear: function() { try { window.localStorage.clear(); } catch(e) { mem = {}; } }
+  };
+})();
+
+var sessionStorage = (function() {
+  var mem = {};
+  return {
+    getItem: function(k) { try { return window.sessionStorage.getItem(k); } catch(e) { return mem[k] || null; } },
+    setItem: function(k, v) { try { window.sessionStorage.setItem(k, v); } catch(e) { mem[k] = v; } },
+    removeItem: function(k) { try { window.sessionStorage.removeItem(k); } catch(e) { delete mem[k]; } },
+    clear: function() { try { window.sessionStorage.clear(); } catch(e) { mem = {}; } }
+  };
+})();
+
+
 /* ============================================
    Supabase 配置
    ============================================ */
@@ -201,9 +227,9 @@ function renderProfile(){
   rounds.textContent=cnt+' '+t('轮反馈');
 
   var h='';
-  if(p.like)h+='<div><strong style="color:#22d3ee">✅ '+t('偏好：')+'</strong>'+p.like+'</div>';
-  if(p.avoid)h+='<div><strong style="color:#f472b6">❌ '+t('避免：')+'</strong>'+p.avoid+'</div>';
-  if(p.style)h+='<div><strong style="color:#8b5cf6">🎨 '+t('风格：')+'</strong>'+p.style+'</div>';
+  if(p.like)h+='<div><strong style="color:var(--d)">✅ '+t('偏好：')+'</strong>'+p.like+'</div>';
+  if(p.avoid)h+='<div><strong style="color:var(--cm)">❌ '+t('避免：')+'</strong>'+p.avoid+'</div>';
+  if(p.style)h+='<div><strong style="color:var(--r0)">🎨 '+t('风格：')+'</strong>'+p.style+'</div>';
   if(p.extra)h+='<div><strong style="color:var(--tm)">📝 '+t('备注：')+'</strong>'+p.extra+'</div>';
   display.innerHTML=h;
   hint.textContent=t('↑ 此画像自动附加到每次生成的 Prompt 末尾，随反馈轮次更新');
@@ -345,9 +371,41 @@ function preset(key){
   var p=presets[key];if(!p)return;
   document.getElementById('aud').value=p.aud;
   document.getElementById('genre').value=p.genre;
-  document.querySelectorAll('#tags input').forEach(function(c){c.checked=p.tags.indexOf(c.value)>=0});
+  updateGenreHint();
+  document.querySelectorAll('#tags input').forEach(function(c){
+    c.checked=p.tags.indexOf(c.value)>=0;
+    if (c.parentElement && c.parentElement.classList.contains('to')) {
+      if (c.checked) {
+        c.parentElement.classList.add('checked');
+      } else {
+        c.parentElement.classList.remove('checked');
+      }
+    }
+    try {
+      var event = document.createEvent('HTMLEvents');
+      event.initEvent('change', true, false);
+      c.dispatchEvent(event);
+    } catch(e){}
+  });
   document.getElementById('ref').value=p.ref||'';
   document.getElementById('cust').value='';
+
+  // 按钮微光脉冲指引
+  var genBtn = document.querySelector('.gs button.bg');
+  var genAIBtn = document.getElementById('genAIBtn');
+  if (genBtn) {
+    genBtn.classList.remove('btn-pulse');
+    void genBtn.offsetWidth;
+    genBtn.classList.add('btn-pulse');
+    setTimeout(function(){ genBtn.classList.remove('btn-pulse'); }, 1000);
+  }
+  if (genAIBtn) {
+    genAIBtn.classList.remove('btn-pulse');
+    void genAIBtn.offsetWidth;
+    genAIBtn.classList.add('btn-pulse');
+    setTimeout(function(){ genAIBtn.classList.remove('btn-pulse'); }, 1000);
+  }
+
   ts(t('已加载预设')+'「'+key+'」');
 }
 
@@ -435,6 +493,9 @@ function loadHist(i){
     document.getElementById('fbSection').style.display='block';
     initFeedbackCards(it.result);
     document.getElementById('pasteArea').scrollIntoView({behavior:'smooth',block:'center'});
+    setStep(3);
+  } else {
+    setStep(1);
   }
   ts(t('已加载历史记录'));
 }
@@ -690,7 +751,8 @@ function build(){
   p+='2. 如果“目标受众”中指定了“男频”或“男性主角”（或用户明确要求），请在生成时将上述方法论中的“大女主”和“她”平移映射为男频高品质的“大男主”与“他”，同样遵循配得感、快意恩仇与主体性的内核，避免沦为被命运或系统强行投喂的提线木偶与无脑爽文工具人。\n';
 
   return p;
-   gen / pv / cp / dl
+}
+/* --- gen / pv / cp / dl
    ============================================ */
 function gen(){
   var p=build();if(!p)return;
@@ -700,6 +762,11 @@ function gen(){
   o.classList.add('v');o.style.animation='none';o.offsetHeight;
   o.style.animation='fu .6s ease forwards';
   o.scrollIntoView({behavior:'smooth',block:'start'});
+  setStep(2);
+  var banner = document.getElementById('advancedTrainingBanner');
+  var paste = document.getElementById('pasteArea');
+  if(banner) banner.style.display = 'flex';
+  if(paste) paste.style.display = 'block';
 }
 
 function pv(){
@@ -811,6 +878,7 @@ async function archiveResult(){
 
   // 4. 滚到质检结果
   document.getElementById('qcResults').scrollIntoView({behavior:'smooth',block:'start'});
+  setStep(3);
 }
 
 
@@ -996,6 +1064,7 @@ async function genAI(){
   opanel.classList.add('v');opanel.style.animation='none';opanel.offsetHeight;
   opanel.style.animation='fu .6s ease forwards';
   opanel.scrollIntoView({behavior:'smooth',block:'start'});
+  setStep(2);
 
   try{
     var isAnthropic=preset.endpoint.indexOf('anthropic')>=0;
@@ -1065,6 +1134,8 @@ async function genAI(){
     // 显示流程指引和粘贴区
     document.getElementById('workflowHint').style.display='block';
     document.getElementById('pasteArea').style.display='block';
+    var banner = document.getElementById('advancedTrainingBanner');
+    if(banner) banner.style.display = 'flex';
     document.getElementById('pasteInput').value='';
     document.getElementById('qcResults').innerHTML='';
     document.getElementById('qcToFeedbackHint').style.display='none';
@@ -1564,6 +1635,8 @@ gen=function(){
   // 显示流程指引和粘贴区
   document.getElementById('workflowHint').style.display='block';
   document.getElementById('pasteArea').style.display='block';
+  var banner = document.getElementById('advancedTrainingBanner');
+  if(banner) banner.style.display = 'flex';
   document.getElementById('pasteInput').value='';
   document.getElementById('qcResults').innerHTML='';
   document.getElementById('qcToFeedbackHint').style.display='none';
@@ -1579,6 +1652,24 @@ gen=function(){
 /* ============================================
    i18n 中英文切换
 var ZH_TO_EN = {
+  "暂无有效的生成结果，无法导入": "No valid generation results, cannot import",
+  "已成功一键导入并完成入库！": "Successfully imported and archived with one-click!",
+  "✨ 灵感模板（点击直接运行）：": "✨ Inspiration Presets (Click to run):",
+  "点选后自动填好参数": "Parameters auto-filled upon selection",
+  "受众与题材 (必填)": "Audience & Genre (Required)",
+  "核心情绪 (必填，可多选)": "Core Emotions (Required, Multi-select)",
+  "参考与补充 (高阶选填)": "Narrative Anchors (Optional)",
+  "🧬 AI 炼金偏好沉淀（资深创作者迭代专区）": "🧬 AI Profile Training & Feedback (Advanced iteration area)",
+  // Step Wizard & Footer Cards
+  "配置参数": "Configure Parameters",
+  "题材与核心情绪": "Genre & Core Emotions",
+  "运行激发": "Run Inspiration",
+  "生成 Prompt 发给大模型": "Generate Prompt & Send to LLM",
+  "结果入库": "Archive Result",
+  "质检反馈并沉淀画像": "Check Quality, Feedback & Update Profile",
+  "🧬 故事炼金坊原理": "🧬 Story Alchemy Principles",
+  "💡 人机协同使用方式": "💡 Human-AI Co-creation Workflow",
+
   // Slogan & Slogan background
   "故事创意炼金坊 — 创意方法论引擎": "Story Creative Alchemy — Creative Methodology Engine",
   "故事创意炼金坊": "Story Creative Alchemy",
@@ -1978,6 +2069,7 @@ window.addEventListener('load', function() {
    初始化
    ============================================ */
 async function initApp(){
+  initTheme();
   // 直接显示主界面
   renderProfile();
   renderHist();
@@ -2002,8 +2094,54 @@ async function initApp(){
       loadCloudData().then(function(){renderProfile();renderHist()});
     }
   }
+
+  // 绑定输入框变化，重置步骤条到第 1 步
+  setTimeout(function() {
+    setStep(1);
+    var inputs = document.querySelectorAll('#aud, #genre, #ref, #cust, #tags input[type="checkbox"]');
+    inputs.forEach(function(input) {
+      input.addEventListener('change', function() {
+        setStep(1);
+        if (input.id === 'genre') {
+          updateGenreHint();
+        }
+        if (input.type === 'checkbox' && input.parentElement && input.parentElement.classList.contains('to')) {
+          if (input.checked) {
+            input.parentElement.classList.add('checked');
+          } else {
+            input.parentElement.classList.remove('checked');
+          }
+        }
+      });
+      if (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA') {
+        input.addEventListener('input', function() {
+          setStep(1);
+        });
+      }
+    });
+    // 首次加载初始化题材灵感提示与 checkbox 选中样式
+    updateGenreHint();
+    document.querySelectorAll('#tags input[type="checkbox"]').forEach(function(c) {
+      if (c.checked) {
+        c.parentElement.classList.add('checked');
+      } else {
+        c.parentElement.classList.remove('checked');
+      }
+    });
+  }, 100);
 }
 initApp();
+
+function setStep(step) {
+  document.querySelectorAll('.step-wizard .step-item').forEach(function(el) {
+    var s = parseInt(el.getAttribute('data-step') || '0');
+    if (s === step) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+  });
+}
 
 /* --- Tab 切换 --- */
 function switchTab(tab){
@@ -2022,4 +2160,85 @@ document.addEventListener('click',function(e){
   var btn=document.querySelector('.settings-btn');
   if(sp&&!sp.contains(e.target)&&!btn.contains(e.target))sp.classList.remove('visible');
 });
+
+/* --- 主题切换 --- */
+var currentTheme = localStorage.getItem('sdcc_theme') || 'dark';
+function initTheme() {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  var icon = document.getElementById('themeIcon');
+  if (icon) {
+    icon.textContent = currentTheme === 'light' ? '☀️' : '🌙';
+  }
+}
+function toggleTheme() {
+  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+  localStorage.setItem('sdcc_theme', currentTheme);
+  initTheme();
+}
+
+/* === 题材爆款灵感提示数据字典 === */
+var GENRE_HINTS = {
+  '豪门甜宠': '✨ 甜宠爆款：阶级跨越+极致被爱，观众追的是女主的主体性，CP是调味剂，他被她吸引因为她足够强。',
+  '现代都市': '✨ 都市网感：身份反差与极端身份错位（如首富继承人去当外卖员），注重快节奏的情感转折。',
+  '古装权谋': '✨ 古装权谋：极致爽感与快意恩仇，重在女主/男主的信息差降维打击，拒绝拖泥带水。',
+  '古装喜剧': '✨ 古装喜剧：现代梗与古代设定极端错位，通过无厘头喜剧包装，达成治愈亲情或爱情。',
+  '奇幻穿越': '✨ 奇幻穿越：初始幻想设定（如带系统、读心术）与日常生活碰撞，建立极致的爽感与控制力。',
+  '穿书': '✨ 穿书反套路：极端身份错位与降维打击，不从痛点出发，从观众对“掌控全局”的幻想出发。',
+  '重生宅斗': '✨ 宅斗爽感：重生后的信息差优势，每一步转折都是女主的主动决定，避免陷入传统悲惨境遇。',
+  '家庭喜剧': '✨ 喜剧公式：奇幻触发器 × 极端身份错位 × 家庭关系 × 喜剧 × 治愈（至少满足3项）。',
+  '女性成长': '✨ 大女主关卡：女主必须经历“配得感 → 快意恩仇 → 主体性”三个维度的爽感闭环。',
+  '年代怀旧': '✨ 年代爽点：时代洪流中的信息差降维打击，重在日常奋斗与地域特色，温情中带爽感。',
+  '地域特色': '✨ 地域特色：强烈的地域符号与方言魅力（如东北豪爽/川渝幽默），让喜剧和市井烟火气落地。',
+  '仙侠虐恋': '✨ 仙侠虐恋：极致虐心与身份反转，重点是女主身份高贵后的“配得感”与反向打脸的快意恩仇。',
+  '乡村田园': '✨ 乡村田园：极度解压的世外桃源幻想，搭配爽快的宗族平事或新农村建设，治愈与反击并存。',
+  '悬疑复仇': '✨ 复仇爽感：主引擎是“看她怎么做”，剧情反转要爽快，杜绝无意义的误会和憋屈。',
+  '热血逆袭': '✨ 逆袭秘诀：前期极致的压抑与后期身份反转，夺回掌控权，满足观众的“主体性幻想”。',
+  '科幻脑洞': '✨ 脑洞科幻：将新奇的未来概念（如意识上传、循环）融入日常伦理情感，做足反差和伦理碰撞。'
+};
+
+function updateGenreHint() {
+  var select = document.getElementById('genre');
+  var hintEl = document.getElementById('genreHint');
+  if (!select || !hintEl) return;
+  var val = select.value;
+  var hint = GENRE_HINTS[val] || '';
+  if (hint) {
+    hintEl.innerHTML = t(hint);
+    hintEl.classList.add('show');
+  } else {
+    hintEl.classList.remove('show');
+  }
+}
+
+/* === 智能一键流式导入及自动入库 === */
+function importAndArchive() {
+  var obox = document.getElementById('obox');
+  if (!obox) return;
+  var fullText = obox.textContent.trim();
+  if (!fullText || fullText.startsWith('⏳') || fullText.startsWith('❌')) {
+    ts(t('暂无有效的生成结果，无法导入'));
+    return;
+  }
+  
+  var pasteInput = document.getElementById('pasteInput');
+  if (pasteInput) {
+    pasteInput.value = fullText;
+    
+    // 确保显示粘贴区，并做数据备份
+    var pasteArea = document.getElementById('pasteArea');
+    if (pasteArea) {
+      pasteArea.style.display = 'block';
+    }
+    
+    try {
+      if (typeof autoSaveResult === 'function') {
+        autoSaveResult();
+      }
+    } catch(e){}
+    
+    // 执行底层入库逻辑
+    archiveResult();
+    ts(t('已成功一键导入并完成入库！'));
+  }
+}
 
