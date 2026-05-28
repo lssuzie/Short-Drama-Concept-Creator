@@ -414,11 +414,22 @@
 </div>
 
 
-  <div class="dv"></div>
+  <div style="display:flex;gap:24px;margin-top:32px;opacity:0;animation:fu .7s ease .4s forwards;flex-wrap:wrap;border-top:1px solid var(--b);padding-top:24px">
+    <!-- 数据看板折叠 -->
+    <div>
+      <button class="rt" id="dashTog" onclick="toggleDashboard();this.classList.toggle('open')"><span class="ar">›</span> 数据看板</button>
+    </div>
+    <!-- 实验室折叠 -->
+    <div>
+      <button class="rt" id="labTog" onclick="toggleLab();this.classList.toggle('open')"><span class="ar">›</span> 方法论实验室</button>
+    </div>
+    <!-- 版本更新折叠 -->
+    <div>
+      <button class="rt" id="chtog" onclick="document.getElementById('chlog').classList.toggle('visible');this.classList.toggle('open')"><span class="ar">›</span> 版本更新</button>
+    </div>
+  </div>
 
-  <div style="opacity:0;animation:fu .7s ease .4s forwards">
-    <button class="rt" id="chtog" onclick="document.getElementById('chlog').classList.toggle('visible');this.classList.toggle('open')"><span class="ar">›</span> 版本更新</button>
-    <div class="rp" id="chlog">
+  <div class="rp" id="chlog">
       <strong>v1.1 · 2026-05-04</strong><br>
       · 流水线重设计：粘贴区合并为「📚 入库」一键操作<br>
       · 创意库改造：结果摘要 + 逐条删除 + TXT下载<br>

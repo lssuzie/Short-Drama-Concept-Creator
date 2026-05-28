@@ -1214,11 +1214,22 @@ html[data-theme="dark"] .preset-btn:hover {
 </div>
 
 
-  <div class="dv"></div>
+  <div style="display:flex;gap:24px;margin-top:32px;opacity:0;animation:fu .7s ease .4s forwards;flex-wrap:wrap;border-top:1px solid var(--b);padding-top:24px">
+    <!-- 数据看板折叠 -->
+    <div>
+      <button class="rt" id="dashTog" onclick="toggleDashboard();this.classList.toggle('open')"><span class="ar">›</span> 数据看板</button>
+    </div>
+    <!-- 实验室折叠 -->
+    <div>
+      <button class="rt" id="labTog" onclick="toggleLab();this.classList.toggle('open')"><span class="ar">›</span> 方法论实验室</button>
+    </div>
+    <!-- 版本更新折叠 -->
+    <div>
+      <button class="rt" id="chtog" onclick="document.getElementById('chlog').classList.toggle('visible');this.classList.toggle('open')"><span class="ar">›</span> 版本更新</button>
+    </div>
+  </div>
 
-  <div style="opacity:0;animation:fu .7s ease .4s forwards">
-    <button class="rt" id="chtog" onclick="document.getElementById('chlog').classList.toggle('visible');this.classList.toggle('open')"><span class="ar">›</span> 版本更新</button>
-    <div class="rp" id="chlog">
+  <div class="rp" id="chlog">
       <strong>v1.1 · 2026-05-04</strong><br>
       · 流水线重设计：粘贴区合并为「📚 入库」一键操作<br>
       · 创意库改造：结果摘要 + 逐条删除 + TXT下载<br>
@@ -1261,26 +1272,80 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
 }
 
-// 解决 file:/// 协议和隐私模式下禁用 Storage 导致的全局 JS 崩溃问题
-var localStorage = (function() {
-  var mem = {};
-  return {
-    getItem: function(k) { try { return window.localStorage.getItem(k); } catch(e) { return mem[k] || null; } },
-    setItem: function(k, v) { try { window.localStorage.setItem(k, v); } catch(e) { mem[k] = v; } },
-    removeItem: function(k) { try { window.localStorage.removeItem(k); } catch(e) { delete mem[k]; } },
-    clear: function() { try { window.localStorage.clear(); } catch(e) { mem = {}; } }
-  };
+// 解决 file:/// 协议和隐私模式下禁用 Storage 导致的全局 JS (及 Supabase SDK) 崩溃问题
+(function() {
+  var memLocal = {};
+  var memSession = {};
+  
+  function testStorage(type) {
+    try {
+      var storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  if (!testStorage('localStorage')) {
+    if (window.Storage) {
+      Storage.prototype.getItem = function(k) {
+        var mem = this === window.localStorage ? memLocal : memSession;
+        return mem[k] || null;
+      };
+      Storage.prototype.setItem = function(k, v) {
+        var mem = this === window.localStorage ? memLocal : memSession;
+        mem[k] = String(v);
+      };
+      Storage.prototype.removeItem = function(k) {
+        var mem = this === window.localStorage ? memLocal : memSession;
+        delete mem[k];
+      };
+      Storage.prototype.clear = function() {
+        if (this === window.localStorage) {
+          memLocal = {};
+        } else {
+          memSession = {};
+        }
+      };
+    } else {
+      try {
+        Object.defineProperty(window, 'localStorage', {
+          value: {
+            getItem: function(k) { return memLocal[k] || null; },
+            setItem: function(k, v) { memLocal[k] = String(v); },
+            removeItem: function(k) { delete memLocal[k]; },
+            clear: function() { memLocal = {}; }
+          },
+          configurable: true,
+          writable: true
+        });
+      } catch(err) {}
+    }
+  }
+
+  if (!testStorage('sessionStorage')) {
+    if (!window.Storage) {
+      try {
+        Object.defineProperty(window, 'sessionStorage', {
+          value: {
+            getItem: function(k) { return memSession[k] || null; },
+            setItem: function(k, v) { memSession[k] = String(v); },
+            removeItem: function(k) { delete memSession[k]; },
+            clear: function() { memSession = {}; }
+          },
+          configurable: true,
+          writable: true
+        });
+      } catch(err) {}
+    }
+  }
 })();
 
-var sessionStorage = (function() {
-  var mem = {};
-  return {
-    getItem: function(k) { try { return window.sessionStorage.getItem(k); } catch(e) { return mem[k] || null; } },
-    setItem: function(k, v) { try { window.sessionStorage.setItem(k, v); } catch(e) { mem[k] = v; } },
-    removeItem: function(k) { try { window.sessionStorage.removeItem(k); } catch(e) { delete mem[k]; } },
-    clear: function() { try { window.sessionStorage.clear(); } catch(e) { mem = {}; } }
-  };
-})();
+var localStorage = window.localStorage;
+var sessionStorage = window.sessionStorage;
 
 
 /* ============================================
@@ -1641,9 +1706,7 @@ function preset(key){
       }
     }
     try {
-      var event = document.createEvent('HTMLEvents');
-      event.initEvent('change', true, false);
-      c.dispatchEvent(event);
+      c.dispatchEvent(new Event('change', { bubbles: true }));
     } catch(e){}
   });
   document.getElementById('ref').value=p.ref||'';
@@ -2913,6 +2976,12 @@ gen=function(){
 var ZH_TO_EN = {
   "暂无有效的生成结果，无法导入": "No valid generation results, cannot import",
   "已成功一键导入并完成入库！": "Successfully imported and archived with one-click!",
+  "数据看板": "Data Dashboard",
+  "方法论实验室": "Methodology Lab",
+  "版本更新": "Changelog",
+  "所有规则均已开启。生成的 Prompt 将包含完整的方法论体系。": "All rules are enabled. The generated Prompt will include the full methodology.",
+  "已关闭": "Disabled",
+  "条规则：": "rules:",
   "✨ 灵感模板（点击直接运行）：": "✨ Inspiration Presets (Click to run):",
   "点选后自动填好参数": "Parameters auto-filled upon selection",
   "受众与题材 (必填)": "Audience & Genre (Required)",
@@ -3437,22 +3506,42 @@ function toggleTheme() {
 
 /* === 题材爆款灵感提示数据字典 === */
 var GENRE_HINTS = {
-  '豪门甜宠': '✨ 甜宠爆款：阶级跨越+极致被爱，观众追的是女主的主体性，CP是调味剂，他被她吸引因为她足够强。',
-  '现代都市': '✨ 都市网感：身份反差与极端身份错位（如首富继承人去当外卖员），注重快节奏的情感转折。',
-  '古装权谋': '✨ 古装权谋：极致爽感与快意恩仇，重在女主/男主的信息差降维打击，拒绝拖泥带水。',
-  '古装喜剧': '✨ 古装喜剧：现代梗与古代设定极端错位，通过无厘头喜剧包装，达成治愈亲情或爱情。',
-  '奇幻穿越': '✨ 奇幻穿越：初始幻想设定（如带系统、读心术）与日常生活碰撞，建立极致的爽感与控制力。',
-  '穿书': '✨ 穿书反套路：极端身份错位与降维打击，不从痛点出发，从观众对“掌控全局”的幻想出发。',
-  '重生宅斗': '✨ 宅斗爽感：重生后的信息差优势，每一步转折都是女主的主动决定，避免陷入传统悲惨境遇。',
-  '家庭喜剧': '✨ 喜剧公式：奇幻触发器 × 极端身份错位 × 家庭关系 × 喜剧 × 治愈（至少满足3项）。',
-  '女性成长': '✨ 大女主关卡：女主必须经历“配得感 → 快意恩仇 → 主体性”三个维度的爽感闭环。',
-  '年代怀旧': '✨ 年代爽点：时代洪流中的信息差降维打击，重在日常奋斗与地域特色，温情中带爽感。',
-  '地域特色': '✨ 地域特色：强烈的地域符号与方言魅力（如东北豪爽/川渝幽默），让喜剧和市井烟火气落地。',
-  '仙侠虐恋': '✨ 仙侠虐恋：极致虐心与身份反转，重点是女主身份高贵后的“配得感”与反向打脸的快意恩仇。',
-  '乡村田园': '✨ 乡村田园：极度解压的世外桃源幻想，搭配爽快的宗族平事或新农村建设，治愈与反击并存。',
-  '悬疑复仇': '✨ 复仇爽感：主引擎是“看她怎么做”，剧情反转要爽快，杜绝无意义的误会和憋屈。',
-  '热血逆袭': '✨ 逆袭秘诀：前期极致的压抑与后期身份反转，夺回掌控权，满足观众的“主体性幻想”。',
-  '科幻脑洞': '✨ 脑洞科幻：将新奇的未来概念（如意识上传、循环）融入日常伦理情感，做足反差和伦理碰撞。'
+  'zh': {
+    '豪门甜宠': '✨ 甜宠爆款：阶级跨越+极致被爱，观众追的是女主的主体性，CP是调味剂，他被她吸引因为她足够强。',
+    '现代都市': '✨ 都市网感：身份反差与极端身份错位（如首富继承人去当外卖员），注重快节奏的情感转折。',
+    '古装权谋': '✨ 古装权谋：极致爽感与快意恩仇，重在女主/男主的信息差降维打击，拒绝拖泥带水。',
+    '古装喜剧': '✨ 古装喜剧：现代梗与古代设定极端错位，通过无厘头喜剧包装，达成治愈亲情或爱情。',
+    '奇幻穿越': '✨ 奇幻穿越：初始幻想设定（如带系统、读心术）与日常生活碰撞，建立极致的爽感与控制力。',
+    '穿书': '✨ 穿书反套路：极端身份错位与降维打击，不从痛点出发，从观众对“掌控全局”的幻想出发。',
+    '重生宅斗': '✨ 宅斗爽感：重生后的信息差优势，每一步转折都是女主的主动决定，避免陷入传统悲惨境遇。',
+    '家庭喜剧': '✨ 喜剧公式：奇幻触发器 × 极端身份错位 × 家庭关系 × 喜剧 × 治愈（至少满足3项）。',
+    '女性成长': '✨ 大女主关卡：女主必须经历“配得感 → 快意恩仇 → 主体性”三个维度的爽感闭环。',
+    '年代怀旧': '✨ 年代爽点：时代洪流中的信息差降维打击，重在日常奋斗与地域特色，温情中带爽感。',
+    '地域特色': '✨ 地域特色：强烈的地域符号与方言魅力（如东北豪爽/川渝幽默），让喜剧和市井烟火气落地。',
+    '仙侠虐恋': '✨ 仙侠虐恋：极致虐心与身份反转，重点是女主身份高贵后的“配得感”与反向打脸的快意恩仇。',
+    '乡村田园': '✨ 乡村田园：极度解压的世外桃源幻想，搭配爽快的宗族平事或新农村建设，治愈与反击并存。',
+    '悬疑复仇': '✨ 复仇爽感：主引擎是“看她怎么做”，剧情反转要爽快，杜绝无意义的误会和憋屈。',
+    '热血逆袭': '✨ 逆袭秘诀：前期极致的压抑与后期身份反转，夺回掌控权，满足观众的“主体性幻想”。',
+    '科幻脑洞': '✨ 脑洞科幻：将新奇的未来概念（如意识上传、循环）融入日常伦理情感，做足反差和伦理碰撞。'
+  },
+  'en': {
+    '豪门甜宠': '✨ Sweet Romance: Class transition + ultimate being loved. The audience chases the heroine\'s agency; the CP is just seasoning—he is attracted because she is strong.',
+    '现代都市': '✨ Modern City: Identity contrast and extreme mismatch (e.g., the richest heir becoming a delivery worker), focusing on fast-paced emotional shifts.',
+    '古装权谋': '✨ Historical Intrigue: Ultimate satisfaction and quick revenge, focusing on information asymmetry and dimensional strikes by the leads.',
+    '古装喜剧': '✨ Historical Comedy: Extreme mismatch between modern memes and ancient settings, wrapped in slapstick comedy to heal family or romantic ties.',
+    '奇幻穿越': '✨ Fantasy Travel: Initial fantasy settings (e.g., system, mind-reading) colliding with daily life, establishing absolute control and satisfaction.',
+    '穿书': '✨ Book Travel: Anti-cliche identity mismatch and dimensional strikes, starting from the audience\'s fantasy of "controlling everything."',
+    '重生宅斗': '✨ House Fight: Information advantage after rebirth. Every turn is the heroine\'s active decision, avoiding traditional tragic paths.',
+    '家庭喜剧': '✨ Family Comedy: Fantasy Trigger × Extreme Mismatch × Family ties × Comedy × Healing (satisfy at least 3).',
+    '女性成长': '✨ Female Growth: The heroine must complete a feedback loop of "deservingness → satisfying revenge → agency."',
+    '年代怀旧': '✨ Nostalgia Era: Dimensional strikes via information gap in the torrent of time, focusing on daily struggles and local warmth.',
+    '地域特色': '✨ Local Style: Strong regional symbols and dialect charm (e.g., Northeast frankness / Sichuan humor), grounding comedy in daily life.',
+    '仙侠虐恋': '✨ Xianxia Romance: Extreme angst and identity reversals. The key is the heroine\'s "sense of deservingness" and satisfying payback.',
+    '乡村田园': '✨ Rural Life: Stress-relieving utopian fantasies, paired with clan mediation or rural building—healing and counter-strikes coexist.',
+    '悬疑复仇': '✨ Suspense Revenge: The main engine is "watch her act." Plenteous plot twists should be fast, eliminating pointless misunderstandings.',
+    '热血逆袭': '✨ Blood Resurgence: Extreme early suppression and late identity reversal, reclaiming control to satisfy the audience\'s agency fantasy.',
+    '科幻脑洞': '✨ Sci-Fi Concepts: Integrating futuristic concepts (e.g., upload, loops) into daily relationships to create sharp contrasts.'
+  }
 };
 
 function updateGenreHint() {
@@ -3460,9 +3549,10 @@ function updateGenreHint() {
   var hintEl = document.getElementById('genreHint');
   if (!select || !hintEl) return;
   var val = select.value;
-  var hint = GENRE_HINTS[val] || '';
+  var dict = GENRE_HINTS[currentLang] || GENRE_HINTS['zh'];
+  var hint = dict[val] || '';
   if (hint) {
-    hintEl.innerHTML = t(hint);
+    hintEl.innerHTML = hint;
     hintEl.classList.add('show');
   } else {
     hintEl.classList.remove('show');
