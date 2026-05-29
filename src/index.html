@@ -92,6 +92,23 @@
     <div id="settingsUserEmail" style="font-size:11px;color:var(--tm);margin-bottom:10px"></div>
     <button onclick="exportCloudData()" style="width:100%;font-size:12px;padding:8px;border-radius:8px;border:1px solid var(--d);background:transparent;color:var(--d);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif;margin-bottom:8px">📥 导出云端数据</button>
     <button onclick="sbLogout()" style="width:100%;font-size:13px;padding:10px;border-radius:8px;border:1px solid var(--b);background:transparent;color:var(--ts);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif">退出登录</button>
+    
+    <!-- 自定义 Supabase 配置 -->
+    <div style="margin-top:16px;border-top:1px dashed var(--b);padding-top:16px">
+      <div style="font-size:12px;font-weight:500;color:var(--tp);margin-bottom:8px">🔧 实例源配置 (选填)</div>
+      <div class="sp-field">
+        <label>Supabase URL</label>
+        <input type="text" id="sbCustomUrl" placeholder="https://your-project.supabase.co">
+      </div>
+      <div class="sp-field">
+        <label>Anon Key</label>
+        <input type="password" id="sbCustomKey" placeholder="eyJhbGciOiJIUzI1Ni...">
+      </div>
+      <div class="sp-row">
+        <button class="sp-save" onclick="saveCustomSb()" style="font-size:11px;padding:6px 12px;flex:1">保存实例</button>
+        <button class="sp-test" onclick="resetCustomSb()" style="font-size:11px;padding:6px 12px;background:transparent;color:var(--tm);border-color:var(--b);flex:1">重置默认</button>
+      </div>
+    </div>
   </div>
 </div>
 

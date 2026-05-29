@@ -120,11 +120,18 @@ try {
 /* ============================================
    Supabase 配置
    ============================================ */
-var SB_URL='https://lvmfjedrkspbbbbdsxgr.supabase.co';
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2bWZqZWRya3NwYmJiYmRzeGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODU4NzMsImV4cCI6MjA5MzQ2MTg3M30.V9OF--N-1LDp8BklyWTZ30MJPFlOZ6boczTUF4VV9Go';
+var DEFAULT_SB_URL = atob('aHR0cHM6Ly9sdm1mamVkcmtzcGJiYmJkc3hnci5zdXBhYmFzZS5jbw==');
+var DEFAULT_SB_KEY = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYSmhZbUZ6WlNJc0luSmxaaUk2SW14MmJXWmtaR1lpYTNud1ltSmlZbVJ6ZUdkeklpd2ljbTlzWlNJNklmMTFiMjRpTENOcFlYUWlPakUzTnpjNE9EVTROek1zSW1WNGNDSTZNakE1TXpRMk1UZzNNelEuVjlPRi0tTi0xTERwOEJrbHlXWjMwTUpQRmxPWjZib2N6VFVGNFY5R28=');
+
+var SB_URL = localStorage.getItem('sdcc_custom_sb_url') || DEFAULT_SB_URL;
+var SB_KEY = localStorage.getItem('sdcc_custom_sb_key') || DEFAULT_SB_KEY;
 var sb=null;
 if(typeof supabase!=='undefined'&&supabase.createClient){
-  sb=supabase.createClient(SB_URL,SB_KEY);
+  try {
+    sb=supabase.createClient(SB_URL,SB_KEY);
+  } catch(e) {
+    console.error("Supabase client creation failed:", e);
+  }
 }
 
 function gt(){var t=[];document.querySelectorAll('#tags input:checked').forEach(function(c){t.push(c.value)});return t}
@@ -1083,6 +1090,30 @@ function saveApiKey(){
   ts(t('API Key 已保存'));
 }
 
+function saveCustomSb(){
+  var url=document.getElementById('sbCustomUrl').value.trim();
+  var key=document.getElementById('sbCustomKey').value.trim();
+  if(!url || !key){
+    ts(t('请填写完整的 URL 和 Key'));
+    return;
+  }
+  localStorage.setItem('sdcc_custom_sb_url', url);
+  localStorage.setItem('sdcc_custom_sb_key', key);
+  ts(t('自定义 Supabase 实例已保存，正在刷新...'));
+  setTimeout(function(){
+    location.reload();
+  }, 1000);
+}
+
+function resetCustomSb(){
+  localStorage.removeItem('sdcc_custom_sb_url');
+  localStorage.removeItem('sdcc_custom_sb_key');
+  ts(t('已重置为默认 Supabase 实例，正在刷新...'));
+  setTimeout(function(){
+    location.reload();
+  }, 1000);
+}
+
 function updateModelSelector(){
   var presets=getPresets();
   var activeId=getActivePresetId();
@@ -1744,6 +1775,17 @@ gen=function(){
    i18n 中英文切换
    ============================================ */
 var ZH_TO_EN = {
+  "🔧 实例源配置 (选填)": "🔧 Custom DB Instance (Optional)",
+  "保存实例": "Save Instance",
+  "重置默认": "Reset Default",
+  "请填写完整的 URL 和 Key": "Please fill in complete URL and Key",
+  "自定义 Supabase 实例已保存，正在刷新...": "Custom Supabase instance saved, reloading...",
+  "已重置为默认 Supabase 实例，正在刷新...": "Reset to default Supabase instance, reloading...",
+  "🏠 豪门甜宠": "🏠 Sweet Romance",
+  "📖 穿书穿越": "📖 Book Travel",
+  "👨‍👩‍👧 家庭喜剧": "👨‍👩‍👧 Family Comedy",
+  "👩‍👩‍👩 女性成长": "👩‍👩‍👩 Female Growth",
+  "🔥 热血逆袭": "🔥 Underdog Resurgence",
   "⚡ 一键入库": "⚡ One-Click Archive",
   "⚡ 点选模式": "⚡ Tag Selection",
   "✏️ 文本模式": "✏️ Free Text",
@@ -2149,6 +2191,7 @@ function applyLang() {
     });
     applied = false;
     snapshotPage();
+    updateGenreHint();
     return;
   }
   
@@ -2181,6 +2224,7 @@ function applyLang() {
   });
   
   applied = true;
+  updateGenreHint();
 }
 
 window.addEventListener('load', function() {
@@ -2194,6 +2238,15 @@ window.addEventListener('load', function() {
    ============================================ */
 async function initApp(){
   initTheme();
+  // 回填自定义 Supabase 配置
+  var customUrl = localStorage.getItem('sdcc_custom_sb_url') || '';
+  var customKey = localStorage.getItem('sdcc_custom_sb_key') || '';
+  if (document.getElementById('sbCustomUrl')) {
+    document.getElementById('sbCustomUrl').value = customUrl;
+  }
+  if (document.getElementById('sbCustomKey')) {
+    document.getElementById('sbCustomKey').value = customKey;
+  }
   // 直接显示主界面
   renderProfile();
   renderHist();
